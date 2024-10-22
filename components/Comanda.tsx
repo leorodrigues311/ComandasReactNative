@@ -2,20 +2,28 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, Text, View} from 'react-native';
 import react from 'react'
 
-export function Comanda(){
-    return (
+interface ComandaProps {
+  nomeComanda: string;
+  numeroComanda: number;
+  valorTotal: number;
+  horaAbertura: string;
+}
 
+export function Comanda({nomeComanda, numeroComanda, valorTotal, horaAbertura}: ComandaProps){
+    return (
         <View  style={styles.viewPrincipal}>
             <View style={styles.viewStatus}></View>
+
             <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>12</Text>
+                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
             </View>
-        </View>
 
-
-
-    
-        
+            <View style={styles.viewInfo}>
+              <Text style={styles.viewInfoNome}>{nomeComanda}</Text>
+              <Text style={styles.viewInfoValorTotal}>R$ {valorTotal}</Text>
+              <Text style={styles.viewInfoHora}>Hora de Abertura: {horaAbertura}</Text>
+            </View>
+        </View>  
     );
 
 }
@@ -26,19 +34,19 @@ const styles = StyleSheet.create({
   viewPrincipal: {
     height:100,
     borderWidth: 0.5,
-    borderRadius:3,
+    borderRadius:5,
     borderColor: '#4F4F4F',
     margin: 12,
     backgroundColor:'#1C1C1C',
-    flexDirection: 'column'
+    flexDirection: 'row'
   },
 
   viewStatus: {
-    height:98,
+    height:99,
     width:12,
     backgroundColor:'#00FF00',
     borderWidth: 0.2,
-    borderRadius:3,
+    borderRadius:5,
     borderTopRightRadius:0,
     borderBottomRightRadius:0,
     borderColor: '#00FF00',
@@ -46,8 +54,8 @@ const styles = StyleSheet.create({
   },
 
   viewNumero: {
-    height:98,
-    width:98,
+    height:99,
+    width:99,
     alignItems: 'center',
     backgroundColor:'#696969',
     borderTopRightRadius:5,
@@ -62,5 +70,31 @@ const styles = StyleSheet.create({
     fontSize:50
   },
 
+  viewInfo: {
+    alignItems: 'flex-start',
+    margin:3,
+  },
+
+  viewInfoNome: {
+    alignItems: 'center',
+    marginLeft:10,
+    marginTop:5,
+    color:'white',
+    fontSize:20
+  },
+
+  viewInfoValorTotal: {
+    marginLeft:10,
+    marginTop:8,
+    color:'#00FF00',
+    fontSize:23
+  },
+
+  viewInfoHora: {
+    marginLeft:10,
+    marginTop:10,
+    color:'white',
+    fontSize:12
+  },
 
 });

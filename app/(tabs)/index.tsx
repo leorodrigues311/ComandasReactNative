@@ -4,12 +4,56 @@ import { Comanda } from '@/components/Comanda';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native';
+import { ScrollView } from 'react-native';
 
 export default function HomeScreen() {
   return (
     <SafeAreaView>
-      <Comanda/>
+      <ScrollView>
+        <Comanda
+          numeroComanda={1}
+          nomeComanda='João da Silva'
+          valorTotal={134.21}
+          horaAbertura='10:42'
+        />
+
+        <Comanda
+          numeroComanda={2}
+          nomeComanda='Joana Dias'
+          valorTotal={73.15}
+          horaAbertura='11:23'
+        />
+
+        <Comanda
+          numeroComanda={3}
+          nomeComanda='José Roberto'
+          valorTotal={33.52}
+          horaAbertura='12:02'
+        />
+
+        <Comanda
+          numeroComanda={4}
+          nomeComanda='Jairo Mendes'
+          valorTotal={714.15}
+          horaAbertura='13:52'
+        />
+
+        <Comanda
+          numeroComanda={5}
+          nomeComanda='Manoel da Cruz'
+          valorTotal={14.22}
+          horaAbertura='14:43'
+        />
+
+        <Comanda
+          numeroComanda={6}
+          nomeComanda='Charles Darwin da Silva'
+          valorTotal={7.55}
+          horaAbertura='14:53'
+        />
+
+      </ScrollView>
     </SafeAreaView>
     
 
