@@ -7,12 +7,16 @@ interface ComandaProps {
   numeroComanda: number;
   valorTotal: number;
   horaAbertura: string;
+  statusComanda: boolean
 }
 
-export function Comanda({nomeComanda, numeroComanda, valorTotal, horaAbertura}: ComandaProps){
+export function Comanda({nomeComanda, numeroComanda, valorTotal, horaAbertura, statusComanda}: ComandaProps){
     return (
         <View  style={styles.viewPrincipal}>
-            <View style={styles.viewStatus}></View>
+            <View style={[styles.viewStatus,
+             {backgroundColor: statusComanda ? '#00FF00' : '#FF0000'},
+             {borderColor: statusComanda ? '#00FF00' : '#FF0000'}]}>
+             </View>
 
             <View style={styles.viewNumero}>
                 <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
@@ -37,6 +41,7 @@ const styles = StyleSheet.create({
     borderRadius:5,
     borderColor: '#4F4F4F',
     margin: 12,
+    marginBottom:4,
     backgroundColor:'#1C1C1C',
     flexDirection: 'row'
   },

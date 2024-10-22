@@ -16,6 +16,7 @@ export default function HomeScreen() {
           nomeComanda='João da Silva'
           valorTotal={134.21}
           horaAbertura='10:42'
+          statusComanda= {true}
         />
 
         <Comanda
@@ -23,6 +24,7 @@ export default function HomeScreen() {
           nomeComanda='Joana Dias'
           valorTotal={73.15}
           horaAbertura='11:23'
+          statusComanda= {true}
         />
 
         <Comanda
@@ -30,6 +32,7 @@ export default function HomeScreen() {
           nomeComanda='José Roberto'
           valorTotal={33.52}
           horaAbertura='12:02'
+          statusComanda= {true}
         />
 
         <Comanda
@@ -37,6 +40,7 @@ export default function HomeScreen() {
           nomeComanda='Jairo Mendes'
           valorTotal={714.15}
           horaAbertura='13:52'
+          statusComanda= {true}
         />
 
         <Comanda
@@ -44,6 +48,7 @@ export default function HomeScreen() {
           nomeComanda='Manoel da Cruz'
           valorTotal={14.22}
           horaAbertura='14:43'
+          statusComanda= {false}
         />
 
         <Comanda
@@ -51,6 +56,7 @@ export default function HomeScreen() {
           nomeComanda='Charles Darwin da Silva'
           valorTotal={7.55}
           horaAbertura='14:53'
+          statusComanda= {true}
         />
 
       </ScrollView>
