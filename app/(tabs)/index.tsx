@@ -2,11 +2,12 @@ import {StyleSheet, Text } from 'react-native';
 
 import { Comanda } from '@/components/Comanda';
 import { TopBar } from '@/components/TopBar';
+import { ButtonFlutuante } from '@/components/ButtonFlutuante';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { SafeAreaView } from 'react-native';
-import { ScrollView } from 'react-native';
+import { ScrollView} from 'react-native';
 
 
 export default function HomeScreen() {
@@ -62,7 +63,11 @@ export default function HomeScreen() {
           statusComanda= {true}
         />
 
+
+ 
       </ScrollView>
+      <ButtonFlutuante/>
+      
     </SafeAreaView>
     
 

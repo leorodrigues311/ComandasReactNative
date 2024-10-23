@@ -11,7 +11,7 @@ export function TopBar(){
 
 
             <View style={styles.viewOperador}>
-                <Ionicons name="person-circle-outline" size={40} color="white" />
+                <Ionicons name="person-circle-outline" size={30} color="white" />
                 <Text style={styles.nomeOperador}>Leonardo</Text>
             </View>
 
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   nomeOperador:{
     alignItems: 'center',
     color:'white',
-    fontSize:15,
+    fontSize:13,
     fontWeight:'600'
 
   },
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     paddingHorizontal: 10,
     color: 'white',
-    paddingRight: 40, // Espaço para o ícone
+    paddingRight: 40,
     marginLeft:10
   },
 
