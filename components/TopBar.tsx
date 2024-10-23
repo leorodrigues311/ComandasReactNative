@@ -23,9 +23,11 @@ export function TopBar(){
                 value={inputValue}
                 onChangeText={setInputValue}
                 />
-                <Ionicons style={styles.btnFiltro} name="filter-outline" size={20} color="white" ></Ionicons>
                 <Ionicons style={styles.btnPesquisar} name="search-outline" size={20} color="white" />
+                <Ionicons style={styles.btnFiltro} name="filter-outline" size={20} color="white" ></Ionicons>
           </View>
+          
+
 
         </View>  
     );
@@ -64,7 +66,7 @@ const styles = StyleSheet.create({
 
   inputPesquisar:{
     height: 45,
-    width: '100%',
+    width: '80%',
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 50,
@@ -81,14 +83,14 @@ const styles = StyleSheet.create({
 
   btnPesquisar:{
     position: 'absolute',
-    right: 10,
+    right: 60,
     top: '50%',
     transform: [{ translateY: -12.5 }]
   }, 
 
   btnFiltro:{
     position: 'absolute',
-    right: 40,
+    right: 10,
     top: '50%',
     transform: [{ translateY: -12.5 }]
   }
