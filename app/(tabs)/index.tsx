@@ -1,16 +1,19 @@
 import {StyleSheet, Text } from 'react-native';
 
 import { Comanda } from '@/components/Comanda';
+import { TopBar } from '@/components/TopBar';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { SafeAreaView } from 'react-native';
 import { ScrollView } from 'react-native';
 
+
 export default function HomeScreen() {
   return (
-    <SafeAreaView>
-      <ScrollView>
+    <SafeAreaView style={styles.container}>
+       <TopBar/>
+       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         <Comanda
           numeroComanda={1}
           nomeComanda='João da Silva'
@@ -67,24 +70,12 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 32,
-    color:'white',
-    fontSize: 24,
-    marginLeft: 20,
-    marginTop: 20
+
+  container: {
+    flex: 1,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+
+  scrollViewContent: {
+    
   },
 });
