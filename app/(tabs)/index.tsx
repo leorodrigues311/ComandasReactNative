@@ -3,10 +3,8 @@ import {StyleSheet, Text } from 'react-native';
 import { Comanda } from '@/components/Comanda';
 import { ComandaDetalhe } from '@/components/ComandaDetalhe';
 import { TopBar } from '@/components/TopBar';
+import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda';
 import { ButtonFlutuante } from '@/components/ButtonFlutuante';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import { SafeAreaView } from 'react-native';
 import { ScrollView} from 'react-native';
 
@@ -15,13 +13,15 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
        {/* <TopBar/> */}
+       <TopBarDetalheComanda/>
        <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        <ComandaDetalhe
-                  numeroComanda={1}
-                  nomeComanda='João da Silva'
-                  valorTotal={134.21}
-                  horaAbertura='10:42'
-                  statusComanda= {true}/>
+          <ComandaDetalhe
+                    numeroComanda={1}
+                    nomeComanda='João da Silva'
+                    valorTotal={134.21}
+                    horaAbertura='10:42'
+                    statusComanda= {true}
+          />
 
         {/* <Comanda
           numeroComanda={1}
@@ -85,10 +85,11 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
 
   container: {
-    flex: 1,
+    flex:1
+
   },
 
   scrollViewContent: {
-    
+    flexGrow: 1,
   },
 });

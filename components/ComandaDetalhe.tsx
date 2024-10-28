@@ -1,6 +1,7 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, Text, View} from 'react-native';
 import react from 'react'
+import { ItemComanda } from '@/components/ItemComanda';
 
 interface ComandaProps {
   nomeComanda: string;
@@ -11,12 +12,15 @@ interface ComandaProps {
 }
 
 export function ComandaDetalhe({nomeComanda, numeroComanda, valorTotal, horaAbertura, statusComanda}: ComandaProps){
+
     return (
-        <View  style={styles.viewPrincipal}>
+        <View style={styles.viewPrincipal} >
+          <View style={styles.viewInfoComanda}>
+
             <View style={[styles.viewStatus,
              {backgroundColor: statusComanda ? '#00FF00' : '#FF0000'},
              {borderColor: statusComanda ? '#00FF00' : '#FF0000'}]}>
-             </View>
+            </View>
 
             <View style={styles.viewNumero}>
                 <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
@@ -24,9 +28,48 @@ export function ComandaDetalhe({nomeComanda, numeroComanda, valorTotal, horaAber
 
             <View style={styles.viewInfo}>
               <Text style={styles.viewInfoNome}>{nomeComanda}</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ {valorTotal}</Text>
               <Text style={styles.viewInfoHora}>Hora de Abertura: {horaAbertura}</Text>
+              <Text style={styles.viewInfoHora}>Aberta por: Leonardo</Text>
             </View>
+          </View>
+
+          <View style={styles.itensComanda}>
+              <View style={styles.itensComandaIndice}>
+                <Text style={styles.itensComandaTexto}>QTD</Text>
+                <Text style={styles.itensComandaTexto}>Item</Text>
+                <Text style={styles.itensComandaTexto}>Valor</Text>
+              </View>
+              <ItemComanda
+                nomeItem='Teste grelhado com queijo'
+                valor={100.00}
+                quantidade={1000}
+              />
+              
+              <ItemComanda
+                nomeItem='Comida gostosa'
+                valor={100.00}
+                quantidade={1000}
+              />
+
+              <ItemComanda
+                nomeItem='Coquinha gelada'
+                valor={100.00}
+                quantidade={4}
+              />
+
+              <ItemComanda
+                nomeItem='Comida com nome grande de proposito'
+                valor={100.00}
+                quantidade={1}
+              />
+
+              <ItemComanda
+                nomeItem='Teste grelhado com queijo'
+                valor={100.00}
+                quantidade={1000}
+              />
+            </View>
+            
         </View>  
     );
 
@@ -36,14 +79,19 @@ export function ComandaDetalhe({nomeComanda, numeroComanda, valorTotal, horaAber
 const styles = StyleSheet.create({
 
   viewPrincipal: {
-    height:100,
-    borderWidth: 0.5,
-    borderRadius:5,
-    borderColor: '#4F4F4F',
     margin: 12,
-    marginBottom:4,
+    marginBottom:16,
     backgroundColor:'#1C1C1C',
-    flexDirection: 'row'
+    flexDirection: 'column',
+    flex:1,
+    borderRadius:5
+  },
+
+  viewInfoComanda: {
+    flexDirection: 'row',
+    backgroundColor:'#363636',
+    borderRadius:5,
+    height:99
   },
 
   viewStatus: {
@@ -85,7 +133,7 @@ const styles = StyleSheet.create({
     marginLeft:10,
     marginTop:5,
     color:'white',
-    fontSize:20
+    fontSize:25
   },
 
   viewInfoValorTotal: {
@@ -101,5 +149,24 @@ const styles = StyleSheet.create({
     color:'white',
     fontSize:12
   },
+
+  itensComanda: {
+    flex:1,
+    
+  },
+
+  itensComandaIndice:{
+    flexDirection:'row',
+    justifyContent:'space-between',
+    marginLeft:10,
+    marginRight:10
+  },
+
+  itensComandaTexto:{
+    color:'white',
+    margin:10,
+    marginBottom:2
+
+  }
 
 });
