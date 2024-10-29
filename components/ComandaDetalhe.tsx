@@ -69,6 +69,11 @@ export function ComandaDetalhe({nomeComanda, numeroComanda, valorTotal, horaAber
                 quantidade={1000}
               />
             </View>
+            <View style={styles.viewValorTotal}>
+              <Text style={styles.textValorTotal}>Valor Total:</Text>
+              <Text style={styles.textValorTotalNumero}>R$ 120.96</Text>
+
+            </View>
             
         </View>  
     );
@@ -167,6 +172,29 @@ const styles = StyleSheet.create({
     margin:10,
     marginBottom:2
 
+  },
+  viewValorTotal:{
+    backgroundColor:'#363636',
+    width:'100%',
+    height:60,
+    borderRadius:5,
+    flexDirection:'row',
+    justifyContent:'space-between'
+  },
+  textValorTotal:{
+    color:'white',
+    fontSize:26,
+    marginTop:15,
+    marginLeft:15,
+    fontWeight:'bold'
+  },
+
+  textValorTotalNumero:{
+    color:'#00FF00',
+    fontSize:26,
+    marginTop:15,
+    marginRight:15,
+    fontWeight:'bold'
   }
 
 });
