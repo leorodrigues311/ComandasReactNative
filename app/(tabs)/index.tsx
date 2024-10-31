@@ -78,7 +78,7 @@ export default function HomeScreen() {
       {/* <ButtonFlutuante/> */}
 
       <ValorTotalComanda
-      valorTotal={10.00}/>
+      valorTotal={1732.98}/>
       
     </SafeAreaView>
 

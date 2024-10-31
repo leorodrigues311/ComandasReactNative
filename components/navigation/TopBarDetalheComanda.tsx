@@ -8,12 +8,13 @@ export function TopBarDetalheComanda(){
     return (
         <View style={styles.viewPrincipal}>
 
-            <View style={styles.inputContainer}>
-                <Ionicons style={styles.viewBtnSair} name="arrow-back-outline" size={30} color="white" />
-                <Ionicons style={styles.btnImprimir} name="print-outline" size={30} color="white" />
-                <Ionicons style={styles.btnFinalizarComanda} name="reader-outline" size={30} color="red" ></Ionicons>
-             </View>
-          
+          <Ionicons style={styles.viewBtnSair} name="arrow-back-outline" size={32} color="white" />
+          <View style={styles.viewOperacoesComanda}>
+            <Ionicons style={styles.btnFinalizarComanda} name="receipt-outline" size={35} color="red" ></Ionicons>
+            <Ionicons style={styles.btnImprimir} name="print-outline" size={35} color="white" />
+            <Ionicons style={styles.btnAdicionarItens} name="add-circle-outline" size={35} color="#00FF00" ></Ionicons>
+          </View>
+    
         </View>  
     );
 
@@ -38,26 +39,29 @@ const styles = StyleSheet.create({
   },
 
   viewBtnSair:{
-    alignItems: 'center',
-    left:10
+    left:10,
+    flexDirection: 'row',
+
   },
 
-  inputContainer:{
-    position: 'relative',
-    flex: 1,
-  },
-
-  btnImprimir:{
-    position: 'absolute',
-    right: 60,
+  viewOperacoesComanda:{
     top:'50%',
+    width:'50%',
+    height:40,
+    flexDirection:'row',
+    justifyContent:'space-between'
+  },
+
+  
+  btnFinalizarComanda:{
     transform: [{ translateY: -12.5 }]
   },
 
-  btnFinalizarComanda:{
-    position: 'absolute',
-    right: 10,
-    top:'50%',
+  btnImprimir:{
+    transform: [{ translateY: -12.5 }]
+  },
+
+  btnAdicionarItens:{
     transform: [{ translateY: -12.5 }]
   }
 

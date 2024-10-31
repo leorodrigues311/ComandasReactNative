@@ -31,6 +31,8 @@ export function ComandaDetalhe({nomeComanda, numeroComanda, horaAbertura, status
               <Text style={styles.viewInfoHora}>Hora de Abertura: {horaAbertura}</Text>
               <Text style={styles.viewInfoHora}>Aberta por: Leonardo</Text>
             </View>
+
+
           </View>
 
           <View style={styles.itensComanda}>
@@ -91,7 +93,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor:'#363636',
     borderRadius:5,
-    height:99
+    height:99,
+    marginBottom:25
   },
 
   viewStatus: {
@@ -193,6 +196,5 @@ const styles = StyleSheet.create({
     marginRight:15,
     fontWeight:'bold'
 
-  }
-
+  },
 });

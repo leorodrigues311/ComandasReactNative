@@ -16,15 +16,16 @@ export function ItemComanda({nomeItem, quantidade, valorUnit, valorTotal}: itemP
     return (
 
         <View style={styles.viewPrincipal}>
-            <View>
+            <View style={styles.viewNomeItem}>
               <Text style={styles.nomeItem}>{nomeItem}</Text>
             </View>
 
             <View style={styles.viewValorUnitItem}>
               <Text style={styles.quantidadeItem}>QTD: {quantidade}</Text>
               <Text style={styles.valorUnitItem}>UN R$ {valorUnit}</Text>
-              <Text style={styles.valorTotalItem}>R$ {valorTotal}</Text>
             </View>
+
+            <Text style={styles.valorTotalItem}>R$ {valorTotal}</Text>
 
         </View>
 
@@ -37,7 +38,9 @@ export function ItemComanda({nomeItem, quantidade, valorUnit, valorTotal}: itemP
 const styles = StyleSheet.create({
 
   viewPrincipal: {
-    margin: 8,
+    margin: 5,
+    marginLeft:10,
+    marginRight:10,
     backgroundColor:'#2e2e2e',
     justifyContent:'space-between',
     alignItems:'flex-start',
@@ -47,44 +50,54 @@ const styles = StyleSheet.create({
   },
 
   quantidadeItem:{
-    fontSize:14,
-    color:'white',
+    fontSize:13,
+    color:'#C0C0C0',
     left:10,
     margin:5,
+    marginTop:0,
     fontWeight:'300'
+  },
+
+  viewNomeItem:{
+    width:'66%',
+    height:30,
   },
 
   nomeItem:{
     width:'100%',
-    fontSize:19,
+    fontSize:18,
     color:'white',
     left:0,
     marginLeft:10,
-    margin:5
+    margin:5,
   },
 
   viewValorUnitItem:{
     flexDirection: 'row',
     justifyContent:'space-between',
-    width:'100%'
+    width:'100%',
+    marginBottom:5
   },
 
   valorUnitItem:{
-    fontSize:14,
+    fontSize:13,
     fontWeight:'300',
-    color:'white',
+    color:'#C0C0C0',
     left:'30%',
     margin:5,
+    marginTop:0,
     position:'absolute'
 
   },
 
   valorTotalItem:{
-    fontSize:20,
+    fontSize:16,
     color:'#00FF00',
-    left:'70%',
+    fontWeight:'800',
+    right:'2%',
+    top:'30%',
     margin:5,
-    position:'absolute'
+    position:'absolute',
   }
 
 
