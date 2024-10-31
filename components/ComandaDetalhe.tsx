@@ -11,7 +11,7 @@ interface ComandaProps {
   statusComanda: boolean
 }
 
-export function ComandaDetalhe({nomeComanda, numeroComanda, valorTotal, horaAbertura, statusComanda}: ComandaProps){
+export function ComandaDetalhe({nomeComanda, numeroComanda, horaAbertura, statusComanda}: ComandaProps){
 
     return (
         <View style={styles.viewPrincipal} >
@@ -34,47 +34,42 @@ export function ComandaDetalhe({nomeComanda, numeroComanda, valorTotal, horaAber
           </View>
 
           <View style={styles.itensComanda}>
-              <View style={styles.itensComandaIndice}>
-                <Text style={styles.itensComandaTexto}>QTD</Text>
-                <Text style={styles.itensComandaTexto}>Item</Text>
-                <Text style={styles.itensComandaTexto}>Valor</Text>
-              </View>
+
               <ItemComanda
                 nomeItem='Teste grelhado com queijo'
-                valor={100.00}
-                quantidade={1000}
+                valorUnit={10.00}
+                valorTotal={100.00}
+                quantidade={3453}
               />
               
               <ItemComanda
                 nomeItem='Comida gostosa'
-                valor={100.00}
-                quantidade={1000}
+                valorUnit={24.93}
+                valorTotal={100.00}
+                quantidade={103}
               />
 
               <ItemComanda
                 nomeItem='Coquinha gelada'
-                valor={100.00}
-                quantidade={4}
-              />
-
-              <ItemComanda
-                nomeItem='Comida com nome grande de proposito'
-                valor={100.00}
+                valorUnit={39.90}
+                valorTotal={1430.34}
                 quantidade={1}
               />
 
               <ItemComanda
+                nomeItem='Comida com nome grande de proposito'
+                valorUnit={10.00}
+                valorTotal={2.25}
+                quantidade={10}
+              />
+
+              <ItemComanda
                 nomeItem='Teste grelhado com queijo'
-                valor={100.00}
-                quantidade={1000}
+                valorUnit={2.24}
+                valorTotal={100.39}
+                quantidade={45}
               />
             </View>
-            <View style={styles.viewValorTotal}>
-              <Text style={styles.textValorTotal}>Valor Total:</Text>
-              <Text style={styles.textValorTotalNumero}>R$ 120.96</Text>
-
-            </View>
-            
         </View>  
     );
 
@@ -177,9 +172,11 @@ const styles = StyleSheet.create({
     backgroundColor:'#363636',
     width:'100%',
     height:60,
+    bottom:0,
     borderRadius:5,
     flexDirection:'row',
-    justifyContent:'space-between'
+    justifyContent:'space-between',
+    position:'absolute'
   },
   textValorTotal:{
     color:'white',
@@ -195,6 +192,7 @@ const styles = StyleSheet.create({
     marginTop:15,
     marginRight:15,
     fontWeight:'bold'
+
   }
 
 });

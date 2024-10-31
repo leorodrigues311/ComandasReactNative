@@ -6,18 +6,26 @@ import react from 'react'
 interface itemProps {
     nomeItem: string;
     quantidade: number;
-    valor: number;
+    valorUnit: number,
+    valorTotal: number;
   }
 
 
-export function ItemComanda({nomeItem, quantidade, valor}: itemProps){
+export function ItemComanda({nomeItem, quantidade, valorUnit, valorTotal}: itemProps){
 
     return (
 
         <View style={styles.viewPrincipal}>
-            <Text style={styles.quantidadeItem}>{quantidade}</Text>
-            <Text style={styles.nomeItem}>{nomeItem}</Text>
-            <Text style={styles.valorItem}>R$ {valor}</Text>
+            <View>
+              <Text style={styles.nomeItem}>{nomeItem}</Text>
+            </View>
+
+            <View style={styles.viewValorUnitItem}>
+              <Text style={styles.quantidadeItem}>QTD: {quantidade}</Text>
+              <Text style={styles.valorUnitItem}>UN R$ {valorUnit}</Text>
+              <Text style={styles.valorTotalItem}>R$ {valorTotal}</Text>
+            </View>
+
         </View>
 
 
@@ -32,40 +40,52 @@ const styles = StyleSheet.create({
     margin: 8,
     backgroundColor:'#2e2e2e',
     justifyContent:'space-between',
-    alignItems:'center',
-    height:35,
-    flexDirection: 'row',
+    alignItems:'flex-start',
+    height:60,
+    flexDirection: 'column',
     borderRadius:5,
   },
 
   quantidadeItem:{
-    fontSize:16,
+    fontSize:14,
     color:'white',
+    left:10,
     margin:5,
-    marginLeft:10,
-    position:'absolute'
+    fontWeight:'300'
   },
 
   nomeItem:{
-    fontSize:16,
+    width:'100%',
+    fontSize:19,
     color:'white',
-    margin:5,
-    position:'absolute',
-    left:'16%'
+    left:0,
+    marginLeft:10,
+    margin:5
   },
 
-  valorItem:{
-    fontSize:18,
+  viewValorUnitItem:{
+    flexDirection: 'row',
+    justifyContent:'space-between',
+    width:'100%'
+  },
+
+  valorUnitItem:{
+    fontSize:14,
+    fontWeight:'300',
     color:'white',
-    paddingLeft:10,
+    left:'30%',
     margin:5,
-    marginRight:10,
-    right:0,
-    position:'absolute',
-    backgroundColor:'#2e2e2e'
+    position:'absolute'
 
+  },
+
+  valorTotalItem:{
+    fontSize:20,
+    color:'#00FF00',
+    left:'70%',
+    margin:5,
+    position:'absolute'
   }
-
 
 
 });

@@ -2,6 +2,7 @@ import {StyleSheet, Text } from 'react-native';
 
 import { Comanda } from '@/components/Comanda';
 import { ComandaDetalhe } from '@/components/ComandaDetalhe';
+import { ValorTotalComanda } from '@/components/valorTotalComanda';
 import { TopBar } from '@/components/TopBar';
 import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda';
 import { ButtonFlutuante } from '@/components/ButtonFlutuante';
@@ -75,8 +76,12 @@ export default function HomeScreen() {
      
       </ScrollView>
       {/* <ButtonFlutuante/> */}
+
+      <ValorTotalComanda
+      valorTotal={10.00}/>
       
     </SafeAreaView>
+
     
 
   );
