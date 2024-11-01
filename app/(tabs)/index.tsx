@@ -1,4 +1,4 @@
-import {StyleSheet, Text } from 'react-native';
+import {Pressable, StyleSheet, Text } from 'react-native';
 
 import { Comanda } from '@/components/Comanda';
 import { ComandaDetalhe } from '@/components/ComandaDetalhe';
@@ -7,30 +7,34 @@ import { TopBar } from '@/components/TopBar';
 import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda';
 import { ButtonFlutuante } from '@/components/ButtonFlutuante';
 import { SafeAreaView } from 'react-native';
-import { ScrollView} from 'react-native';
+import { View, ScrollView} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function HomeScreen() {
+  const navigation = useNavigation(); // Hook para navegação
   return (
     <SafeAreaView style={styles.container}>
-       {/* <TopBar/> */}
-       <TopBarDetalheComanda/>
+       <TopBar/>
+       {/* <TopBarDetalheComanda/> */}
        <ScrollView contentContainerStyle={styles.scrollViewContent}>
-          <ComandaDetalhe
+          {/* <ComandaDetalhe
                     numeroComanda={1}
                     nomeComanda='João da Silva'
                     valorTotal={134.21}
                     horaAbertura='10:42'
                     statusComanda= {true}
-          />
+          /> */}
 
-        {/* <Comanda
-          numeroComanda={1}
-          nomeComanda='João da Silva'
-          valorTotal={134.21}
-          horaAbertura='10:42'
-          statusComanda= {true}
-        />
+        <Pressable>
+          <Comanda
+            numeroComanda={1}
+            nomeComanda='João da Silva'
+            valorTotal={134.21}
+            horaAbertura='10:42'
+            statusComanda= {true}
+          />
+        </Pressable>
 
         <Comanda
           numeroComanda={2}
@@ -70,15 +74,16 @@ export default function HomeScreen() {
           valorTotal={7.55}
           horaAbertura='14:53'
           statusComanda= {true}
-        /> */}
+        />
 
 
      
       </ScrollView>
-      {/* <ButtonFlutuante/> */}
-
+      <ButtonFlutuante/>
+{/* 
       <ValorTotalComanda
-      valorTotal={1732.98}/>
+      valorTotal={1732.98}/> */}
+
       
     </SafeAreaView>
 
@@ -97,4 +102,5 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     flexGrow: 1,
   },
+
 });

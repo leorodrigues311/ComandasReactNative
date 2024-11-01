@@ -26,9 +26,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="historico"
         options={{
-          title: 'Historico',
+          title: 'Produtos',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'timer' : 'timer-outline'} color={color} />
+            <TabBarIcon name={focused ? 'cube' : 'cube-outline'} color={color} />
           ),
         }}
       />
