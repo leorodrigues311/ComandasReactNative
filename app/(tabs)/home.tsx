@@ -1,9 +1,6 @@
 import {Pressable, StyleSheet, Text } from 'react-native';
 import { Comanda } from '@/components/Comanda';
-import { ComandaDetalhe } from '@/components/ComandaDetalhe';
-import { ValorTotalComanda } from '@/components/valorTotalComanda';
 import { TopBar } from '@/components/navigation/TopBar';
-import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda';
 import { ButtonFlutuante } from '@/components/ButtonFlutuante';
 import { SafeAreaView } from 'react-native';
 import { View, ScrollView} from 'react-native';
