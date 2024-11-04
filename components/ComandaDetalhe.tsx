@@ -2,6 +2,9 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, Text, View} from 'react-native';
 import react from 'react'
 import { ItemComanda } from '@/components/ItemComanda';
+import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { RouteProp, useRoute } from '@react-navigation/native';
 
 interface ComandaProps {
   nomeComanda: string;
@@ -11,10 +14,15 @@ interface ComandaProps {
   statusComanda: boolean
 }
 
-export function ComandaDetalhe({nomeComanda, numeroComanda, horaAbertura, statusComanda}: ComandaProps){
+export function ComandaDetalhe(){
+
+  const route = useRoute<RouteProp<{ params: ComandaProps }>>();
+  const { nomeComanda, numeroComanda, valorTotal, horaAbertura, statusComanda } = route.params;
+
 
     return (
-        <View style={styles.viewPrincipal} >
+        <SafeAreaView style={styles.viewPrincipal} >
+          <TopBarDetalheComanda/>
           <View style={styles.viewInfoComanda}>
 
             <View style={[styles.viewStatus,
@@ -72,7 +80,7 @@ export function ComandaDetalhe({nomeComanda, numeroComanda, horaAbertura, status
                 quantidade={45}
               />
             </View>
-        </View>  
+        </SafeAreaView>  
     );
 
 }
@@ -82,6 +90,7 @@ const styles = StyleSheet.create({
 
   viewPrincipal: {
     margin: 12,
+    marginTop:0,
     marginBottom:16,
     backgroundColor:'#1C1C1C',
     flexDirection: 'column',

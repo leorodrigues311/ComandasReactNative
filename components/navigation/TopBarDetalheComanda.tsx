@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Pressable, Touchable } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-
 
 
 export function TopBarDetalheComanda(){
     return (
         <View style={styles.viewPrincipal}>
-
           <Ionicons style={styles.viewBtnSair} name="arrow-back-outline" size={32} color="white" />
           <View style={styles.viewOperacoesComanda}>
             <Ionicons style={styles.btnFinalizarComanda} name="receipt-outline" size={35} color="red" ></Ionicons>
