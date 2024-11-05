@@ -14,7 +14,7 @@ export default function HomeScreen() {
     const params = new URLSearchParams();
     params.set('name', 'Leo')
     params.set('age', '19')
-    router.navigate(`../components/ComandaDetalhe?${params.toString()}`)
+    router.navigate(`./ComandaDetalhe?${params.toString()}`)
 }
 
 
