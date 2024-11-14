@@ -11,10 +11,7 @@ export default function HomeScreen() {
 
 
   const botaoComanda = () => {
-    const params = new URLSearchParams();
-    params.set('name', 'Leo')
-    params.set('age', '19')
-    router.navigate(`./ComandaDetalhe?${params.toString()}`)
+    router.push('/comandaDetalhe')
 }
 
 
