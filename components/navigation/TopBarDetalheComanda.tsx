@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Pressable, Touchable } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { Router } from 'expo-router';
 
 
 export function TopBarDetalheComanda(){
+
+
     return (
         <View style={styles.viewPrincipal}>
           <Ionicons style={styles.viewBtnSair} name="arrow-back-outline" size={32} color="white" />
           <View style={styles.viewOperacoesComanda}>
-            <Ionicons style={styles.btnFinalizarComanda} name="receipt-outline" size={35} color="red" ></Ionicons>
-            <Ionicons style={styles.btnImprimir} name="print-outline" size={35} color="white" />
-            <Ionicons style={styles.btnAdicionarItens} name="add-circle-outline" size={35} color="#00FF00" ></Ionicons>
+            <Ionicons style={styles.btnFinalizarComanda} name="receipt-outline" size={32} color="red" ></Ionicons>
+            <Ionicons style={styles.btnImprimir} name="print-outline" size={32} color="white" />
+            <Ionicons style={styles.btnAdicionarItens} name="add-circle-outline" size={32} color="#00FF00" ></Ionicons>
           </View>
     
         </View>  
@@ -34,6 +37,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 15,
+    marginBottom:10
   },
 
   viewBtnSair:{
@@ -47,20 +51,21 @@ const styles = StyleSheet.create({
     width:'50%',
     height:40,
     flexDirection:'row',
-    justifyContent:'space-between'
+    justifyContent:'space-between',
+    marginBottom:20
   },
 
   
   btnFinalizarComanda:{
-    transform: [{ translateY: -12.5 }]
+
   },
 
   btnImprimir:{
-    transform: [{ translateY: -12.5 }]
+
   },
 
   btnAdicionarItens:{
-    transform: [{ translateY: -12.5 }]
+
   }
 
 
