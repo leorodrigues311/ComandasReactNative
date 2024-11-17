@@ -10,12 +10,12 @@ export default function TabTwoScreen() {
       headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
       headerImage={<Ionicons size={310} name="timer" style={styles.headerImage} />}>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Histórico</ThemedText>
+        <ThemedText type="title">Produtos</ThemedText>
       </ThemedView>
 
 
     <ThemedText>
-        Aqui ficará a tela de histórico do app de comandas!
+        Aqui ficará a tela para visualizar os produtos!
     </ThemedText>
     </ParallaxScrollView>
   );

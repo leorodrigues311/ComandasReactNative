@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
     borderRadius:5,
     flexDirection:'row',
     justifyContent:'space-between',
-    position:'absolute'
+    position:'absolute',
+    marginBottom:10,
   },
   textValorTotal:{
     color:'white',

@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Pressable, Touchable } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Router } from 'expo-router';
+import { useRouter } from 'expo-router';
 
 
 export function TopBarDetalheComanda(){
 
+  const router = useRouter();
+
 
     return (
         <View style={styles.viewPrincipal}>
-          <Ionicons style={styles.viewBtnSair} name="arrow-back-outline" size={32} color="white" />
+          <Pressable onPress={() => router.back()}>
+            <Ionicons style={styles.viewBtnSair} name="arrow-back-outline" size={32} color="white" />
+          </Pressable>
+
           <View style={styles.viewOperacoesComanda}>
             <Ionicons style={styles.btnFinalizarComanda} name="receipt-outline" size={32} color="red" ></Ionicons>
             <Ionicons style={styles.btnImprimir} name="print-outline" size={32} color="white" />

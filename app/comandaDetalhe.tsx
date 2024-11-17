@@ -4,6 +4,8 @@ import react from 'react'
 import { ItemComanda } from '@/components/ItemComanda';
 import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native';
+import { ValorTotalComanda } from '@/components/valorTotalComanda';
 
 interface ComandaProps {
   nomeComanda: string;
@@ -13,68 +15,72 @@ interface ComandaProps {
   statusComanda: boolean
 }
 
-export default function ComandaDetalhe ({nomeComanda, numeroComanda, valorTotal, horaAbertura, statusComanda}:ComandaProps){
+export default function ComandaDetalhe ({nomeComanda, numeroComanda, horaAbertura, statusComanda}:ComandaProps){
 
     return (
         <SafeAreaView style={styles.viewPrincipal} >
           <TopBarDetalheComanda/>
-          <View style={styles.viewInfoComanda}>
 
-            <View style={[styles.viewStatus,
-             {backgroundColor: statusComanda ? '#00FF00' : '#FF0000'},
-             {borderColor: statusComanda ? '#00FF00' : '#FF0000'}]}>
+            <View style={styles.viewInfoComanda}>
+
+              <View style={[styles.viewStatus,
+              {backgroundColor: statusComanda ? '#00FF00' : '#FF0000'},
+              {borderColor: statusComanda ? '#00FF00' : '#FF0000'}]}>
+              </View>
+
+              <View style={styles.viewNumero}>
+                  <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
+              </View>
+
+              <View style={styles.viewInfo}>
+                <Text style={styles.viewInfoNome}>{nomeComanda}</Text>
+                <Text style={styles.viewInfoHora}>Hora de Abertura: {horaAbertura}</Text>
+                <Text style={styles.viewInfoHora}>Aberta por: Leonardo</Text>
+              </View>
+
+
             </View>
+          <ScrollView>
+            <View style={styles.itensComanda}>
 
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
+                <ItemComanda
+                  nomeItem='Teste grelhado com queijo'
+                  valorUnit={10.00}
+                  valorTotal={100.00}
+                  quantidade={3453}
+                />
+                
+                <ItemComanda
+                  nomeItem='Comida gostosa'
+                  valorUnit={24.93}
+                  valorTotal={100.00}
+                  quantidade={103}
+                />
 
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>{nomeComanda}</Text>
-              <Text style={styles.viewInfoHora}>Hora de Abertura: {horaAbertura}</Text>
-              <Text style={styles.viewInfoHora}>Aberta por: Leonardo</Text>
-            </View>
+                <ItemComanda
+                  nomeItem='Coquinha gelada'
+                  valorUnit={39.90}
+                  valorTotal={1430.34}
+                  quantidade={1}
+                />
 
+                <ItemComanda
+                  nomeItem='Comida com nome grande de proposito'
+                  valorUnit={10.00}
+                  valorTotal={2.25}
+                  quantidade={10}
+                />
 
-          </View>
-
-          <View style={styles.itensComanda}>
-
-              <ItemComanda
-                nomeItem='Teste grelhado com queijo'
-                valorUnit={10.00}
-                valorTotal={100.00}
-                quantidade={3453}
-              />
-              
-              <ItemComanda
-                nomeItem='Comida gostosa'
-                valorUnit={24.93}
-                valorTotal={100.00}
-                quantidade={103}
-              />
-
-              <ItemComanda
-                nomeItem='Coquinha gelada'
-                valorUnit={39.90}
-                valorTotal={1430.34}
-                quantidade={1}
-              />
-
-              <ItemComanda
-                nomeItem='Comida com nome grande de proposito'
-                valorUnit={10.00}
-                valorTotal={2.25}
-                quantidade={10}
-              />
-
-              <ItemComanda
-                nomeItem='Teste grelhado com queijo'
-                valorUnit={2.24}
-                valorTotal={100.39}
-                quantidade={45}
-              />
-            </View>
+                <ItemComanda
+                  nomeItem='Teste grelhado com queijo'
+                  valorUnit={2.24}
+                  valorTotal={100.39}
+                  quantidade={45}
+                />
+              </View>
+            </ScrollView>
+            <ValorTotalComanda
+            valorTotal={10}/>
         </SafeAreaView>  
     );
 
