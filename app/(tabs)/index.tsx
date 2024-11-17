@@ -4,31 +4,31 @@ import { TopBar } from '@/components/navigation/TopBar';
 import { ButtonFlutuante } from '@/components/ButtonFlutuante';
 import { SafeAreaView } from 'react-native';
 import { View, ScrollView} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { router } from "expo-router";
+import { Link } from 'expo-router';
 
 export default function HomeScreen() {
 
+ 
 
-  const botaoComanda = () => {
-    router.push('/comandaDetalhe')
-}
-
+ 
 
   return (
     <SafeAreaView style={styles.container}>
        <TopBar/>
        {/* <TopBarDetalheComanda/> */}
        <ScrollView contentContainerStyle={styles.scrollViewContent}>
-       <Pressable onPress={botaoComanda}>
-          <Comanda
-            numeroComanda={1}
-            nomeComanda='João da Silva'
-            valorTotal={134.21}
-            horaAbertura='10:42'
-            statusComanda= {true}
-          />
-        </Pressable>
+       <Link href="/comandaDetalhe" asChild>
+        <Pressable>
+            <Comanda
+              numeroComanda={1}
+              nomeComanda='João da Silva'
+              valorTotal={134.21}
+              horaAbertura='10:42'
+              statusComanda= {true}
+            />
+          </Pressable>
+        </Link>
       </ScrollView>
       <ButtonFlutuante/>  
     </SafeAreaView>

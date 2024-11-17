@@ -4,7 +4,6 @@ import react from 'react'
 import { ItemComanda } from '@/components/ItemComanda';
 import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { RouteProp, useRoute } from '@react-navigation/native';
 
 interface ComandaProps {
   nomeComanda: string;
@@ -14,11 +13,7 @@ interface ComandaProps {
   statusComanda: boolean
 }
 
-export function ComandaDetalhe(){
-
-  const route = useRoute<RouteProp<{ params: ComandaProps }>>();
-  const { nomeComanda, numeroComanda, valorTotal, horaAbertura, statusComanda } = route.params;
-
+export default function ComandaDetalhe ({nomeComanda, numeroComanda, valorTotal, horaAbertura, statusComanda}:ComandaProps){
 
     return (
         <SafeAreaView style={styles.viewPrincipal} >
