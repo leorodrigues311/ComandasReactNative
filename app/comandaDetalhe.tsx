@@ -6,16 +6,18 @@ import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComan
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import { ValorTotalComanda } from '@/components/valorTotalComanda';
+import { useLocalSearchParams  } from 'expo-router';
 
-interface ComandaProps {
+type ComandaDetalheParams = {
   nomeComanda: string;
   numeroComanda: number;
-  valorTotal: number;
   horaAbertura: string;
-  statusComanda: boolean
+  statusComanda: string;
 }
 
-export default function ComandaDetalhe ({nomeComanda, numeroComanda, horaAbertura, statusComanda}:ComandaProps){
+export default function ComandaDetalhe (){
+
+  const { nomeComanda, numeroComanda, horaAbertura, statusComanda } = useLocalSearchParams<ComandaDetalheParams>()
 
     return (
         <SafeAreaView style={styles.viewPrincipal} >
@@ -24,8 +26,8 @@ export default function ComandaDetalhe ({nomeComanda, numeroComanda, horaAbertur
             <View style={styles.viewInfoComanda}>
 
               <View style={[styles.viewStatus,
-              {backgroundColor: statusComanda ? '#00FF00' : '#FF0000'},
-              {borderColor: statusComanda ? '#00FF00' : '#FF0000'}]}>
+              {backgroundColor: statusComanda === 'ativo' ? '#00FF00' : '#FF0000'},
+              {borderColor: statusComanda === 'ativo' ? '#00FF00' : '#FF0000'}]}>
               </View>
 
               <View style={styles.viewNumero}>
@@ -46,14 +48,14 @@ export default function ComandaDetalhe ({nomeComanda, numeroComanda, horaAbertur
                 <ItemComanda
                   nomeItem='Teste grelhado com queijo'
                   valorUnit={10.00}
-                  valorTotal={100.00}
+                  valorTotal={50.00}
                   quantidade={3453}
                 />
                 
                 <ItemComanda
                   nomeItem='Comida gostosa'
                   valorUnit={24.93}
-                  valorTotal={100.00}
+                  valorTotal={10.00}
                   quantidade={103}
                 />
 
@@ -73,14 +75,46 @@ export default function ComandaDetalhe ({nomeComanda, numeroComanda, horaAbertur
 
                 <ItemComanda
                   nomeItem='Teste grelhado com queijo'
-                  valorUnit={2.24}
+                  valorUnit={24.31}
+                  valorTotal={100.39}
+                  quantidade={45}
+                />
+
+                
+                <ItemComanda
+                  nomeItem='Teste grelhado com queijo'
+                  valorUnit={24.31}
+                  valorTotal={100.39}
+                  quantidade={45}
+                />
+
+                
+                <ItemComanda
+                  nomeItem='Teste grelhado com queijo'
+                  valorUnit={24.31}
+                  valorTotal={100.39}
+                  quantidade={45}
+                />
+
+                
+                <ItemComanda
+                  nomeItem='Teste grelhado com queijo'
+                  valorUnit={24.31}
+                  valorTotal={100.39}
+                  quantidade={45}
+                />
+
+                
+                <ItemComanda
+                  nomeItem='Teste grelhado com queijo'
+                  valorUnit={24.31}
                   valorTotal={100.39}
                   quantidade={45}
                 />
               </View>
             </ScrollView>
             <ValorTotalComanda
-            valorTotal={10}/>
+            valorTotal={134.21}/>
         </SafeAreaView>  
     );
 

@@ -7,15 +7,15 @@ interface ComandaProps {
   numeroComanda: number;
   valorTotal: number;
   horaAbertura: string;
-  statusComanda: boolean
+  statusComanda: string
 }
 
 export function Comanda({nomeComanda, numeroComanda, valorTotal, horaAbertura, statusComanda}: ComandaProps){
     return (
         <View  style={styles.viewPrincipal}>
             <View style={[styles.viewStatus,
-             {backgroundColor: statusComanda ? '#00FF00' : '#FF0000'},
-             {borderColor: statusComanda ? '#00FF00' : '#FF0000'}]}>
+              {backgroundColor: statusComanda === 'ativo' ? '#00FF00' : '#FF0000'},
+              {borderColor: statusComanda === 'ativo' ? '#00FF00' : '#FF0000'}]}>
              </View>
 
             <View style={styles.viewNumero}>
