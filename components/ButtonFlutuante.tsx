@@ -26,8 +26,8 @@ export function ButtonFlutuante(){
       
         <View style={styles.viewPrincipal}>
 
-            <Pressable>
-                <Ionicons onPress={showDialog} style={styles.btnNovaComanda} name="add-outline" size={40} color="black" />
+            <Pressable onPress={showDialog} >
+                <Ionicons style={styles.btnNovaComanda} name="add-outline" size={40} color="black" />
             </Pressable>
 
             
