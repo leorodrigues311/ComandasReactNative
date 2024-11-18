@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
 
   viewStatus: {
     height:99,
-    width:12,
+    width:5,
     backgroundColor:'#00FF00',
     borderWidth: 0.2,
     borderRadius:5,
