@@ -34,6 +34,7 @@ export default function HomeScreen() {
        <TopBar/>
        {/* <TopBarDetalheComanda/> */}
        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+
         {comandas.map((comanda, index) => (
                   <Pressable
                       key={index}
@@ -51,6 +52,7 @@ export default function HomeScreen() {
                       />
                   </Pressable>
               ))}
+              
       </ScrollView>
       <ButtonFlutuante/>  
     </SafeAreaView>
