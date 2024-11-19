@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Button } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Dialog from "react-native-dialog";
+import { useLocalSearchParams  } from 'expo-router';
+import { useRouter } from "expo-router";
 
 
 
 export function ButtonFlutuante(){
+
+  const router = useRouter();
 
   const [visible, setVisible] = useState(false);
 
@@ -19,6 +23,7 @@ export function ButtonFlutuante(){
 
   const handleConfirm = () => {
     setVisible(false);
+    router.push('/novaComanda')
   };
 
     return (
