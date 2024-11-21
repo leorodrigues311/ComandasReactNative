@@ -199,46 +199,9 @@ const styles = StyleSheet.create({
 
   itensComanda: {
     flex:1,
+    marginBottom:50
     
   },
 
-  itensComandaIndice:{
-    flexDirection:'row',
-    justifyContent:'space-between',
-    marginLeft:10,
-    marginRight:10
-  },
-
-  itensComandaTexto:{
-    color:'white',
-    margin:10,
-    marginBottom:2
-
-  },
-  viewValorTotal:{
-    backgroundColor:'#363636',
-    width:'100%',
-    height:60,
-    bottom:0,
-    borderRadius:5,
-    flexDirection:'row',
-    justifyContent:'space-between',
-    position:'absolute'
-  },
-  textValorTotal:{
-    color:'white',
-    fontSize:26,
-    marginTop:15,
-    marginLeft:15,
-    fontWeight:'bold'
-  },
-
-  textValorTotalNumero:{
-    color:'#00FF00',
-    fontSize:26,
-    marginTop:15,
-    marginRight:15,
-    fontWeight:'bold'
-
-  },
+ 
 });

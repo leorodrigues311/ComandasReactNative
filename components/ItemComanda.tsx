@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     margin: 5,
     marginLeft:10,
     marginRight:10,
-    backgroundColor:'#2e2e2e',
+    backgroundColor:'#282828',
     justifyContent:'space-between',
     alignItems:'flex-start',
     height:60,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
 
   valorTotalItem:{
     fontSize:16,
-    color:'#00FF00',
+    color:'#00CC00',
     fontWeight:'800',
     right:'2%',
     top:'30%',
