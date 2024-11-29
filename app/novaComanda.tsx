@@ -1,6 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Modal, Text, TextInput, View, Button, Pressable, StyleSheet } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import { useLocalSearchParams  } from 'expo-router';
@@ -40,11 +40,15 @@ export default function novaComanda (){
    
   };
 
+  useEffect(() => { 
+    setTimeout(() => {
+      setModalNumeroComanda(true)
+    }, 500);
+   }, []);
+
     return (
         <SafeAreaView style={styles.viewPrincipal} >
             <View style={styles.container}>
-            <Button title="Abrir Modal" onPress={() => setModalNumeroComanda(true)} />
-
 
             <Modal
               visible={modalNumeroComandaVisivel}
@@ -155,7 +159,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   modalTitle: {
-    fontSize: 18,
+    fontSize: 20,
     marginBottom: 20,
     color:'white'
   },
