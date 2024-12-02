@@ -4,18 +4,28 @@ import React, { useState, useEffect  } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import { useLocalSearchParams  } from 'expo-router';
+import { useRouter } from "expo-router";
 
-
+type ComandaDetalheParams = {
+  nomeComanda: string;
+  numeroComanda: number;
+  horaAbertura: string;
+  statusComanda: string;
+};
 
 
 
 export default function novaComanda (){
+
+  const router = useRouter();
 
   const [modalNumeroComandaVisivel, setModalNumeroComanda] = useState(false)
   const [inputNumeroComanda, setInputNumeroComanda] = useState('')
 
   const [modalNomeComandaVisivel, setModalNomeComanda] = useState(false)
   const [inputNomeComanda, setInputNomeComanda] = useState('')
+
+  const [text, setText] = useState('');
 
   const handleButtonPress = (buttonType: string) => {
     if (buttonType === 'confirmaNumero') {
@@ -33,11 +43,13 @@ export default function novaComanda (){
     }
 
     else if (buttonType === 'finaliza'){
-      setModalNomeComanda(false)
-
+      router.push({
+        pathname: '/comandaDetalhe',
+        params: { nomeComanda: inputNomeComanda, numeroComanda: inputNumeroComanda, horaAbertura: '10:42', valorTotal: 0, statusComanda: 'ativo' },
+      }),
+      setModalNomeComanda(false);
     }
-    
-   
+
   };
 
   useEffect(() => { 
@@ -49,7 +61,7 @@ export default function novaComanda (){
     return (
         <SafeAreaView style={styles.viewPrincipal} >
             <View style={styles.container}>
-
+ 
             <Modal
               visible={modalNumeroComandaVisivel}
               animationType="slide"
@@ -67,6 +79,7 @@ export default function novaComanda (){
                     value={inputNumeroComanda}
                     onChangeText={setInputNumeroComanda}
                     placeholder="Número"
+                    keyboardType='numeric'
                   />
 
                   <View style={styles.buttonsContainer}>
@@ -179,5 +192,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     width: '100%'
   },
+
 
 });
