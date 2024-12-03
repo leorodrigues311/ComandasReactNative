@@ -5,7 +5,6 @@ import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComan
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ValorTotalComanda } from '@/components/valorTotalComanda'
 import { useLocalSearchParams, useRouter } from 'expo-router'
-import CheckBox from '@react-native-community/checkbox'
 
 type ComandaDetalheParams = {
   nomeComanda: string
@@ -15,9 +14,9 @@ type ComandaDetalheParams = {
 }
 
 export default function ComandaDetalhe () {
-
   const { nomeComanda, numeroComanda, horaAbertura, statusComanda } = useLocalSearchParams<ComandaDetalheParams>()
   const router = useRouter()
+
 
   const itensComanda = [   
     { numeroComanda: 1, nomeItem: 'Teste grelhado', valorUnit: 12.21, quantidade: 3 },
@@ -31,21 +30,11 @@ export default function ComandaDetalhe () {
     { numeroComanda: 9, nomeItem: 'Cuscuz', valorUnit: 12.21, quantidade: 3 }
   ]
 
-  // Estado para armazenar a visibilidade e o status do checkbox para cada item
-  const [checkboxVisible, setCheckboxVisible] = useState<{ [key: number]: boolean }>({})
-  const [checkboxChecked, setCheckboxChecked] = useState<{ [key: number]: boolean }>({})
 
-  // Função para exibir o checkbox quando pressionado por longo tempo
+  const [selectedItem, setSelectedItem] = useState<number | null>(null)
+
   const handleLongPress = (numeroComanda: number) => {
-    setCheckboxVisible(prevState => ({ ...prevState, [numeroComanda]: true }));
-  }
-
-  // Função para alternar o estado do checkbox
-  const toggleCheckbox = (numeroComanda: number) => {
-    setCheckboxChecked(prevState => ({
-      ...prevState,
-      [numeroComanda]: !prevState[numeroComanda]
-    }))
+    setSelectedItem(prevSelected => (prevSelected === numeroComanda ? null : numeroComanda))
   }
 
   return (
@@ -56,9 +45,7 @@ export default function ComandaDetalhe () {
         <View style={[styles.viewStatus, 
           { backgroundColor: statusComanda === 'ativo' ? '#00FF00' : '#FF0000' },
           { borderColor: statusComanda === 'ativo' ? '#00FF00' : '#FF0000' }
-        ]}>
-
-        </View>
+        ]}></View>
 
         <View style={styles.viewNumero}>
           <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
@@ -76,25 +63,15 @@ export default function ComandaDetalhe () {
           {itensComanda.map((item) => (
             <Pressable
               key={item.numeroComanda}
-              onLongPress={() => handleLongPress(item.numeroComanda)} // Long press para mostrar o checkbox
+              onLongPress={() => handleLongPress(item.numeroComanda)}
             >
               <ItemComanda
                 nomeItem={item.nomeItem}
                 valorUnit={item.valorUnit}
                 valorTotal={50.00}
                 quantidade={item.quantidade}
+                style={selectedItem === item.numeroComanda ? styles.selectedItem : {}}
               />
-
-              {/* Mostrar checkbox se o item foi pressionado por longo tempo */}
-              {checkboxVisible[item.numeroComanda] && (
-                <View style={styles.checkboxContainer}>
-                  <CheckBox
-                    value={checkboxChecked[item.numeroComanda] || false}
-                    onValueChange={() => toggleCheckbox(item.numeroComanda)} // Alternar checkbox
-                  />
-                  <Text>Selecionar</Text>
-                </View>
-              )}
             </Pressable>
           ))}
         </View>
@@ -178,9 +155,9 @@ const styles = StyleSheet.create({
     marginBottom: 50
   },
 
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
+  selectedItem: {
+    backgroundColor: '#ff6347',
+    borderRadius: 5,
+    padding: 10,
   },
 });
