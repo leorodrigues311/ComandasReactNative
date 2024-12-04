@@ -1,0 +1,154 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { StyleSheet, Text, View } from 'react-native';
+import react from 'react';
+
+
+interface itemProps {
+    nomeItem: string;
+    quantidade: number;
+    valorUnit: number;
+    valorTotal: number;
+    style?: object;
+}
+
+export function ItemProduto({ nomeItem, quantidade, valorUnit, valorTotal, style }: itemProps) {
+    return (
+        <View  style={styles.viewPrincipal}>
+            <View style= {styles.viewStatus}>
+
+            </View>
+
+            <View style={styles.viewNumero}>
+                <Text style={styles.viewNumeroTexto}></Text>
+            </View>
+
+            <View style={styles.viewInfo}>
+              <Text style={styles.viewInfoNome}>Pão com pão</Text>
+              <Text style={styles.viewInfoValorTotal}>R$ 36,90</Text>
+              <View style={styles.viewValorUnitItem}>
+                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
+              </View>
+            </View>
+        </View>  
+    );
+}
+
+const styles = StyleSheet.create({
+  viewPrincipal: {
+    margin: 5,
+    marginLeft: 10,
+    marginRight: 10,
+    backgroundColor: '#282828',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    height: 60,
+    flexDirection: 'column',
+    borderRadius: 5,
+  },
+
+  viewStatus: {
+    height:99,
+    width:5,
+    backgroundColor:'#696969',
+    borderWidth: 0.2,
+    borderRadius:5,
+    borderTopRightRadius:0,
+    borderBottomRightRadius:0,
+    borderColor: '#696969',
+    marginLeft: 0,
+  },
+
+  viewNumero: {
+    height:99,
+    width:99,
+    alignItems: 'center',
+    backgroundColor:'#696969',
+    borderTopRightRadius:5,
+    borderBottomRightRadius:5,
+  },
+
+  viewNumeroTexto: {
+    alignItems: 'center',
+    margin:20,
+    gap: 6,
+    color:'white',
+    fontSize:50
+  },
+
+  viewInfo: {
+    alignItems: 'flex-start',
+    margin:3,
+  },
+
+  viewInfoNome: {
+    alignItems: 'center',
+    marginLeft:10,
+    marginTop:5,
+    color:'white',
+    fontSize:20
+  },
+
+  viewInfoValorTotal: {
+    marginLeft:10,
+    marginTop:8,
+    color:'#00FF00',
+    fontSize:23
+  },
+
+  viewInfoHora: {
+    marginLeft:10,
+    marginTop:10,
+    color:'white',
+    fontSize:12
+  },
+
+  quantidadeItem: {
+    fontSize: 13,
+    color: '#C0C0C0',
+    left: 10,
+    margin: 0,
+    marginTop: 7,
+    fontWeight: '300',
+  },
+
+  viewNomeItem: {
+    width: '66%',
+    height: 30,
+  },
+
+  nomeItem: {
+    width: '100%',
+    fontSize: 18,
+    color: 'white',
+    left: 0,
+    marginLeft: 10,
+    margin: 5,
+  },
+
+  viewValorUnitItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 5,
+  },
+
+  valorUnitItem: {
+    fontSize: 13,
+    fontWeight: '300',
+    color: '#C0C0C0',
+    left: '30%',
+    margin: 5,
+    marginTop: 0,
+    position: 'absolute',
+  },
+
+  valorTotalItem: {
+    fontSize: 16,
+    color: '#00CC00',
+    fontWeight: '800',
+    right: '2%',
+    top: '30%',
+    margin: 5,
+    position: 'absolute',
+  },
+});
