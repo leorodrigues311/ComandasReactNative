@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     borderRadius:5,
     borderColor: '#4F4F4F',
     margin: 12,
-    marginBottom:4,
+    marginBottom:1,
     backgroundColor:'#1C1C1C',
     flexDirection: 'row'
   },
@@ -97,8 +97,8 @@ const styles = StyleSheet.create({
 
   viewInfoHora: {
     marginLeft:10,
-    marginTop:10,
-    color:'white',
+    marginTop:7,
+    color:'#C0C0C0',
     fontSize:12
   },
 

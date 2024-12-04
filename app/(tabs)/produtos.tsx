@@ -450,8 +450,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#C0C0C0',
     left: 10,
-    margin: 5,
-    marginTop: 0,
+    margin: 0,
+    marginTop: 7,
     fontWeight: '300',
   },
 
