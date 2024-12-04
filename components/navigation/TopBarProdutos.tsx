@@ -79,14 +79,14 @@ const styles = StyleSheet.create({
   btnPesquisar:{
     position: 'absolute',
     right: 80,
-    top: '50%',
+    top: '25%',
     transform: [{ translateY: -12.5 }]
   }, 
 
   btnFiltro:{
     position: 'absolute',
     right: 10,
-    top: '50%',
+    top: '25%',
     transform: [{ translateY: -12.5 }]
   }
 

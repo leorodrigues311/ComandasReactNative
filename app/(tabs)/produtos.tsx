@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Pressable, ScrollView, Image } from 'react-native'
 import { ItemProduto } from '@/components/ItemProduto'
 import { TopBarProdutos } from '@/components/navigation/TopBarProdutos'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -57,23 +57,27 @@ const router = useRouter();
             </View>
         </View>  
 
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
+        <View style={styles.viewPrincipal}>
+    <View style={styles.viewStatus}>
 
-            </View>
+    </View>
 
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
+    <View style={styles.viewNumero}>
+        <Image 
+            source={{uri: 'https://amopaocaseiro.com.br/wp-content/uploads/2020/01/pao-caseiro-para-iniciantes_02.jpg'}} 
+            style={styles.imagemNumero} 
+        />
+        <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
+    </View>
 
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Pão com pão</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 36,90</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
+    <View style={styles.viewInfo}>
+        <Text style={styles.viewInfoNome}>Pão com pão</Text>
+        <Text style={styles.viewInfoValorTotal}>R$ 36,90</Text>
+        <View style={styles.viewValorUnitItem}>
+            <Text style={styles.quantidadeItem}>Estoque: 10</Text>
         </View>
+    </View>
+</View>
 
         <View  style={styles.viewPrincipal}>
             <View style= {styles.viewStatus}>
@@ -386,12 +390,13 @@ const styles = StyleSheet.create({
 
   viewStatus: {
     height:99,
-    width:5,
-    backgroundColor:'#696969',
+    width:0,
+    backgroundColor:'red',
+    opacity:0.1,
     borderWidth: 0.2,
     borderRadius:5,
-    borderTopRightRadius:0,
-    borderBottomRightRadius:0,
+    borderTopRightRadius:5,
+    borderBottomRightRadius:5,
     borderColor: '#696969',
     marginLeft: 0,
   },
@@ -401,6 +406,7 @@ const styles = StyleSheet.create({
     width:99,
     alignItems: 'center',
     backgroundColor:'#696969',
+    borderRadius:5,
     borderTopRightRadius:5,
     borderBottomRightRadius:5,
   },
@@ -489,6 +495,16 @@ const styles = StyleSheet.create({
     margin: 5,
     position: 'absolute',
   },
+
+  imagemNumero: {
+    width: '100%',   // Faz a imagem ocupar toda a largura disponível
+    height: '100%',  // Faz a imagem ocupar toda a altura disponível
+    position: 'absolute',  // Posiciona a imagem atrás do texto
+    top: 0,   // Alinha a imagem ao topo
+    left: 0,  // Alinha a imagem à esquerda
+    resizeMode: 'cover',  // Faz a imagem preencher todo o espaço, cortando se necessário
+    borderRadius:5,
+},
 
 });
 
