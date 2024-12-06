@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, Pressable, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, Pressable, ScrollView, Vibration } from 'react-native'
 import { ItemComanda } from '@/components/ItemComanda'
 import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ValorTotalComanda } from '@/components/valorTotalComanda'
 import { useLocalSearchParams, useRouter } from 'expo-router'
+import * as Haptics from 'expo-haptics';
 
 type ComandaDetalheParams = {
   nomeComanda: string
@@ -14,9 +15,9 @@ type ComandaDetalheParams = {
 }
 
 export default function ComandaDetalhe () {
+
   const { nomeComanda, numeroComanda, horaAbertura, statusComanda } = useLocalSearchParams<ComandaDetalheParams>()
   const router = useRouter()
-
 
   const itensComanda = [   
     { numeroComanda: 1, nomeItem: 'Teste grelhado', valorUnit: 12.21, quantidade: 3 },
@@ -30,12 +31,36 @@ export default function ComandaDetalhe () {
     { numeroComanda: 9, nomeItem: 'Cuscuz', valorUnit: 12.21, quantidade: 3 }
   ]
 
-
-  const [selectedItem, setSelectedItem] = useState<number | null>(null)
+  const [selectedItems, setSelectedItems] = useState<number[]>([])  // Lista de itens selecionados
+  const [isSelectingMultiple, setIsSelectingMultiple] = useState(false) // Controle de seleção múltipla
 
   const handleLongPress = (numeroComanda: number) => {
-    setSelectedItem(prevSelected => (prevSelected === numeroComanda ? null : numeroComanda))
+    // A primeira vez que um item é pressionado por longo tempo
+    if (selectedItems.length === 0) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
+      setIsSelectingMultiple(true)  // Ativa o modo de seleção múltipla
+    }
+
+    // Se o item já está selecionado, remove da lista, caso contrário, adiciona
+    setSelectedItems(prevSelected => 
+      prevSelected.includes(numeroComanda)
+        ? prevSelected.filter(item => item !== numeroComanda) // Remover item
+        : [...prevSelected, numeroComanda] // Adicionar item
+    )
   }
+
+  const handlePress = (numeroComanda: number) => {
+    // Quando mais de um item é selecionado, usamos o onPress
+    if (selectedItems.length !== 0) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
+      setSelectedItems(prevSelected => 
+        prevSelected.includes(numeroComanda)
+          ? prevSelected.filter(item => item !== numeroComanda) // Remover item
+          : [...prevSelected, numeroComanda] // Adicionar item
+      )
+    }
+  }
+
 
   return (
     <SafeAreaView style={styles.viewPrincipal}>
@@ -64,13 +89,14 @@ export default function ComandaDetalhe () {
             <Pressable
               key={item.numeroComanda}
               onLongPress={() => handleLongPress(item.numeroComanda)}
+              onPress={() => handlePress(item.numeroComanda)} // Usa o onPress após o primeiro item
             >
               <ItemComanda
                 nomeItem={item.nomeItem}
                 valorUnit={item.valorUnit}
                 valorTotal={50.00}
                 quantidade={item.quantidade}
-                style={selectedItem === item.numeroComanda ? styles.selectedItem : {}}
+                style={selectedItems.includes(item.numeroComanda) ? styles.selectedItem : {}}
               />
             </Pressable>
           ))}
@@ -156,8 +182,16 @@ const styles = StyleSheet.create({
   },
 
   selectedItem: {
-    backgroundColor: '#ff6347',
+    margin: 5,
+    marginLeft: 10,
+    marginRight: 10,
+    backgroundColor: '#696969',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    height: 60,
+    flexDirection: 'column',
     borderRadius: 5,
-    padding: 10,
+    borderColor:'#A9A9A9',
+    borderWidth:0.6
   },
 });
