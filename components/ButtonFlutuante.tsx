@@ -17,7 +17,7 @@ export function ButtonFlutuante(){
   const [visible, setVisible] = useState(false);
 
   const showDialog = () => {
-    Haptics.NotificationFeedbackType.Success
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
     setVisible(true);
   };
 
