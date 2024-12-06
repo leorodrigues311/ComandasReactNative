@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable, Button } from 'react-native';
+import { View, StyleSheet, Pressable } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Dialog from "react-native-dialog";
-import { useLocalSearchParams  } from 'expo-router';
 import { useRouter } from "expo-router";
 import * as Haptics from 'expo-haptics';
 
-
-
-
-export function ButtonFlutuante(){
-
-
+export function ButtonFlutuante() {
   const router = useRouter();
-
   const [visible, setVisible] = useState(false);
+  const [viewColor, setViewColor] = useState('white'); // Estado para controlar a cor de fundo do View
 
   const showDialog = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
+    setViewColor('gray'); // Altera a cor do fundo para cinza claro
+
+    setTimeout(() => {
+      setViewColor('white'); // Retorna a cor do fundo para branco
+    }, 50);
+
     setVisible(true);
   };
 
@@ -27,58 +27,48 @@ export function ButtonFlutuante(){
 
   const handleConfirm = () => {
     setVisible(false);
-    router.push('/novaComanda')
+    router.push('/novaComanda');
   };
 
-    return (
+  return (
+    <View style={[styles.viewPrincipal, { backgroundColor: viewColor }]}>
+      <Pressable onPressIn={showDialog}>
+        <Ionicons
+          style={styles.btnNovaComanda}
+          name="add-outline"
+          size={40}
+        />
+      </Pressable>
 
-      
-        <View style={styles.viewPrincipal}>
-
-            <Pressable onPress={showDialog} >
-                <Ionicons style={styles.btnNovaComanda} name="add-outline" size={40} color="black" />
-            </Pressable>
-
-            
-            <Dialog.Container visible={visible}>
-                <Dialog.Title>Nova Comanda</Dialog.Title>
-                <Dialog.Description>
-                    Deseja realmente abrir uma nova comanda?
-                </Dialog.Description>
-                <Dialog.Button onPress={handleCancel} label="Não" />
-                <Dialog.Button onPress={handleConfirm} label="Sim" />
-            </Dialog.Container>
-
-        </View>  
-    );
-
+      <Dialog.Container visible={visible}>
+        <Dialog.Title>Nova Comanda</Dialog.Title>
+        <Dialog.Description>
+          Deseja realmente abrir uma nova comanda?
+        </Dialog.Description>
+        <Dialog.Button onPress={handleCancel} label="Não" />
+        <Dialog.Button onPress={handleConfirm} label="Sim" />
+      </Dialog.Container>
+    </View>
+  );
 }
 
-
 const styles = StyleSheet.create({
-
   viewPrincipal: {
-    height:70,
-    width:70,
+    height: 70,
+    width: 70,
     bottom: 30,
     right: 30,
-    zIndex:1,
+    zIndex: 1,
     alignItems: 'center',
-    justifyContent:'center',
-    position:'absolute',
-    backgroundColor:'white',
-    borderRadius:100,
-    borderColor:'white',
-    borderWidth:1
+    justifyContent: 'center',
+    position: 'absolute',
+    borderRadius: 100,
+    borderColor: 'white',
+    borderWidth: 1,
   },
-
-  btnNovaComanda:{
-    fontSize:40,
+  btnNovaComanda: {
+    fontSize: 40,
     alignItems: 'center',
-    justifyContent:'center',
-
-
-  }
-
- 
+    justifyContent: 'center',
+  },
 });
