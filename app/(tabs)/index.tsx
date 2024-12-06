@@ -5,6 +5,7 @@ import { ButtonFlutuante } from '@/components/ButtonFlutuante';
 import { SafeAreaView } from 'react-native';
 import { View, ScrollView} from 'react-native';
 import { useRouter } from "expo-router";
+import * as Haptics from 'expo-haptics';
 
 type ComandaDetalheParams = {
   nomeComanda: string;

@@ -4,6 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Dialog from "react-native-dialog";
 import { useLocalSearchParams  } from 'expo-router';
 import { useRouter } from "expo-router";
+import * as Haptics from 'expo-haptics';
 
 
 
@@ -16,6 +17,7 @@ export function ButtonFlutuante(){
   const [visible, setVisible] = useState(false);
 
   const showDialog = () => {
+    Haptics.NotificationFeedbackType.Success
     setVisible(true);
   };
 

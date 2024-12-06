@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, Pressable, ScrollView, Vibration } from 'react-native'
 import { ItemComanda } from '@/components/ItemComanda'
 import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda'
+import { BottomBarDetalheComanda } from '@/components/navigation/BottomBarDetalheComanda'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ValorTotalComanda } from '@/components/valorTotalComanda'
 import { useLocalSearchParams, useRouter } from 'expo-router'
@@ -32,13 +33,12 @@ export default function ComandaDetalhe () {
   ]
 
   const [selectedItems, setSelectedItems] = useState<number[]>([])  // Lista de itens selecionados
-  const [isSelectingMultiple, setIsSelectingMultiple] = useState(false) // Controle de seleção múltipla
+
 
   const handleLongPress = (numeroComanda: number) => {
     // A primeira vez que um item é pressionado por longo tempo
     if (selectedItems.length === 0) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
-      setIsSelectingMultiple(true)  // Ativa o modo de seleção múltipla
     }
 
     // Se o item já está selecionado, remove da lista, caso contrário, adiciona
@@ -61,9 +61,12 @@ export default function ComandaDetalhe () {
     }
   }
 
+  const isBottomBarVisible = selectedItems.length > 0;
+
 
   return (
     <SafeAreaView style={styles.viewPrincipal}>
+
       <TopBarDetalheComanda/>
 
       <View style={styles.viewInfoComanda}>
@@ -103,7 +106,9 @@ export default function ComandaDetalhe () {
         </View>
       </ScrollView>
 
-      <ValorTotalComanda valorTotal={134.21}/>
+      {(!isBottomBarVisible) && <ValorTotalComanda valorTotal={134.21}/>}
+      {isBottomBarVisible && <BottomBarDetalheComanda/>}
+      
     </SafeAreaView>
   )
 }
