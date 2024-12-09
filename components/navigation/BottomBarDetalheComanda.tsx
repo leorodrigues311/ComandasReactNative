@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Pressable, Touchable } from 'react-native';
+import { View, Text, StyleSheet, Pressable} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useRouter } from 'expo-router';
 
 
 export function BottomBarDetalheComanda(){
 
-  const router = useRouter();
-
-
     return (
         <View style={styles.viewPrincipal}>
 
-        <Text style={styles.viewBtnSair}>5</Text>
+        <Text style={styles.viewBtnSair}>1</Text>
 
 
         <View style={styles.viewOperacoesComanda}>

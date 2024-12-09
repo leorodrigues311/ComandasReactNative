@@ -1,24 +1,24 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Pressable } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import Dialog from "react-native-dialog";
-import { useRouter } from "expo-router";
-import * as Haptics from 'expo-haptics';
+import React, { useState } from 'react'
+import { View, StyleSheet, Pressable } from 'react-native'
+import Ionicons from '@expo/vector-icons/Ionicons'
+import Dialog from "react-native-dialog"
+import { useRouter } from "expo-router"
+import * as Haptics from 'expo-haptics'
 
 export function ButtonFlutuante() {
-  const router = useRouter();
-  const [visible, setVisible] = useState(false);
-  const [viewColor, setViewColor] = useState('white'); // Estado para controlar a cor de fundo do View
+  const router = useRouter()
+  const [visible, setVisible] = useState(false)
+  const [viewColor, setViewColor] = useState('white')
+
+  const handleFeedbackButton = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
+    setViewColor('gray')
+  }
 
   const showDialog = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
-    setViewColor('gray'); // Altera a cor do fundo para cinza claro
-
-    setTimeout(() => {
-      setViewColor('white'); // Retorna a cor do fundo para branco
-    }, 50);
-
-    setVisible(true);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
+    setViewColor('white')
+    setVisible(true)
   };
 
   const handleCancel = () => {
@@ -26,13 +26,13 @@ export function ButtonFlutuante() {
   };
 
   const handleConfirm = () => {
-    setVisible(false);
-    router.push('/novaComanda');
+    setVisible(false)
+    router.push('/novaComanda')
   };
 
   return (
     <View style={[styles.viewPrincipal, { backgroundColor: viewColor }]}>
-      <Pressable onPressIn={showDialog}>
+      <Pressable onPressIn={handleFeedbackButton} onPressOut={showDialog}> 
         <Ionicons
           style={styles.btnNovaComanda}
           name="add-outline"

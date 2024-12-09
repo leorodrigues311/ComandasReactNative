@@ -8,12 +8,7 @@ import { ValorTotalComanda } from '@/components/valorTotalComanda'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Haptics from 'expo-haptics';
 
-type ComandaDetalheParams = {
-  nomeComanda: string
-  numeroComanda: number
-  horaAbertura: string
-  statusComanda: string
-}
+
 
 export default function ComandaDetalhe () {
 
@@ -92,7 +87,7 @@ export default function ComandaDetalhe () {
             <Pressable
               key={item.numeroComanda}
               onLongPress={() => handleLongPress(item.numeroComanda)}
-              onPress={() => handlePress(item.numeroComanda)} // Usa o onPress após o primeiro item
+              onPress={() => handlePress(item.numeroComanda)}
             >
               <ItemComanda
                 nomeItem={item.nomeItem}
@@ -199,4 +194,5 @@ const styles = StyleSheet.create({
     borderColor:'#A9A9A9',
     borderWidth:0.6
   },
+
 });

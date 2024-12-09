@@ -2,17 +2,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Modal, Text, TextInput, View, Button, Pressable, StyleSheet } from 'react-native';
 import React, { useState, useEffect  } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native';
-import { useLocalSearchParams  } from 'expo-router';
+import Dialog from "react-native-dialog"
 import { useRouter } from "expo-router";
-
-type ComandaDetalheParams = {
-  nomeComanda: string;
-  numeroComanda: number;
-  horaAbertura: string;
-  statusComanda: string;
-};
-
 
 
 export default function novaComanda (){
@@ -25,7 +16,18 @@ export default function novaComanda (){
   const [modalNomeComandaVisivel, setModalNomeComanda] = useState(false)
   const [inputNomeComanda, setInputNomeComanda] = useState('')
 
+  const [dialogVisible, setDialogVisible] = useState(false)
+
   const [text, setText] = useState('');
+
+  const handleCancel = () => {
+    setDialogVisible(false);
+  };
+
+  const handleConfirm = () => {
+    router.back()
+  };
+
 
   const handleButtonPress = (buttonType: string) => {
     if (buttonType === 'confirmaNumero') {
@@ -34,7 +36,7 @@ export default function novaComanda (){
     } 
 
     else if (buttonType === 'cancela') {
-      setInputNumeroComanda('')
+      setDialogVisible(true)
     }
     
     else if (buttonType === 'voltaEtapa'){
@@ -61,6 +63,16 @@ export default function novaComanda (){
     return (
         <SafeAreaView style={styles.viewPrincipal} >
             <View style={styles.container}>
+
+
+            <Dialog.Container visible={dialogVisible}>
+              <Dialog.Title>Cancelar</Dialog.Title>
+              <Dialog.Description>
+                Deseja Cancelar o Cadastro da Nova Comanda?
+              </Dialog.Description>
+              <Dialog.Button onPress={handleCancel} label="Não" />
+              <Dialog.Button onPress={handleConfirm} label="Sim" />
+            </Dialog.Container>
  
             <Modal
               visible={modalNumeroComandaVisivel}
