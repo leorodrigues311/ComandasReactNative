@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, Pressable, ScrollView, Image } from 'react-nati
 import { ItemProduto } from '@/components/ItemProduto'
 import { TopBarProdutos } from '@/components/navigation/TopBarProdutos'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { ValorTotalComanda } from '@/components/valorTotalComanda'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 
 interface ComandaProps {
@@ -497,12 +496,12 @@ const styles = StyleSheet.create({
   },
 
   imagemNumero: {
-    width: '100%',   // Faz a imagem ocupar toda a largura disponível
-    height: '100%',  // Faz a imagem ocupar toda a altura disponível
-    position: 'absolute',  // Posiciona a imagem atrás do texto
-    top: 0,   // Alinha a imagem ao topo
-    left: 0,  // Alinha a imagem à esquerda
-    resizeMode: 'cover',  // Faz a imagem preencher todo o espaço, cortando se necessário
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    resizeMode: 'cover',
     borderRadius:5,
 },
 
