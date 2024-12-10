@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, Pressable, ScrollView, Vibration } from 'react-native'
+import { StyleSheet, Text, View, Pressable, ScrollView} from 'react-native'
 import { ItemComanda } from '@/components/ItemComanda'
 import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda'
 import { BottomBarDetalheComanda } from '@/components/navigation/BottomBarDetalheComanda'
@@ -28,6 +28,11 @@ export default function ComandaDetalhe () {
   ]
 
   const [selectedItems, setSelectedItems] = useState<number[]>([])  // Lista de itens selecionados
+
+    // Função para limpar selectedItems
+    const limparSelecao = () => {
+      setSelectedItems([]); // Limpa o array
+    }
 
 
   const handleLongPress = (numeroComanda: number) => {
@@ -102,7 +107,7 @@ export default function ComandaDetalhe () {
       </ScrollView>
 
       {(!isBottomBarVisible) && <ValorTotalComanda valorTotal={134.21}/>}
-      {isBottomBarVisible && <BottomBarDetalheComanda/>}
+      {isBottomBarVisible && <BottomBarDetalheComanda selectedItemsLength={selectedItems.length} limparSelecao={limparSelecao}/>}
       
     </SafeAreaView>
   )

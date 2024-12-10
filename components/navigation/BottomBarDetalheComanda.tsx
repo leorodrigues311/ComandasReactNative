@@ -14,7 +14,7 @@ type IconName =
   | "arrow-down"
 
 
-export function BottomBarDetalheComanda(){
+export function BottomBarDetalheComanda({ selectedItemsLength, limparSelecao }: { selectedItemsLength: number, limparSelecao: () => void }) {
 
   const router = useRouter();
 
@@ -49,6 +49,8 @@ export function BottomBarDetalheComanda(){
   const handleFecharBottomBar = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
     setIconeFecharBottomBar('arrow-down-outline');
+    limparSelecao();  // Limpa a seleção
+    setDialogNovoProdutoVisible(false);  // Fecha o diálogo
   }
 
   const handleImprimir = () => {
@@ -88,7 +90,7 @@ export function BottomBarDetalheComanda(){
             <Dialog.Button onPress={handleConfirm} label="Sim" />
           </Dialog.Container>
 
-          <Text style={styles.viewBtnSair}>1</Text>
+          <Text style={styles.viewBtnSair}>{selectedItemsLength}</Text>
 
 
           <View style={styles.viewOperacoesComanda}>
