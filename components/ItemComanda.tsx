@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-
+// Aqui nós instanciamos uma interface para definir o tipo de cada variavel/ variáveis opcionais tem um ? após o nome
 interface itemProps {
     nomeItem: string;
     quantidade: number;

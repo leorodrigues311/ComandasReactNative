@@ -2,6 +2,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, Text, View} from 'react-native';
 import react from 'react'
 
+// Aqui nós instanciamos uma interface para definir o tipo de cada variavel
 interface ComandaProps {
   nomeComanda: string;
   numeroComanda: number;
@@ -13,15 +14,18 @@ interface ComandaProps {
 export function Comanda({nomeComanda, numeroComanda, valorTotal, horaAbertura, statusComanda}: ComandaProps){
     return (
         <View  style={styles.viewPrincipal}>
+          {/*Aqui fica o visualizador do status da comanda, estiver ativo, fica verde, inativo fica vermelho*/}
             <View style={[styles.viewStatus,
               {backgroundColor: statusComanda === 'ativo' ? '#00FF00' : '#FF0000'},
               {borderColor: statusComanda === 'ativo' ? '#00FF00' : '#FF0000'}]}>
              </View>
 
+          {/*Essa é a view que exibe o numero da comanda*/}
             <View style={styles.viewNumero}>
                 <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
             </View>
 
+          {/*Essa é a view que traz os detalhes da comanda*/}
             <View style={styles.viewInfo}>
               <Text style={styles.viewInfoNome}>{nomeComanda}</Text>
               <Text style={styles.viewInfoValorTotal}>R$ {valorTotal}</Text>
