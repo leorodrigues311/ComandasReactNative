@@ -62,7 +62,7 @@ export default function ComandaDetalhe () {
   return (
     <SafeAreaView style={styles.viewPrincipal}>
 
-      <TopBarDetalheComanda/>
+      <TopBarDetalheComanda hideIcons={isBottomBarVisible}/>
 
       <View style={styles.viewInfoComanda}>
         <View style={[styles.viewStatus, 
@@ -194,5 +194,10 @@ const styles = StyleSheet.create({
     borderColor:'#A9A9A9',
     borderWidth:0.6
   },
+
+  topBarPreta: {
+    backgroundColor: '#000000',  // Torna a TopBar preta
+    zIndex:0
+  }
 
 });

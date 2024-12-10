@@ -32,7 +32,7 @@ export default function novaComanda (){
   const handleButtonPress = (buttonType: string) => {
     if (buttonType === 'confirmaNumero') {
       setModalNumeroComanda(false);
-      setTimeout(() => {setModalNomeComanda(true)}, 500);
+      setTimeout(() => {setModalNomeComanda(true)}, 600);
     } 
 
     else if (buttonType === 'cancela') {
@@ -41,7 +41,7 @@ export default function novaComanda (){
     
     else if (buttonType === 'voltaEtapa'){
       setModalNomeComanda(false);
-      setTimeout(() => {setModalNumeroComanda(true)}, 500);
+      setTimeout(() => {setModalNumeroComanda(true)}, 600);
     }
 
     else if (buttonType === 'finaliza'){
