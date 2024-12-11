@@ -88,7 +88,8 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
 
   // Esta função executa a ação do dialogo ****** ainda em desenvolvimento ******
   const handleConfirm = () => {
-    router.back()
+    setDialogNovoProdutoVisible(false)
+    router.push('/produtos')
   }
 
   return (
