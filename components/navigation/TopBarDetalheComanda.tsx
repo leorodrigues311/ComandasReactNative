@@ -104,7 +104,7 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
 
     {/*O "hideIcons traz se o icone deve ser ocultado ou não, então se ele for false, ele exibe os icones*/}
     {!hideIcons && (
-      <Pressable onPress={() => router.back()}>
+      <Pressable onPress={() => router.replace('/(tabs)')}>
         <Ionicons style={styles.viewBtnSair} name="arrow-back-outline" size={32} color="white" />
       </Pressable>
     )}
