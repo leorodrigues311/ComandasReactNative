@@ -16,6 +16,7 @@ interface ComandaProps {
 export default function Produto({nomeComanda, numeroComanda, valorTotal, horaAbertura, statusComanda}: ComandaProps){
 
 
+  // Este array guarda os produtos existentes no cadastro de produtos
   const produtos = [
     { nomeComanda: 'João da Silva', numeroComanda: 1, horaAbertura: '10:42', valorTotal: 134.21, statusComanda: 'ativo' },
     { nomeComanda: 'Roberto', numeroComanda: 2, horaAbertura: '10:42', valorTotal: 14.11, statusComanda: 'ativo' },

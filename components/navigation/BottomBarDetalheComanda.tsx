@@ -5,6 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics'
 
+// Aqui tivemos que criar um type, para mudar o estado de cada icone ao clicar
 type IconName = 
   | "trash-outline"
   | "trash"
@@ -16,64 +17,74 @@ type IconName =
 
 export function BottomBarDetalheComanda({ selectedItemsLength, limparSelecao }: { selectedItemsLength: number, limparSelecao: () => void }) {
 
-  const router = useRouter();
+  const router = useRouter()
 
-  const [tituloModal, setTituloModal] = useState('');
-  const [conteudoModal, setConteudoModal] = useState('');
+  // Aqui foi criado um estado para o conteudo dos 'dialog', pois temos vários botões, então cada um usa o 'dialog' com um conteudo diferente
+  const [tituloModal, setTituloModal] = useState('')
+  const [conteudoModal, setConteudoModal] = useState('')
 
-  const [iconeImpressora, setIconeImpressora] = useState<IconName>('print-outline');
-  const [iconeLixo, setIconeLixo] = useState<IconName>('trash-outline');
-  const [iconeFecharBottomBar, setIconeFecharBottomBar] = useState<IconName>('arrow-down-outline');
+  // Aqui ficam os estados normais dos icones, que são todos 'outline', é através dessas funções que trocamos o tipo do icone
+  const [iconeImpressora, setIconeImpressora] = useState<IconName>('print-outline')
+  const [iconeLixo, setIconeLixo] = useState<IconName>('trash-outline')
+  const [iconeFecharBottomBar, setIconeFecharBottomBar] = useState<IconName>('arrow-down-outline')
 
-  const [dialogActionVisible, setDialogNovoProdutoVisible] = useState(false)
+  // Aqui nós exibimos o 'dialog'
+  const [dialogActionVisible, setDialogBottomBarVisible] = useState(false)
 
+  // Este é o feedback tátil do icone de fechar a bottomBar (acionado no OnPressIn)
   const handleFeedbackFecharBottomBar = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
-    setIconeFecharBottomBar('arrow-down');
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
+    setIconeFecharBottomBar('arrow-down')
   }
 
+  // Este é o feedback tátil do icone de impressora (acionado no OnPressIn)
   const handleFeedbackPrint = () => {
     Haptics.notificationAsync(
       Haptics.NotificationFeedbackType.Warning
     )
-    setIconeImpressora('print');
+    setIconeImpressora('print')
   }
 
+  // Este é o feedback tátil do icone de excluir o produto (acionado no OnPressIn)
   const handleFeedbackExcluirProduto = () => {
     Haptics.notificationAsync(
       Haptics.NotificationFeedbackType.Error
     )
-    setIconeLixo('trash');
+    setIconeLixo('trash')
   }
 
+  // Aqui nós fechamos a bottomBar e removemos os itens que estão no array de seleção (acionado no OnPressOut)
   const handleFecharBottomBar = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
-    setIconeFecharBottomBar('arrow-down-outline');
-    limparSelecao();  // Limpa a seleção
-    setDialogNovoProdutoVisible(false);  // Fecha o diálogo
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
+    setIconeFecharBottomBar('arrow-down-outline')
+    limparSelecao()
   }
 
+  // Aqui fica a função real do botão de imprimir (acionado no OnPressOut)
   const handleImprimir = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
-    setIconeImpressora('print-outline');
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
+    setIconeImpressora('print-outline')
     setTituloModal('Imprimir')
     setConteudoModal('Deseja imprimir os itens selecionados?')
-    setDialogNovoProdutoVisible(true);
+    setDialogBottomBarVisible(true)
   }
 
+  // Aqui fica a função real do botão de Excluir produto (acionado no OnPressOut)
   const handleExcluirProduto = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
-    setIconeLixo('trash-outline');
+    setIconeLixo('trash-outline')
     setTituloModal('Excluir')
     setConteudoModal('Deseja excluir os itens selecionados?')
-    setDialogNovoProdutoVisible(true);
+    setDialogBottomBarVisible(true)
     
   }
 
+  // Este cancela a ação do dialogo
   const handleCancel = () => {
-    setDialogNovoProdutoVisible(false);
-  };
+    setDialogBottomBarVisible(false)
+  }
 
+  // Esta função executa a ação do dialogo ****** ainda em desenvolvimento ******
   const handleConfirm = () => {
     router.back()
   };
@@ -81,6 +92,7 @@ export function BottomBarDetalheComanda({ selectedItemsLength, limparSelecao }: 
     return (
         <View style={styles.viewPrincipal}>
 
+        {/*Este é o dialogo dos botões, o conteudo muda de acordo com cada botão*/}
           <Dialog.Container visible={dialogActionVisible}>
             <Dialog.Title>{tituloModal}</Dialog.Title>
             <Dialog.Description>

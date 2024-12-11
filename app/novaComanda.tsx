@@ -10,25 +10,31 @@ export default function novaComanda (){
 
   const router = useRouter();
 
+  // Estas instâncias servem para mudar o estado do modal do número da comanda, e para mudar o valor do input quando o usuario digita
   const [modalNumeroComandaVisivel, setModalNumeroComanda] = useState(false)
   const [inputNumeroComanda, setInputNumeroComanda] = useState('')
 
+  // Estas instâncias servem para mudar o estado do modal do nome da comanda, e para mudar o valor do input quando o usuario digita
   const [modalNomeComandaVisivel, setModalNomeComanda] = useState(false)
   const [inputNomeComanda, setInputNomeComanda] = useState('')
 
+  // Este serve para mudar o estado do "dialog", no caso aquele aviso para cancelar a abertura da comanda
   const [dialogVisible, setDialogVisible] = useState(false)
 
   const [text, setText] = useState('');
 
+  // Essa função muda o estado do "dialog", é acionada pelo botão "cancelar" do "dialog"
   const handleCancel = () => {
     setDialogVisible(false);
   };
 
+  // Essa função confirma o cancelamento, levando o usuário para a página inicial
   const handleConfirm = () => {
     router.back()
   };
 
 
+  // aqui a função captura o clique do botão, e verifica se o botão retornou com os nomes correspondentes. E então executa a ação
   const handleButtonPress = (buttonType: string) => {
     if (buttonType === 'confirmaNumero') {
       setModalNumeroComanda(false);
@@ -54,17 +60,14 @@ export default function novaComanda (){
 
   };
 
-  useEffect(() => { 
-    setTimeout(() => {
-      setModalNumeroComanda(true)
-    }, 500);
-   }, []);
+  // Aqui ele abre o modal assim que o documento é carregado
+  useEffect(() => { setTimeout(() => { setModalNumeroComanda(true) }, 500) }, []);
 
     return (
         <SafeAreaView style={styles.viewPrincipal} >
             <View style={styles.container}>
 
-
+          {/*Este é o dialogo para cancelar a abertura da comanda*/}
             <Dialog.Container visible={dialogVisible}>
               <Dialog.Title>Cancelar</Dialog.Title>
               <Dialog.Description>
@@ -74,6 +77,7 @@ export default function novaComanda (){
               <Dialog.Button onPress={handleConfirm} label="Sim" />
             </Dialog.Container>
  
+            {/*Este é o primeiro modal, que recebe o número da comanda*/}
             <Modal
               visible={modalNumeroComandaVisivel}
               animationType="slide"
@@ -112,6 +116,7 @@ export default function novaComanda (){
               </View>
             </Modal>
 
+          {/*Este é o segundo modal, que recebe o nome do cliente*/}
             <Modal
               visible={modalNomeComandaVisivel}
               animationType="slide"
