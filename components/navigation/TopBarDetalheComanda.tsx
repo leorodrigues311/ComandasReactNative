@@ -87,10 +87,26 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
   }
 
   // Esta função executa a ação do dialogo ****** ainda em desenvolvimento ******
-  const handleConfirm = () => {
+  const handleConfirm = (buttonType: string) => {
     setDialogNovoProdutoVisible(false)
-    router.push('/produtos')
-  }
+
+    if (buttonType === 'adicionarItemComanda') {
+
+      router.push({
+        pathname: '/produtoAdicionarComanda',
+        params: {},
+      })
+      
+    }
+
+    else if (buttonType === 'finaliza'){
+    }
+
+  };
+
+
+
+
 
   return (
     <View style={[styles.viewPrincipal, style]}>
@@ -100,7 +116,7 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
         <Dialog.Title>{tituloModal}</Dialog.Title>
         <Dialog.Description>{conteudoModal}</Dialog.Description>
         <Dialog.Button onPress={handleCancel} label="Não" />
-        <Dialog.Button onPress={handleConfirm} label="Sim" />
+        <Dialog.Button onPress={() => handleConfirm('adicionarItemComanda')} label="Sim" />
       </Dialog.Container>
 
     {/*O "hideIcons traz se o icone deve ser ocultado ou não, então se ele for false, ele exibe os icones*/}

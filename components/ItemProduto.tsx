@@ -4,64 +4,48 @@ import { StyleSheet, Text, View } from 'react-native';
 
 interface itemProps {
     nomeItem: string;
-    quantidade: number;
-    valorUnit: number;
+    estoque: number;
     valorTotal: number;
     style?: object;
 }
 
-export function ItemProduto({ nomeItem, quantidade, valorUnit, valorTotal, style }: itemProps) {
+export function ItemProduto({ nomeItem, estoque, valorTotal, style }: itemProps) {
     return (
         <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
 
-            </View>
+          <View style={styles.viewNumero}>
+              <Text style={styles.viewNumeroTexto}></Text>
+          </View>
 
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}></Text>
+          <View style={styles.viewInfo}>
+            <Text style={styles.viewInfoNome}>{nomeItem}</Text>
+            <View style={styles.viewValorUnitItem}>
+              <Text style={styles.viewInfoValorTotal}>R$: {valorTotal.toFixed(2)}</Text>
+              <Text style={styles.quantidadeItem}>Estoque: {estoque}</Text>
             </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Pão com pão</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 36,90</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
+          </View>
         </View>  
     );
 }
 
 const styles = StyleSheet.create({
   viewPrincipal: {
-    margin: 5,
-    marginLeft: 10,
-    marginRight: 10,
-    backgroundColor: '#282828',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    height: 60,
-    flexDirection: 'column',
-    borderRadius: 5,
-  },
-
-  viewStatus: {
-    height:99,
-    width:5,
-    backgroundColor:'#696969',
-    borderWidth: 0.2,
+    height:70,
+    borderWidth: 0.5,
     borderRadius:5,
-    borderTopRightRadius:0,
-    borderBottomRightRadius:0,
-    borderColor: '#696969',
-    marginLeft: 0,
+    borderColor: '#4F4F4F',
+    margin: 12,
+    marginBottom:1,
+    backgroundColor:'#1C1C1C',
+    flexDirection: 'row'
   },
 
   viewNumero: {
-    height:99,
-    width:99,
+    height:70,
+    width:70,
     alignItems: 'center',
     backgroundColor:'#696969',
+    borderRadius:5,
     borderTopRightRadius:5,
     borderBottomRightRadius:5,
   },
@@ -84,7 +68,7 @@ const styles = StyleSheet.create({
     marginLeft:10,
     marginTop:5,
     color:'white',
-    fontSize:20
+    fontSize:17
   },
 
   viewInfoValorTotal: {
@@ -104,9 +88,9 @@ const styles = StyleSheet.create({
   quantidadeItem: {
     fontSize: 13,
     color: '#C0C0C0',
-    left: 10,
+    left:'30%',
     margin: 0,
-    marginTop: 7,
+    marginTop: 14,
     fontWeight: '300',
   },
 
@@ -126,7 +110,6 @@ const styles = StyleSheet.create({
 
   viewValorUnitItem: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     width: '100%',
     marginBottom: 5,
   },
@@ -150,4 +133,15 @@ const styles = StyleSheet.create({
     margin: 5,
     position: 'absolute',
   },
+
+  imagemNumero: {
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    resizeMode: 'cover',
+    borderRadius:5,
+},
+
 });
