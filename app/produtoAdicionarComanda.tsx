@@ -2,44 +2,73 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, Pressable, ScrollView, Image } from 'react-native'
 import { ItemProduto } from '@/components/ItemProduto'
 import { TopBarAdicionarProduto } from '@/components/navigation/TopBarAdicionarProduto'
+import Dialog from "react-native-dialog"
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 
 
+
+
 export default function produtoAdicionarComanda(){
+
+  const router = useRouter()
 
 
   // Este array guarda os produtos existentes no cadastro de produtos
   const produtos = [
     { nomeItem: 'Pão que o Thiago Amassou', estoque: 3, valorTotal: 10.50},
     { nomeItem: 'Caldo de piranha', estoque: 1, valorTotal: 10.50},
-    { nomeItem: 'Pão que o Thiago Amassou', estoque: 3, valorTotal: 10.50},
-    { nomeItem: 'Pão que o Thiago Amassou', estoque: 3, valorTotal: 10.50},
-    { nomeItem: 'Pão que o Thiago Amassou', estoque: 3, valorTotal: 10.50},
-    { nomeItem: 'Pão que o Thiago Amassou', estoque: 3, valorTotal: 10.50},
-    { nomeItem: 'Pão que o Thiago Amassou', estoque: 3, valorTotal: 10.50},
-    { nomeItem: 'Pão que o Thiago Amassou', estoque: 3, valorTotal: 10.50},
+    { nomeItem: 'Ruffles do Outback', estoque: 4, valorTotal: 10.50},
+    { nomeItem: 'Prime Ribs costela do luis', estoque: 21, valorTotal: 10.50},
+    { nomeItem: 'Sopa de hospital', estoque: 43, valorTotal: 10.50},
+    { nomeItem: 'Caldo knorr com agua', estoque: 32, valorTotal: 10.50},
+    { nomeItem: 'Sambiquira', estoque: 1, valorTotal: 10.50},
+    { nomeItem: 'Manga verde', estoque: 0, valorTotal: 10.50},
 
-];
+  ]
+
+  // Aqui nós exibimos o 'dialog'
+  const [dialogActionVisible, setDialogNovoProdutoVisible] = useState(false)
+
+  // Este cancela a ação do dialogo
+  const handleCancel = () => {
+    setDialogNovoProdutoVisible(false)
+  }
+
+  // Esta função executa a ação do dialogo ****** ainda em desenvolvimento ******
+  const handleConfirm = (buttonType: string) => {
+    setDialogNovoProdutoVisible(false)
+
+    if (buttonType === 'adicionarItemComanda') {}
 
 
+      
+    }
 
-const router = useRouter();
+
+ const handleModalAdicionarItem = () => {
+
+  }
 
 
   return (
     <SafeAreaView>
       <TopBarAdicionarProduto/>
+
+          {/*Este é o dialogo dos botões, o conteudo muda de acordo com cada botão*/}
+      <Dialog.Container visible={dialogActionVisible}>
+        <Dialog.Title>Adicionar Item</Dialog.Title>
+        <Dialog.Description>Deseja adicionar (nome do item)à comanda?</Dialog.Description>
+        <Dialog.Button onPress={handleCancel} label="Não" />
+        <Dialog.Button onPress={() => handleConfirm('adicionarItemComanda')} label="Sim" />
+      </Dialog.Container>
       <ScrollView>
 
        
         {produtos.map((produtos, index) => (
                   <Pressable
                       key={index}
-                      onPress={() => router.push({
-                          pathname: '/comandaDetalhe',
-                          params: produtos,
-                      })}
+                      onPress={() => setDialogNovoProdutoVisible(true)}
                   >
                       <ItemProduto
                           nomeItem={produtos.nomeItem}

@@ -28,7 +28,7 @@ export function Comanda({nomeComanda, numeroComanda, valorTotal, horaAbertura, s
           {/*Essa é a view que traz os detalhes da comanda*/}
             <View style={styles.viewInfo}>
               <Text style={styles.viewInfoNome}>{nomeComanda}</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ {valorTotal}</Text>
+              <Text style={styles.viewInfoValorTotal}>R$ {valorTotal.toFixed(2).replace('.', ',')}</Text>
               <Text style={styles.viewInfoHora}>Hora de Abertura: {horaAbertura}</Text>
             </View>
         </View>  

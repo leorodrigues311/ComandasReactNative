@@ -20,7 +20,7 @@ export function ItemProduto({ nomeItem, estoque, valorTotal, style }: itemProps)
           <View style={styles.viewInfo}>
             <Text style={styles.viewInfoNome}>{nomeItem}</Text>
             <View style={styles.viewValorUnitItem}>
-              <Text style={styles.viewInfoValorTotal}>R$: {valorTotal.toFixed(2)}</Text>
+              <Text style={styles.viewInfoValorTotal}>R$: {valorTotal.toFixed(2).replace('.', ',')}</Text>
               <Text style={styles.quantidadeItem}>Estoque: {estoque}</Text>
             </View>
           </View>
