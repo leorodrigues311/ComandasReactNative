@@ -39,15 +39,6 @@ export default function produtoAdicionarComanda(){
   const handleConfirm = (buttonType: string) => {
     setDialogNovoProdutoVisible(false)
 
-    if (buttonType === 'adicionarItemComanda') {}
-
-
-      
-    }
-
-
- const handleModalAdicionarItem = () => {
-
   }
 
 
