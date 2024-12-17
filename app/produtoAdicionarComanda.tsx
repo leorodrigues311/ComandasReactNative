@@ -13,26 +13,17 @@ export default function produtoAdicionarComanda() {
 
   // Este array guarda os produtos existentes no cadastro de produtos
   const produtos = [
-    { nomeItem: 'Pão que o Thiago Amassou', estoque: 3, valorTotal: 10.50},
-    { nomeItem: 'Caldo de piranha', estoque: 1, valorTotal: 10.50},
-    { nomeItem: 'Ruffles do Outback', estoque: 4, valorTotal: 10.50},
-    { nomeItem: 'Prime Ribs costela do luis', estoque: 21, valorTotal: 10.50},
-    { nomeItem: 'Sopa de hospital', estoque: 43, valorTotal: 10.50},
-    { nomeItem: 'Caldo knorr com agua', estoque: 32, valorTotal: 10.50},
-    { nomeItem: 'Sambiquira', estoque: 1, valorTotal: 10.50},
-    { nomeItem: 'Pipoca', estoque: 0, valorTotal: 10.50},
-    { nomeItem: 'Guizado', estoque: 0, valorTotal: 10.50},
-    { nomeItem: 'Tilapia assada', estoque: 0, valorTotal: 10.50},
-    { nomeItem: 'Macaxeira', estoque: 0, valorTotal: 10.50},
-    { nomeItem: 'Salada de frutas', estoque: 0, valorTotal: 10.50},
-    { nomeItem: 'Farofa', estoque: 0, valorTotal: 10.50},
-    { nomeItem: 'Coca cola', estoque: 0, valorTotal: 10.50},
-    { nomeItem: 'Chopp pilsen', estoque: 0, valorTotal: 10.50},
-    { nomeItem: 'Jaggermeister', estoque: 0, valorTotal: 10.50},
-    { nomeItem: 'Milho verde', estoque: 0, valorTotal: 10.50},
-    { nomeItem: 'Mexerica', estoque: 0, valorTotal: 10.50},
-    { nomeItem: 'Javali', estoque: 0, valorTotal: 10.50},
-
+    { nomeItem: 'Pão que o Thiago Amassou', estoque: 3, valorTotal: 10.50, imagem: 'https://emporiokaminski.com.br/wp-content/uploads/2024/06/Pao-Frances-50g-2.jpg'},
+    { nomeItem: 'Caldo de piranha', estoque: 1, valorTotal: 10.50, imagem: 'https://www.joicetur.com.br/arquivos/media/receitas/caldodepiranha-copy-1.jpg'},
+    { nomeItem: 'Ruffles do Outback', estoque: 4, valorTotal: 10.50, imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlk7vfIddfl3rD4XDzz8vc_Nhc8skC20il4g&s'},
+    { nomeItem: 'Prime Ribs costela do luis', estoque: 21, valorTotal: 10.50, imagem: 'https://media-cdn.tripadvisor.com/media/photo-p/19/ed/95/3f/outback-prime-rib-with.jpg'},
+    { nomeItem: 'Sopa de hospital', estoque: 43, valorTotal: 10.50, imagem: 'https://static.itdg.com.br/images/640-440/d44a957b687ea4a22c86f66857da183f/sopa-de-legumes.jpg'},
+    { nomeItem: 'Caldo knorr com agua', estoque: 32, valorTotal: 10.50, imagem: 'https://www.lactosenao.com/wp-content/uploads/2017/06/sopa-legumes-facil-deliciosa.png'},
+    { nomeItem: 'Sambiquira', estoque: 1, valorTotal: 10.50, imagem: 'https://static.itdg.com.br/images/360-240/f966f498ad257feb884f035cb522eac6/shutterstock-2311324171-1-.jpg'},
+    { nomeItem: 'Pipoca', estoque: 0, valorTotal: 10.50, imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0VAatVZEfxQsS9bVgYtWcMPztrgox973y6g&s'},
+    { nomeItem: 'Guizado', estoque: 0, valorTotal: 10.50, imagem: 'https://receitatodahora.com.br/wp-content/uploads/2023/06/carne-de-panela-19-06-1024x683.jpg'},
+    { nomeItem: 'Tilapia assada', estoque: 0, valorTotal: 10.50, imagem: 'https://cdn.casaeculinaria.com/wp-content/uploads/2023/04/01130723/Tilapia-assada.webp'},
+    { nomeItem: 'Macaxeira', estoque: 0, valorTotal: 1070.50, imagem: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhhzPjDfw0J9cOLcNSGp_R_gEDBhaujk0WoQ&s'},
   ]
 
   // Aqui nós guardamos o nome do item que foi selecionado
@@ -101,6 +92,7 @@ export default function produtoAdicionarComanda() {
               nomeItem={produto.nomeItem}
               estoque={produto.estoque}
               valorTotal={produto.valorTotal}
+              imagem = {produto.imagem}
             />
           </Pressable>
         ))}

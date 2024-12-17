@@ -6,16 +6,17 @@ interface itemProps {
     nomeItem: string;
     estoque: number;
     valorTotal: number;
+    imagem?: string;
     style?: object;
 }
 
-export function ItemProduto({ nomeItem, estoque, valorTotal, style }: itemProps) {
+export function ItemProduto({ nomeItem, estoque, valorTotal, imagem, style }: itemProps) {
     return (
         <View  style={styles.viewPrincipal}>
 
           <View style={styles.viewNumero}>
               <Image 
-                  source={{uri: 'https://amopaocaseiro.com.br/wp-content/uploads/2020/01/pao-caseiro-para-iniciantes_02.jpg'}} 
+                  source={{uri: imagem}} 
                   style={styles.imagemNumero} 
               />
           </View>
