@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 
 
 
@@ -14,7 +14,10 @@ export function ItemProduto({ nomeItem, estoque, valorTotal, style }: itemProps)
         <View  style={styles.viewPrincipal}>
 
           <View style={styles.viewNumero}>
-              <Text style={styles.viewNumeroTexto}></Text>
+              <Image 
+                  source={{uri: 'https://amopaocaseiro.com.br/wp-content/uploads/2020/01/pao-caseiro-para-iniciantes_02.jpg'}} 
+                  style={styles.imagemNumero} 
+              />
           </View>
 
           <View style={styles.viewInfo}>
@@ -88,10 +91,11 @@ const styles = StyleSheet.create({
   quantidadeItem: {
     fontSize: 13,
     color: '#C0C0C0',
-    left:'30%',
+    left: 70,
     margin: 0,
     marginTop: 14,
     fontWeight: '300',
+    position:'fixed'
   },
 
   viewNomeItem: {

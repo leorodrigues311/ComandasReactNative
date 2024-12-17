@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, Pressable, ScrollView, Image } from 'react-native'
-import { ItemProduto } from '@/components/ItemProduto'
 import { TopBarProdutos } from '@/components/navigation/TopBarProdutos'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useLocalSearchParams, useRouter } from 'expo-router'
+import ItemProdutoCardapio from '@/components/itemProdutoCardapio'
 
 interface ComandaProps {
   nomeComanda: string;
@@ -15,21 +15,29 @@ interface ComandaProps {
 
 export default function Produto({nomeComanda, numeroComanda, valorTotal, horaAbertura, statusComanda}: ComandaProps){
 
-
   // Este array guarda os produtos existentes no cadastro de produtos
   const produtos = [
-    { nomeComanda: 'João da Silva', numeroComanda: 1, horaAbertura: '10:42', valorTotal: 134.21, statusComanda: 'ativo' },
-    { nomeComanda: 'Roberto', numeroComanda: 2, horaAbertura: '10:42', valorTotal: 14.11, statusComanda: 'ativo' },
-    { nomeComanda: 'Lucas', numeroComanda: 3, horaAbertura: '11:28', valorTotal: 1874.33, statusComanda: 'ativo' },
-    { nomeComanda: 'Maria', numeroComanda: 4, horaAbertura: '09:52', valorTotal: 5.32, statusComanda: 'ativo' },
-    { nomeComanda: 'Ana Clara', numeroComanda: 5, horaAbertura: '15:30', valorTotal: 87.50, statusComanda: 'inativo' },
-    { nomeComanda: 'Pedro Henrique', numeroComanda: 6, horaAbertura: '17:00', valorTotal: 220.25, statusComanda: 'ativo' },
-    { nomeComanda: 'Sofia', numeroComanda: 7, horaAbertura: '18:45', valorTotal: 65.99, statusComanda: 'inativo' },
-    { nomeComanda: 'Lucas Oliveira', numeroComanda: 8, horaAbertura: '19:20', valorTotal: 110.00, statusComanda: 'ativo' },
-    { nomeComanda: 'Camila Souza', numeroComanda: 9, horaAbertura: '20:05', valorTotal: 35.75, statusComanda: 'ativo' }
-];
+    { nomeItem: 'Pão que o Thiago Amassou', estoque: 3, valorTotal: 10.50},
+    { nomeItem: 'Caldo de piranha', estoque: 1, valorTotal: 10.50},
+    { nomeItem: 'Ruffles do Outback', estoque: 4, valorTotal: 10.50},
+    { nomeItem: 'Prime Ribs costela do luis', estoque: 21, valorTotal: 10.50},
+    { nomeItem: 'Sopa de hospital', estoque: 43, valorTotal: 10.50},
+    { nomeItem: 'Caldo knorr com agua', estoque: 32, valorTotal: 10.50},
+    { nomeItem: 'Sambiquira', estoque: 1, valorTotal: 10.50},
+    { nomeItem: 'Pipoca', estoque: 0, valorTotal: 10.50},
+    { nomeItem: 'Guizado', estoque: 0, valorTotal: 10.50},
+    { nomeItem: 'Tilapia assada', estoque: 0, valorTotal: 10.50},
+    { nomeItem: 'Macaxeira', estoque: 0, valorTotal: 10.50},
+    { nomeItem: 'Salada de frutas', estoque: 0, valorTotal: 10.50},
+    { nomeItem: 'Farofa', estoque: 0, valorTotal: 10.50},
+    { nomeItem: 'Coca cola', estoque: 0, valorTotal: 10.50},
+    { nomeItem: 'Chopp pilsen', estoque: 0, valorTotal: 10.50},
+    { nomeItem: 'Jaggermeister', estoque: 0, valorTotal: 10.50},
+    { nomeItem: 'Milho verde', estoque: 0, valorTotal: 10.50},
+    { nomeItem: 'Mexerica', estoque: 0, valorTotal: 10.50},
+    { nomeItem: 'Javali', estoque: 0, valorTotal: 10.50},
 
-
+  ]
 
 const router = useRouter();
 
@@ -38,336 +46,17 @@ const router = useRouter();
     <SafeAreaView>
       <TopBarProdutos/>
       <ScrollView>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Pão com pão</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 36,90</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>  
-
-        <View style={styles.viewPrincipal}>
-    <View style={styles.viewStatus}>
-
-    </View>
-
-    <View style={styles.viewNumero}>
-        <Image 
-            source={{uri: 'https://amopaocaseiro.com.br/wp-content/uploads/2020/01/pao-caseiro-para-iniciantes_02.jpg'}} 
-            style={styles.imagemNumero} 
-        />
-        <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-    </View>
-
-    <View style={styles.viewInfo}>
-        <Text style={styles.viewInfoNome}>Pão com pão</Text>
-        <Text style={styles.viewInfoValorTotal}>R$ 36,90</Text>
-        <View style={styles.viewValorUnitItem}>
-            <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-        </View>
-    </View>
-</View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Suco</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 10,00</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Sopa de pedra</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 96,55</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Galinha Caipira</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 1,00</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Miojo com Caldo Knor</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 5,90</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Casca de ovo</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 56,30</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Feijão</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 10,40</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Carne assada</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 21,99</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Pão de queijo</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 12,90</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Chafé</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 410,30</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Suco de Tamarindo</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 2,50</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Suco tang</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 3,49</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Chocotone</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 0,59</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Washarma (arabe)</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 100,99</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Frango Parmeggiana</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 36,90</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Ovo cozido</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 5,99</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-        <View  style={styles.viewPrincipal}>
-            <View style= {styles.viewStatus}>
-
-            </View>
-
-            <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
-            </View>
-
-            <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>Pão de batata</Text>
-              <Text style={styles.viewInfoValorTotal}>R$ 1,90</Text>
-              <View style={styles.viewValorUnitItem}>
-                <Text style={styles.quantidadeItem}>Estoque: 10</Text>
-              </View>
-            </View>
-        </View>
-
-
+        {produtos.map((produto, index) => (
+          <Pressable
+            key={index}
+          >
+            <ItemProdutoCardapio
+              nomeItem={produto.nomeItem}
+              estoque={produto.estoque}
+              valorTotal={produto.valorTotal}
+            />
+          </Pressable>
+        ))}
       </ScrollView>
     </SafeAreaView>
   );
