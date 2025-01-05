@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, TextInput, View, Pressable, ScrollView, Image } from 'react-native'
 import { ItemProduto } from '@/components/ItemProduto'
+import { BottomBarConferirItens } from '@/components/navigation/BottomBarConferirItens'
 import { TopBarAdicionarProduto } from '@/components/navigation/TopBarAdicionarProduto'
 import Dialog from "react-native-dialog"
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -28,6 +29,14 @@ export default function produtoAdicionarComanda() {
 
   // Aqui nós guardamos o nome do item que foi selecionado
   const [selectedItem, setSelectedItem] = useState<string>('')
+
+ // Aqui fica o array dos itens que são selecionados quando você pressiona e segura um item
+  const [selectedItems, setSelectedItems] = useState<number[]>([])
+
+  // Limpa o array (é acionado com a seta pra baixo da bottomBar)
+  const limparSelecao = () => {
+    setSelectedItems([])
+  }
 
 
   // Estado para armazenar o texto do campo de entrada
@@ -63,42 +72,49 @@ export default function produtoAdicionarComanda() {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <TopBarAdicionarProduto />
-
-{/* Este é dialogo para escolher a quantidade */}
+  
+      {/* Este é o diálogo para escolher a quantidade */}
       <Dialog.Container visible={dialogQuantidadeProduto}>
         <Dialog.Title>Adicionar "{selectedItem}"</Dialog.Title>
-
+  
         {/* Campo de texto para input do usuário */}
         <TextInput
           style={styles.textInput}
           placeholder="Quantidade:"
           value={inputText}
           onChangeText={setInputText}
-          keyboardType='numeric'
+          keyboardType="numeric"
         />
         <Dialog.Button onPress={handleCancel} label="Cancelar" />
         <Dialog.Button onPress={() => handleItemSelect(selectedItem, 'confirmarItemQuantidade')} label="Adicionar" />
       </Dialog.Container>
-
-      <ScrollView style={styles.viewPrincipal}>
-        {produtos.map((produto, index) => (
-          <Pressable
-            key={index}
-            onPress={() => handleItemSelect(produto.nomeItem, 'adicionarItemComanda')}
-          >
-            <ItemProduto
-              nomeItem={produto.nomeItem}
-              estoque={produto.estoque}
-              valorTotal={produto.valorTotal}
-              imagem = {produto.imagem}
-            />
-          </Pressable>
-        ))}
-      </ScrollView>
+  
+      {/* View principal com flex para ocupar o espaço da tela */}
+      <View>
+        <ScrollView style={styles.viewPrincipal}>
+          {produtos.map((produto, index) => (
+            <Pressable
+              key={index}
+              onPress={() => handleItemSelect(produto.nomeItem, 'adicionarItemComanda')}
+            >
+              <ItemProduto
+                nomeItem={produto.nomeItem}
+                estoque={produto.estoque}
+                valorTotal={produto.valorTotal}
+                imagem={produto.imagem}
+              />
+            </Pressable>
+          ))}
+        </ScrollView>
+      </View>
+  
+      {/* BottomBar fixo fora do ScrollView */}
+      <BottomBarConferirItens selectedItemsLength={8} limparSelecao={limparSelecao} />
     </SafeAreaView>
   );
+  
 }
 
 const styles = StyleSheet.create({

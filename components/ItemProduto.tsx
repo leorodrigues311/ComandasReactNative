@@ -92,11 +92,11 @@ const styles = StyleSheet.create({
   quantidadeItem: {
     fontSize: 13,
     color: '#C0C0C0',
-    left: 70,
+    left: 180,
     margin: 0,
     marginTop: 14,
     fontWeight: '300',
-    position:'fixed'
+    position:'absolute'
   },
 
   viewNomeItem: {
