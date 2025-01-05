@@ -1,104 +1,96 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable} from 'react-native';
-import Dialog from "react-native-dialog"
+import { View, Text, StyleSheet, Pressable, Animated, Dimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
-import * as Haptics from 'expo-haptics'
-
-// Aqui tivemos que criar um type, para mudar o estado de cada icone ao clicar
-type IconName = 
-  | "cart-outline"
-  | "cart"
+import * as Haptics from 'expo-haptics';
 
 export function BottomBarConferirItens({ selectedItemsLength, limparSelecao }: { selectedItemsLength: number, limparSelecao: () => void }) {
+  const router = useRouter();
 
-  const router = useRouter()
+  const screenHeight = Dimensions.get('window').height; // Altura total da tela
+  const [isExpanded, setIsExpanded] = useState(false);
+  const heightAnim = useState(new Animated.Value(60))[0]; // Animação para a altura
 
-  // Aqui ficam os estados normais dos icones, que são todos 'outline', é através dessas funções que trocamos o tipo do icone
-  const [iconeCarrinho, seticoneCarrinho] = useState<IconName>('cart-outline')
+  const handleToggle = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
 
-  // Este é o feedback tátil do icone de fechar a bottomBar (acionado no OnPressIn)
-  const handleFeedbackFecharBottomBar = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
-    seticoneCarrinho('cart')
-  }
+    if (isExpanded) {
+      // Recolher
+      Animated.timing(heightAnim, {
+        toValue: 60, // Altura original da BottomBar
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      // Expandir para a altura total da tela
+      Animated.timing(heightAnim, {
+        toValue: screenHeight, // Altura da tela
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    }
 
+    setIsExpanded(!isExpanded);
+  };
 
-  // Aqui nós fechamos a bottomBar e removemos os itens que estão no array de seleção (acionado no OnPressOut)
-  const handleFecharBottomBar = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
-    limparSelecao()
-  }
+  return (
+    <Animated.View style={[styles.viewPrincipal, { height: heightAnim }]}>
+      {/* Conteúdo principal da BottomBar */}
+      <Pressable onPress={handleToggle} style={styles.viewOperacoesComanda}>
+        <Text style={styles.itensQtdCarrinho}>{selectedItemsLength}</Text>
+        <Ionicons style={styles.btnCarrinho} name="cart-outline" size={38} color="#00FF00" />
+      </Pressable>
 
-
-    return (
-        <View style={styles.viewPrincipal}>
-
-          
-
-          <View style={styles.viewOperacoesComanda}>
-
-            <Text style={styles.itensQtdCarrinho}>{selectedItemsLength}</Text>
-            <Pressable onPressIn={() => handleFeedbackFecharBottomBar()} onPressOut={() => handleFecharBottomBar()}>
-              <Ionicons style={styles.btnCarrinho} name={iconeCarrinho} size={36} color="#00FF00" />
-            </Pressable>
-
-          </View>
-          
-    
-        </View>  
-    );
-
+      {/* View extra que aparece ao expandir */}
+      {isExpanded && (
+        <View style={styles.viewExtra}>
+          <Text style={styles.textoViewExtra}>Detalhes da seleção ou outras informações</Text>
+        </View>
+      )}
+    </Animated.View>
+  );
 }
 
-
 const styles = StyleSheet.create({
-
   viewPrincipal: {
-    height:60,
     bottom: 0,
-    width:'100%',
-    backgroundColor:'#151718',
-    borderBottomColor:'#363636',
-    borderBottomWidth: 0.2,
+    width: '100%',
+    backgroundColor: '#151718',
+    borderTopColor: '#363636',
+    borderTopWidth: 0.2,
+    zIndex: 1,
+    position: 'absolute',
+    overflow: 'hidden',
+  },
+
+  viewOperacoesComanda: {
+    height: 60,
     flexDirection: 'row',
-    zIndex:1,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    position:'absolute',
-    padding: 15,
-    marginBottom:10,
+    paddingHorizontal: 15,
   },
 
-
-  viewOperacoesComanda:{
-    top:'50%',
-    width:'100%',
-    height:40,
-    flexDirection:'row',
-    justifyContent:'center',
-    marginBottom:20
+  itensQtdCarrinho: {
+    paddingRight: 10,
+    color: 'white',
+    fontSize: 18,
   },
 
-  itensQtdCarrinho:{
-    paddingRight:10,
-    flexDirection: 'row',
-    color:'white',
-    fontSize:18
+  btnCarrinho: {},
+
+  viewExtra: {
+    backgroundColor: '#202122',
+    flex: 1, // Preenche o restante do espaço disponível
+    padding: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#363636',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
-  
-  btnExcluirProduto:{
-
+  textoViewExtra: {
+    color: 'white',
+    fontSize: 16,
   },
-
-  btnCarrinho:{
-
-  },
-
-  btnFecharBottomBar:{
-
-  }
-
-
 });
