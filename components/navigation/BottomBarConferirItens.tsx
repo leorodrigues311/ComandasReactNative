@@ -42,7 +42,7 @@ export function BottomBarConferirItens({ selectedItemsLength, limparSelecao }: {
         {/* View extra que aparece ao expandir */}
         {isExpanded && (
           <View style={styles.viewExtra}>
-            <Text style={styles.textoViewExtra}>Detalhes da seleção ou outras informações</Text>
+            <Text style={styles.textoViewExtra}>Os produtos escolhidos ficarão aqui</Text>
           </View>
         )}
       </Animated.View>
