@@ -111,7 +111,7 @@ export default function produtoAdicionarComanda() {
       </View>
   
       {/* BottomBar fixo fora do ScrollView */}
-      <BottomBarConferirItens selectedItemsLength={8} limparSelecao={limparSelecao} />
+      <BottomBarConferirItens selectedItemsLength={99} limparSelecao={limparSelecao} />
     </SafeAreaView>
   );
   

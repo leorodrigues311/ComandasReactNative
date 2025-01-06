@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Animated, Dimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context'; // Import SafeAreaView
 import * as Haptics from 'expo-haptics';
 
 export function BottomBarConferirItens({ selectedItemsLength, limparSelecao }: { selectedItemsLength: number, limparSelecao: () => void }) {
-  const router = useRouter();
-
   const screenHeight = Dimensions.get('window').height; // Altura total da tela
   const [isExpanded, setIsExpanded] = useState(false);
   const heightAnim = useState(new Animated.Value(60))[0]; // Animação para a altura
@@ -24,7 +22,7 @@ export function BottomBarConferirItens({ selectedItemsLength, limparSelecao }: {
     } else {
       // Expandir para a altura total da tela
       Animated.timing(heightAnim, {
-        toValue: screenHeight, // Altura da tela
+        toValue: (screenHeight - 60), // Altura da tela
         duration: 300,
         useNativeDriver: false,
       }).start();
@@ -34,26 +32,26 @@ export function BottomBarConferirItens({ selectedItemsLength, limparSelecao }: {
   };
 
   return (
-    <Animated.View style={[styles.viewPrincipal, { height: heightAnim }]}>
-      {/* Conteúdo principal da BottomBar */}
-      <Pressable onPress={handleToggle} style={styles.viewOperacoesComanda}>
-        <Text style={styles.itensQtdCarrinho}>{selectedItemsLength}</Text>
-        <Ionicons style={styles.btnCarrinho} name="cart-outline" size={38} color="#00FF00" />
-      </Pressable>
+      <Animated.View style={[styles.viewPrincipal, { height: heightAnim }]}>
+        {/* Conteúdo principal da BottomBar */}
+        <Pressable onPress={handleToggle} style={styles.viewOperacoesComanda}>
+          <Text style={styles.itensQtdCarrinho}>{selectedItemsLength}</Text>
+          <Ionicons style={styles.btnCarrinho} name="cart-outline" size={38} color="#00FF00" />
+        </Pressable>
 
-      {/* View extra que aparece ao expandir */}
-      {isExpanded && (
-        <View style={styles.viewExtra}>
-          <Text style={styles.textoViewExtra}>Detalhes da seleção ou outras informações</Text>
-        </View>
-      )}
-    </Animated.View>
+        {/* View extra que aparece ao expandir */}
+        {isExpanded && (
+          <View style={styles.viewExtra}>
+            <Text style={styles.textoViewExtra}>Detalhes da seleção ou outras informações</Text>
+          </View>
+        )}
+      </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   viewPrincipal: {
-    bottom: 0,
+    bottom: 15,
     width: '100%',
     backgroundColor: '#151718',
     borderTopColor: '#363636',
@@ -69,12 +67,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 15,
+    zIndex:1
   },
 
   itensQtdCarrinho: {
-    paddingRight: 10,
+    paddingRight: 55,
+    paddingBottom:20,
     color: 'white',
     fontSize: 18,
+    position:'absolute',
   },
 
   btnCarrinho: {},
