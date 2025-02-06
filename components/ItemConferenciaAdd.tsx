@@ -13,12 +13,6 @@ export function ItemConferenciaAdd (){
             <Text style={styles.textoItem}>1 - Coca cola 2 Litros</Text>
         </View>
 
-
-
-
-
-
-
     );
 
 }

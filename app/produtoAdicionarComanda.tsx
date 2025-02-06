@@ -9,6 +9,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Haptics from 'expo-haptics'
 
 
+
 export default function produtoAdicionarComanda() {
   const router = useRouter()
 
@@ -67,7 +68,6 @@ export default function produtoAdicionarComanda() {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     }
 
-    
 
   }
 
@@ -106,6 +106,7 @@ export default function produtoAdicionarComanda() {
                 imagem={produto.imagem}
               />
             </Pressable>
+            
           ))}
         </ScrollView>
       </View>

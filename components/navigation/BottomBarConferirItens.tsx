@@ -6,6 +6,7 @@ import { useRouter } from 'expo-router'
 import Dialog from "react-native-dialog"
 import { ItemConferenciaAdd } from '@/components/ItemConferenciaAdd'
 import * as Haptics from 'expo-haptics';
+import Toast from 'react-native-toast-message';
 
 export function BottomBarConferirItens({ selectedItemsLength, limparSelecao }: { selectedItemsLength: number, limparSelecao: () => void }) {
 
@@ -33,13 +34,14 @@ export function BottomBarConferirItens({ selectedItemsLength, limparSelecao }: {
 
   const adicionaItensComanda = () => {
     setDialogNovoProdutoVisible(false)
-
-    router.back()
+    showSuccessMessage()
+    setTimeout(() => {
+      router.back()
+    }, 2500)
 
 
   }
 
- 
   const handleToggle = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
 
@@ -60,6 +62,17 @@ export function BottomBarConferirItens({ selectedItemsLength, limparSelecao }: {
     }
 
     setIsExpanded(!isExpanded);
+  };
+
+  const showSuccessMessage = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Feito!',
+      text2: 'Os itens Foram Adicionados à Comanda',
+      position: 'top',
+      visibilityTime: 3000,
+      autoHide: true,
+    });
   };
 
   return (
@@ -94,6 +107,8 @@ export function BottomBarConferirItens({ selectedItemsLength, limparSelecao }: {
           <Dialog.Button onPress={handleCancel} label="Não" />
           <Dialog.Button onPress={() => adicionaItensComanda()} label="Sim" />
         </Dialog.Container>
+
+        <Toast />
         
       </Animated.View>
   );
