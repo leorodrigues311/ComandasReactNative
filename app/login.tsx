@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import { useRouter } from 'expo-router';
 
 export default function login () {
@@ -15,7 +15,12 @@ export default function login () {
 
   return (
     <View style={styles.viewPrincipal}>
-      <Text style={styles.title}>Login</Text>
+      <View style={styles.logoInova}>
+          <Image 
+              source={require('../assets/images/inova_comandas.png')}
+              style={styles.imagemLogo} 
+          />
+      </View>
       <TextInput
         style={styles.input}
         placeholder="CPF / CNPJ"
@@ -71,6 +76,23 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+
+  logoInova: {
+    width: '55%',
+    height: '55%',
+    position: 'absolute',
+    top: '10%',
+    left: '30%',
+    resizeMode: 'contain',
+  },
+
+  imagemLogo:{
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    resizeMode: 'contain',
+
+  }
 });
 
 
