@@ -1,8 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { 
   View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, FlatList, 
-  ScrollView, Animated, Dimensions 
-} from 'react-native';
+  ScrollView, Animated, Dimensions, Switch } from 'react-native';
 import { useRouter } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -10,6 +9,7 @@ const { width } = Dimensions.get('window');
 
 export default function Login() {
   const [cnpj, setCnpj] = useState('');
+  const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -30,6 +30,9 @@ export default function Login() {
   const submitLogin = () => {
 
   }
+
+  const [isEnabled, setIsEnabled] = useState(false);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const fecharModal = () => {
     setModalVisible(false)
@@ -66,13 +69,22 @@ export default function Login() {
       </View>
 
       <TextInput
-        style={styles.input}
+        style={styles.inputCnpj}
         placeholder="CPF / CNPJ"
         keyboardType="email-address"
         value={cnpj}
         onChangeText={setCnpj}
       />
-
+      <View style ={styles.btnMantenhaConectado}>
+        <Switch
+          value={isEnabled}
+          onValueChange={toggleSwitch}
+          style={{
+            transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]  // Diminui o tamanho do switch
+          }}
+        />
+        <Text style={styles.textoMantenhaConectado}>Mantenha-me conectado</Text>
+      </View>
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
@@ -123,8 +135,8 @@ export default function Login() {
                     style={styles.inputPassword}
                     placeholder="Senha"
                     keyboardType="visible-password"
-                    value={cnpj}
-                    onChangeText={setCnpj}
+                    value={password}
+                    onChangeText={setPassword}
                   />
                 </View>
                 
@@ -150,13 +162,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#1C1C1C',
     padding: 20,
   },
-  input: {
+  inputCnpj: {
     width: '100%',
     height: 50,
     backgroundColor: '#696868',
     borderRadius: 50,
     paddingHorizontal: 15,
-    marginBottom: 15,
+    marginBottom: 5,
+    color:'white',
+    fontSize:20
   },
   inputPassword: {
     width: '100%',
@@ -165,6 +179,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     paddingHorizontal: 15,
     marginBottom: 15,
+    color:'white',
+    fontSize:17
   },
   button: {
     width: '100%',
@@ -192,7 +208,7 @@ const styles = StyleSheet.create({
     width: '55%',
     height: '55%',
     position: 'absolute',
-    top: '10%',
+    top: '5%',
     left: '30%',
     resizeMode: 'contain',
   },
@@ -292,5 +308,20 @@ const styles = StyleSheet.create({
     color: '#c7c3c3',
     marginBottom:10,
     marginLeft:5
+  },
+
+  textoMantenhaConectado:{
+    color:'white',
+    fontSize:13,
+    fontWeight:400,
+    alignSelf:'center'
+  },
+  btnMantenhaConectado:{
+    width:210,
+    flexDirection:'row',
+    justifyContent:'space-between',
+    alignSelf:'flex-start',
+    marginLeft:10,
+    marginBottom:25
   },
 });
