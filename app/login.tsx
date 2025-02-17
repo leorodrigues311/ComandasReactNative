@@ -17,10 +17,10 @@ export default function Login() {
   const router = useRouter();
 
   const usuarios = [
-    { id: '1', nome: 'Leonardo Rodrigues' },
-    { id: '2', nome: 'José Roberto' },
-    { id: '3', nome: 'Luis Henrique' },
-    { id: '4', nome: 'João Felipe' },
+    { id: '1', nome: 'Leonardo Rodrigues', grupoAcesso: 'Administrador' },
+    { id: '2', nome: 'José Roberto', grupoAcesso: 'Administrador' },
+    { id: '3', nome: 'Luis Henrique', grupoAcesso: 'Administrador' },
+    { id: '4', nome: 'João Felipe', grupoAcesso: 'Administrador' },
   ];
 
   const handleLogin = () => {
@@ -113,7 +113,10 @@ export default function Login() {
                   keyExtractor={(item) => item.id}
                   renderItem={({ item }) => (
                     <TouchableOpacity style={styles.modalItem} onPress={() => selecionarUsuario(item)}>
-                      <Text style={styles.modalItemText}>{item.nome}</Text>
+                      <View style={styles.modalItemDadosLogin}>
+                        <Text style={styles.modalItemNome}>{item.nome}</Text>
+                        <Text style={styles.modalItemGrupoAcesso}>{item.grupoAcesso}</Text>
+                      </View>
                       <Ionicons style={styles.modalItemArrow} name="arrow-forward-outline" size={30} color={'#ccc8c8'} />
                     </TouchableOpacity>
                   )}
@@ -130,11 +133,12 @@ export default function Login() {
 
                 <View style={styles.modalItemSelecionado} >
                   {selectedUser && <Text style={styles.selectedUser}>{selectedUser.nome}</Text>}
-                  {selectedUser && <Text style={styles.selectedUserGrupoAcesso}>{selectedUser.nome}</Text>}
+                  {selectedUser && <Text style={styles.selectedUserGrupoAcesso}>{selectedUser.grupoAcesso}</Text>}
                   <TextInput
                     style={styles.inputPassword}
                     placeholder="Senha"
                     keyboardType="visible-password"
+                    secureTextEntry={true}  // Isso torna o campo de texto uma senha
                     value={password}
                     onChangeText={setPassword}
                   />
@@ -261,6 +265,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 15,
   },
+
+  modalItemDadosLogin:{
+    flexDirection:'column'
+  },
   modalItemSelecionado:{
     padding: 15,
     width: '100%',
@@ -276,10 +284,15 @@ const styles = StyleSheet.create({
     marginTop:15
 
   },
-  modalItemText: {
+  modalItemNome: {
     fontSize: 20,
     fontWeight: '600',
     color: '#f0ebeb',
+  },
+  modalItemGrupoAcesso: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#999797',
   },
   modalItemArrow: {
     position: 'absolute',
