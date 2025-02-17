@@ -1,30 +1,42 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, FlatList } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { 
+  View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, FlatList, 
+  ScrollView, Animated, Dimensions 
+} from 'react-native';
 import { useRouter } from 'expo-router';
+import Ionicons from '@expo/vector-icons/Ionicons';
+
+const { width } = Dimensions.get('window'); // Pega a largura da tela
 
 export default function Login() {
   const [cnpj, setCnpj] = useState('');
-  const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const scrollViewRef = useRef(null);
   const router = useRouter();
 
-  // Lista de usuários fictícia
   const usuarios = [
-    { id: '1', nome: 'Usuário 1' },
-    { id: '2', nome: 'Usuário 2' },
-    { id: '3', nome: 'Usuário 3' },
-    { id: '4', nome: 'Usuário 4' },
+    { id: '1', nome: 'Leonardo Rodrigues' },
+    { id: '2', nome: 'José Roberto' },
+    { id: '3', nome: 'Luis Henrique' },
+    { id: '4', nome: 'João Felipe' },
   ];
 
   const handleLogin = () => {
-    console.log('CNPJ:', cnpj, 'Senha:', password);
-    setModalVisible(true); // Exibe o modal ao clicar no botão
+    setModalVisible(true);
   };
 
   const selecionarUsuario = (usuario) => {
-    console.log('Usuário selecionado:', usuario.nome);
-    setModalVisible(false);
-    router.push('/(tabs)'); // Redireciona após a seleção
+    setSelectedUser(usuario);
+    Animated.timing(scrollX, {
+      toValue: -width, // Move para a esquerda
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+
+    // Faz o ScrollView rolar para a esquerda
+    scrollViewRef.current?.scrollTo({ x: width, animated: true });
   };
 
   return (
@@ -48,24 +60,45 @@ export default function Login() {
         <Text style={styles.buttonText}>Entrar</Text>
       </TouchableOpacity>
 
-      {/* Modal para exibir a lista de usuários */}
-      <Modal visible={modalVisible} animationType="slide" transparent={true}>
+      {/* Modal */}
+      <Modal visible={modalVisible} animationType="fade" transparent={true}>
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Olá "Inova Sistemas"</Text>
-            <FlatList
-              data={usuarios}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <TouchableOpacity style={styles.modalItem} onPress={() => selecionarUsuario(item)}>
-                  <Text style={styles.modalItemText}>{item.nome}</Text>
+          <Animated.View style={[styles.modalContent, { transform: [{ translateX: scrollX }] }]}>
+            <ScrollView
+              ref={scrollViewRef}
+              horizontal
+              pagingEnabled
+              scrollEnabled={false} // Impede rolagem manual
+              showsHorizontalScrollIndicator={false}
+            >
+
+              {/* PRIMEIRA PARTE */}
+              <View style={styles.modalPage}>
+                <Text style={styles.modalTitle}>Escolha um usuário</Text>
+                <FlatList
+                  style={styles.flatList}
+                  data={usuarios}
+                  keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity style={styles.modalItem} onPress={() => selecionarUsuario(item)}>
+                      <Text style={styles.modalItemText}>{item.nome}</Text>
+                      <Ionicons style={styles.modalItemArrow} name="arrow-forward-outline" size={30} color={'#ccc8c8'} />
+                    </TouchableOpacity>
+                  )}
+                />
+              </View>
+              {/* SEGUNDA PARTE */}
+              <View style={styles.modalPage}>
+                <TouchableOpacity style={styles.closeModalButton} onPress={() => setModalVisible(false)}>
+                  <Ionicons name="close-outline" size={30} color="white" />
                 </TouchableOpacity>
-              )}
-            />
-            <TouchableOpacity style={styles.modalCloseButton} onPress={() => setModalVisible(false)}>
-              <Text style={styles.modalCloseText}>Cancelar</Text>
-            </TouchableOpacity>
-          </View>
+                <Text style={styles.modalTitle}>Usuário Selecionado</Text>
+                {selectedUser && <Text style={styles.selectedUser}>{selectedUser.nome}</Text>}
+              </View>
+
+
+            </ScrollView>
+          </Animated.View>
         </View>
       </Modal>
     </View>
@@ -87,11 +120,6 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     paddingHorizontal: 15,
     marginBottom: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
   },
   button: {
     width: '100%',
@@ -120,45 +148,70 @@ const styles = StyleSheet.create({
     position: 'absolute',
     resizeMode: 'contain',
   },
-  // Estilos do Modal
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    alignItems: 'flex-start',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
   },
   modalContent: {
-    width: '90%',
-    backgroundColor: '#696868',
-    padding: 20,
+    flexDirection: 'row',
+    width: width * 2, // Largura do modal: 2x a tela
+    height: 350,
+    backgroundColor: '#454545',
     borderRadius: 10,
+    overflow: 'hidden',
+  },
+  modalPage: {
+    width, // Ocupa exatamente 1 tela
+    flex: 1, // Para garantir que ocupe o espaço vertical
+    justifyContent: 'center',
     alignItems: 'center',
+    padding: 20,
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 15,
-    color:'white'
+    marginBottom: 20,
+    color: 'white',
+  },
+  flatList: {
+    width: '100%', // Garante que ocupe a largura toda
+    left:5
   },
   modalItem: {
     padding: 15,
-    width: '100%',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    width: '100%', // Ajustado para não ocupar a tela toda
+    height: 80,
+    borderWidth: 1,
+    borderColor: '#454545',
+    backgroundColor: '#696868',
+    borderRadius: 8,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 15,
   },
   modalItemText: {
-    fontSize: 16,
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#f0ebeb',
   },
-  modalCloseButton: {
-    marginTop: 15,
+  modalItemArrow: {
+    position: 'absolute',
+    right: 15,
+  },
+  closeModalButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
     padding: 10,
-    backgroundColor: '#dc3545',
-    borderRadius: 5,
+    borderRadius: 50,
   },
-  modalCloseText: {
-    color: '#fff',
+  selectedUser: {
+    fontSize: 22,
     fontWeight: 'bold',
+    color: 'white',
+    marginTop: 20,
   },
 });
-
