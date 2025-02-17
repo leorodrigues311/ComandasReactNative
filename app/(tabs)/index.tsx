@@ -40,7 +40,7 @@ export default function HomeScreen() {
                   <Pressable
                       key={index}
                       onPress={() => router.push({
-                          pathname: '/comandaDetalhe',
+                          pathname: '/login',
                           params: comanda,
                       })}
                   >
