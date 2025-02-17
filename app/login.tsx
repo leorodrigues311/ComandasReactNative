@@ -6,7 +6,7 @@ import {
 import { useRouter } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const { width } = Dimensions.get('window'); // Pega a largura da tela
+const { width } = Dimensions.get('window');
 
 export default function Login() {
   const [cnpj, setCnpj] = useState('');
@@ -27,16 +27,33 @@ export default function Login() {
     setModalVisible(true);
   };
 
-  const selecionarUsuario = (usuario) => {
-    setSelectedUser(usuario);
+  const submitLogin = () => {
+
+  }
+
+  const fecharModal = () => {
+    setModalVisible(false)
+    animacaoModal("reverse");
+
+  }
+
+
+  const animacaoModal = (direction: "normal" | "reverse") => {
+    const directionValue = direction === "normal" ? -width : 0;
+  
     Animated.timing(scrollX, {
-      toValue: -width, // Move para a esquerda
-      duration: 300,
+      toValue: directionValue,
+      duration: 400,
       useNativeDriver: true,
     }).start();
-
-    // Faz o ScrollView rolar para a esquerda
-    scrollViewRef.current?.scrollTo({ x: width, animated: true });
+  
+    // Faz o ScrollView rolar para a posição correta
+    scrollViewRef.current?.scrollTo({ x: direction === "normal" ? 0 : width, animated: true });
+  };
+  
+  const selecionarUsuario = (usuario) => {
+    setSelectedUser(usuario);
+    animacaoModal("normal")
   };
 
   return (
@@ -75,6 +92,9 @@ export default function Login() {
               {/* PRIMEIRA PARTE */}
               <View style={styles.modalPage}>
                 <Text style={styles.modalTitle}>Escolha um usuário</Text>
+                <TouchableOpacity style={styles.closeModalButton} onPress={() => setModalVisible(false)}>
+                  <Ionicons name="close-outline" size={30} color="white" />
+                </TouchableOpacity>
                 <FlatList
                   style={styles.flatList}
                   data={usuarios}
@@ -89,11 +109,28 @@ export default function Login() {
               </View>
               {/* SEGUNDA PARTE */}
               <View style={styles.modalPage}>
-                <TouchableOpacity style={styles.closeModalButton} onPress={() => setModalVisible(false)}>
+                <TouchableOpacity style={styles.closeModalButton} onPress={() => fecharModal()}>
                   <Ionicons name="close-outline" size={30} color="white" />
                 </TouchableOpacity>
-                <Text style={styles.modalTitle}>Usuário Selecionado</Text>
-                {selectedUser && <Text style={styles.selectedUser}>{selectedUser.nome}</Text>}
+                <TouchableOpacity style={styles.modalButtonBack} onPress={() => animacaoModal("reverse")}>
+                  <Ionicons name="arrow-back-outline" size={30} color={'white'} />
+                </TouchableOpacity>
+
+                <View style={styles.modalItemSelecionado} >
+                  {selectedUser && <Text style={styles.selectedUser}>{selectedUser.nome}</Text>}
+                  {selectedUser && <Text style={styles.selectedUserGrupoAcesso}>{selectedUser.nome}</Text>}
+                  <TextInput
+                    style={styles.inputPassword}
+                    placeholder="Senha"
+                    keyboardType="visible-password"
+                    value={cnpj}
+                    onChangeText={setCnpj}
+                  />
+                </View>
+                
+              <TouchableOpacity style={styles.buttonLogin} onPress={submitLogin()}>
+                <Text style={styles.buttonText}>Entrar</Text>
+              </TouchableOpacity>
               </View>
 
 
@@ -121,6 +158,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 15,
   },
+  inputPassword: {
+    width: '100%',
+    height: 50,
+    backgroundColor: '#878686',
+    borderRadius: 50,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+  },
   button: {
     width: '100%',
     height: 50,
@@ -128,6 +173,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 50,
+  },
+  buttonLogin: {
+    width: '100%',
+    height: 50,
+    backgroundColor: '#007bff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50,
+    marginTop:10,
   },
   buttonText: {
     color: '#fff',
@@ -156,15 +210,15 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     flexDirection: 'row',
-    width: width * 2, // Largura do modal: 2x a tela
+    width: width * 2,
     height: 350,
     backgroundColor: '#454545',
     borderRadius: 10,
     overflow: 'hidden',
   },
   modalPage: {
-    width, // Ocupa exatamente 1 tela
-    flex: 1, // Para garantir que ocupe o espaço vertical
+    width,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -176,12 +230,11 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   flatList: {
-    width: '100%', // Garante que ocupe a largura toda
-    left:5
+    width: '100%',
   },
   modalItem: {
     padding: 15,
-    width: '100%', // Ajustado para não ocupar a tela toda
+    width: '100%',
     height: 80,
     borderWidth: 1,
     borderColor: '#454545',
@@ -192,6 +245,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 15,
   },
+  modalItemSelecionado:{
+    padding: 15,
+    width: '100%',
+    height: 170,
+    borderWidth: 1,
+    borderColor: '#454545',
+    backgroundColor: '#696868',
+    borderRadius: 8,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    marginBottom: 15,
+    marginTop:15
+
+  },
   modalItemText: {
     fontSize: 20,
     fontWeight: '600',
@@ -201,17 +269,28 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
   },
+  modalButtonBack:{
+    position: 'absolute',
+    top:20,
+    left:20,
+  },
   closeModalButton: {
     position: 'absolute',
-    top: 10,
-    right: 10,
-    padding: 10,
-    borderRadius: 50,
+    top: 20,
+    right: 20,
   },
   selectedUser: {
     fontSize: 22,
     fontWeight: 'bold',
     color: 'white',
-    marginTop: 20,
+    marginTop:8,
+    marginLeft:5
+  },
+  selectedUserGrupoAcesso: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#c7c3c3',
+    marginBottom:10,
+    marginLeft:5
   },
 });
