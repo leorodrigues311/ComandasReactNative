@@ -31,13 +31,13 @@ export default function Login() {
 
   }
 
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+  const [mantenhaLogado, setMantenhaLogado] = useState(false);
+  const toggleSwitch = () => setMantenhaLogado(previousState => !previousState);
 
   const fecharModal = () => {
     setModalVisible(false)
     animacaoModal("reverse");
-
+    setPassword('')
   }
 
 
@@ -77,7 +77,7 @@ export default function Login() {
       />
       <View style ={styles.btnMantenhaConectado}>
         <Switch
-          value={isEnabled}
+          value={mantenhaLogado}
           onValueChange={toggleSwitch}
           style={{
             transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]  // Diminui o tamanho do switch
