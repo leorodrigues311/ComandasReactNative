@@ -7,19 +7,12 @@ import { ItemConferenciaAdd } from '@/components/ItemConferenciaAdd';
 import * as Haptics from 'expo-haptics';
 import Toast from 'react-native-toast-message';
 
-export function BottomBarConferirItens({ selectedItemsLength, limparSelecao }: { selectedItemsLength: number, limparSelecao: () => void }) {
+export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { items: { id: number; name: string }[], limparSelecao: () => void,  removeItem: (id: number) => void; }) {
   
   const router = useRouter();
   const screenHeight = Dimensions.get('window').height;
   const [isExpanded, setIsExpanded] = useState(false);
   const heightAnim = useState(new Animated.Value(60))[0];
-
-  // Estado para armazenar os itens
-  const [items, setItems] = useState([
-    { id: 1, name: "Coca Cola 2L" },
-    { id: 2, name: "Guaraná 2L" },
-    { id: 3, name: "Suco de Laranja 1L" },
-  ]);
 
   const [dialogActionVisible, setDialogNovoProdutoVisible] = useState(false);
 
@@ -67,11 +60,6 @@ export function BottomBarConferirItens({ selectedItemsLength, limparSelecao }: {
     });
   };
 
-  // Função para remover itens da lista
-  const removeItem = (id: number) => {
-    setItems(prevItems => prevItems.filter(item => item.id !== id));
-  };
-
   return (
     <Animated.View style={[styles.viewPrincipal, { height: heightAnim }]}>
       <Pressable onPress={handleToggle} style={styles.viewOperacoesComanda}>
@@ -103,6 +91,7 @@ export function BottomBarConferirItens({ selectedItemsLength, limparSelecao }: {
     </Animated.View>
   );
 }
+
 
 const styles = StyleSheet.create({
   viewPrincipal: {
