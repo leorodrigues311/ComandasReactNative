@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   },
 
   containerOperador: {
-    flexDirection: "row", // Mantém ícone e botão "Sair" alinhados na horizontal
+    flexDirection: "row",
     alignItems: "center",
   },
 
@@ -85,14 +85,14 @@ const styles = StyleSheet.create({
   },
 
   btnSair: {
-    marginLeft: 15, // Espaçamento entre o ícone do usuário e o botão "Sair"
     paddingVertical: 8,
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
     borderRadius: 8,
+    alignSelf:'flex-end',
   },
 
   btnRecolher:{
-    marginLeft:40
+    marginLeft:20
   },
 
   textoSair: {
