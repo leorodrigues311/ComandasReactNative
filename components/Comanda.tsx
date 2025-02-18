@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     margin:20,
     gap: 6,
     color:'white',
-    fontSize:50
+    fontSize:50,
   },
 
   viewInfo: {

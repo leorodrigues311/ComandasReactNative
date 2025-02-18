@@ -4,6 +4,7 @@ import {
   ScrollView, Animated, Dimensions, Switch } from 'react-native';
 import { useRouter } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { TextInputMask } from "react-native-masked-text";
 
 const { width } = Dimensions.get('window');
 
@@ -68,10 +69,11 @@ export default function Login() {
         />
       </View>
 
-      <TextInput
+      <TextInputMask
         style={styles.inputCnpj}
-        placeholder="CPF / CNPJ"
-        keyboardType="email-address"
+        placeholder="CNPJ"
+        type={"cnpj"}
+        keyboardType="numeric"
         value={cnpj}
         onChangeText={setCnpj}
       />
@@ -155,6 +157,7 @@ export default function Login() {
         </View>
       </Modal>
     </View>
+
   );
 }
 
