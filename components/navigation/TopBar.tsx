@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Animated } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useRouter } from 'expo-router';
 
 export function TopBar() {
   const [inputVisivel, setInputVisivel] = useState(true); // Estado para controlar visibilidade
@@ -15,6 +16,7 @@ export function TopBar() {
     setInputVisivel(!inputVisivel);
   };
 
+
   return (
     <View style={styles.viewPrincipal}>
       {/* Container para ícone + botão "Sair" */}
@@ -25,9 +27,16 @@ export function TopBar() {
           <Text style={styles.nomeOperador}>Leonardo</Text>
         </TouchableOpacity>
 
+        {!inputVisivel && (
+          <TouchableOpacity style={styles.btnRecolher} onPress={alternarPesquisa}>
+            <Ionicons name="chevron-back-outline" size={30} color={"white"} />
+          </TouchableOpacity>
+        )} 
+
         {/* Botão "Sair" (só aparece quando a pesquisa está oculta) */}
         {!inputVisivel && (
-          <TouchableOpacity style={styles.btnSair}>
+          <TouchableOpacity style={styles.btnSair} >
+            <Ionicons name="log-out-outline" size={30} color={"red"} />
             <Text style={styles.textoSair}>Sair</Text>
           </TouchableOpacity>
         )}
@@ -77,10 +86,13 @@ const styles = StyleSheet.create({
 
   btnSair: {
     marginLeft: 15, // Espaçamento entre o ícone do usuário e o botão "Sair"
-    backgroundColor: "red",
     paddingVertical: 8,
     paddingHorizontal: 15,
     borderRadius: 8,
+  },
+
+  btnRecolher:{
+    marginLeft:40
   },
 
   textoSair: {

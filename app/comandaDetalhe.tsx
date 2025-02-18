@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, Pressable, ScrollView} from 'react-native'
+import { StyleSheet, Text, View, Pressable, ScrollView, Animated, TouchableOpacity } from 'react-native'
 import { ItemComanda } from '@/components/ItemComanda'
 import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda'
 import { BottomBarDetalheComanda } from '@/components/navigation/BottomBarDetalheComanda'
