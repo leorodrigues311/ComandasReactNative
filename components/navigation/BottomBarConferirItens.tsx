@@ -98,7 +98,7 @@ export function BottomBarConferirItens({ selectedItemsLength, limparSelecao }: {
 
         <Pressable onPressIn={handleFeedbackButton} onPressOut={handleConfirmaInclusao} style={styles.btnIncluir}>
           <Text style={styles.textoBtnIncluir}>Incluir</Text>
-          <Ionicons name="checkbox-outline" size={38} color="white"/>
+          <Ionicons name="checkmark-circle-outline" size={38} color="white"/>
         </Pressable>
 
         <Dialog.Container visible={dialogActionVisible}>
