@@ -7,7 +7,7 @@ import * as Haptics from 'expo-haptics';
 export function ItemConferenciaAdd (){
 
     const excluirItem = () => {
-        Haptics.NotificationFeedbackType.Warning
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
     }
 
 
