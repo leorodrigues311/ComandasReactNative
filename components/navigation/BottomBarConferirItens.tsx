@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Animated, Dimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import Dialog from "react-native-dialog";
 import { ItemConferenciaAdd } from '@/components/ItemConferenciaAdd';
 import * as Haptics from 'expo-haptics';
 import Toast from 'react-native-toast-message';
 
 export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { items: { id: number; itemNome: string; itemQtd: number }[], limparSelecao: () => void,  removeItem: (id: number) => void; }) {
+
+  const { numeroComanda } = useLocalSearchParams<{ numeroComanda: string }>();
   
   const router = useRouter();
   const screenHeight = Dimensions.get('window').height;
@@ -33,7 +35,11 @@ export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { i
     setDialogNovoProdutoVisible(false);
     showSuccessMessage();
     setTimeout(() => {
-      router.back();
+      // Converte os itens para string JSON e codifica para URL
+      const itensString = encodeURIComponent(JSON.stringify(items));
+      // Navega para a tela de ComandaDetalhe passando os itens e o número da comanda como parâmetros
+      console.log(itensString)
+      router.push(`/comandaDetalhe?numeroComanda=${numeroComanda}&novosItens=${itensString}`);
     }, 2500);
   };
 

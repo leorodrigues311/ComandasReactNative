@@ -5,7 +5,7 @@ import react from 'react'
 // Aqui nós instanciamos uma interface para definir o tipo de cada variavel
 interface ComandaProps {
   nomeComanda: string;
-  numeroComanda: number;
+  numeroComanda: string;
   valorTotal: number;
   horaAbertura: string;
   statusComanda: string

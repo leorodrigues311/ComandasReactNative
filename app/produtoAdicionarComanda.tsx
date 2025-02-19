@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, View, Pressable, ScrollView } from 'react-native';
+import { StyleSheet, TextInput, View, Pressable, ScrollView, TouchableOpacity, Text } from 'react-native';
 import { ItemProduto } from '@/components/ItemProduto';
 import { BottomBarConferirItens } from '@/components/navigation/BottomBarConferirItens';
 import { TopBarAdicionarProduto } from '@/components/navigation/TopBarAdicionarProduto';
 import Dialog from "react-native-dialog";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
 export default function produtoAdicionarComanda() {
+  // Recupera o numeroComanda dos parâmetros da rota
+  const { numeroComanda } = useLocalSearchParams<{ numeroComanda: string }>();
+  const router = useRouter();
+
   const produtos = [
     { nomeItem: 'Pão', estoque: 3, valorTotal: 10.50, imagem: 'https://emporiokaminski.com.br/wp-content/uploads/2024/06/Pao-Frances-50g-2.jpg'},
     { nomeItem: 'Caldo de galinha', estoque: 1, valorTotal: 10.50, imagem: 'https://www.joicetur.com.br/arquivos/media/receitas/caldodepiranha-copy-1.jpg'},
@@ -16,8 +21,7 @@ export default function produtoAdicionarComanda() {
   const [selectedItem, setSelectedItem] = useState<string>('');
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
   const [items, setItems] = useState<{ id: number; itemNome: string; itemQtd: number }[]>([]);
-  // Alterado para string para que o TextInput inicie vazio
-  const [itemQtd, setItemQtd] = useState<string>('');
+  const [itemQtd, setItemQtd] = useState<string>(''); // inicia como string vazia
   const [dialogQuantidadeProduto, setDialogQuantidadeProdutoVisible] = useState(false);
 
   const limparSelecao = () => {
@@ -43,13 +47,34 @@ export default function produtoAdicionarComanda() {
   const handleItemSelect = (itemName: string, buttonType?: string) => {
     if (buttonType === "adicionarItemComanda") {
       setSelectedItem(itemName);
-      setItemQtd(''); // começa com o TextInput vazio
+      setItemQtd(''); // inicia o input vazio
       setDialogQuantidadeProdutoVisible(true);
     } else if (buttonType === "confirmarItemQuantidade") {
       adicionarItemAoCarrinho(selectedItem, Number(itemQtd));
       setDialogQuantidadeProdutoVisible(false);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     }
+  };
+
+  /*
+  // Função que navega para a tela de detalhes da comanda, passando o numero e os itens adicionados
+  const adicionaItensComanda = () => {
+    setDialogNovoProdutoVisible(false);
+    showSuccessMessage();
+    setTimeout(() => {
+      // Converte os itens para string JSON e codifica para URL
+      const itensString = encodeURIComponent(JSON.stringify(items));
+      // Navega para a tela de ComandaDetalhe passando o numeroComanda e os novos itens
+      router.push(`/comandaDetalhe?numeroComanda=${numeroComanda}&novosItens=${itensString}`);
+    }, 2500);
+  };
+
+  */
+  // Funções e estado relacionados ao diálogo de confirmação na BottomBarConferirItens
+  const [dialogNovoProdutoVisible, setDialogNovoProdutoVisible] = useState(false);
+  const showSuccessMessage = () => {
+    // Aqui você pode implementar o Toast ou outra notificação de sucesso
+    console.log('Itens adicionados com sucesso!');
   };
 
   return (
@@ -94,7 +119,7 @@ export default function produtoAdicionarComanda() {
 
 const styles = StyleSheet.create({
   viewPrincipal: {
-    marginBottom: 65
+    marginBottom: 65,
   },
   textInput: {
     borderWidth: 0.3,
@@ -107,6 +132,19 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignSelf: 'center',
     height: 45,
-    width: '80%'
+    width: '80%',
+  },
+  btnIncluir: {
+    height: 60,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#02bf02',
+    borderRadius: 8,
+    margin: 10,
+  },
+  textoBtnIncluir: {
+    color: 'white',
+    fontSize: 28,
   },
 });

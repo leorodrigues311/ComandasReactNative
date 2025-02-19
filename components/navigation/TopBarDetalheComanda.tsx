@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, StyleSheet, Pressable, ViewStyle } from 'react-native'
 import Dialog from "react-native-dialog"
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { useRouter } from 'expo-router'
+import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Haptics from 'expo-haptics'
 
 // Aqui tivemos que criar um type, para mudar o estado de cada icone ao clicar
@@ -23,6 +23,8 @@ interface EstiloMutavel {
 
 export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
   const router = useRouter()
+
+  const { numeroComanda } = useLocalSearchParams<{ numeroComanda: string }>();
 
   // Aqui foi criado um estado para o conteudo dos 'dialog', pois temos vários botões, então cada um usa o 'dialog' com um conteudo diferente
   const [tituloModal, setTituloModal] = useState('')
@@ -92,9 +94,11 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
 
     if (buttonType === 'adicionarItemComanda') {
 
+      console.log('Topbardetalhecomanda', numeroComanda)
+
       router.push({
         pathname: '/produtoAdicionarComanda',
-        params: {},
+        params: {numeroComanda: numeroComanda},
       })
       
     }

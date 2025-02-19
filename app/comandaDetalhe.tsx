@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Pressable, ScrollView, Animated } from 'react-native'
 import { ItemComanda } from '@/components/ItemComanda'
 import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda'
@@ -16,7 +16,33 @@ interface ComandaItem {
 }
 
 export default function ComandaDetalhe () {
-  const { nomeComanda, numeroComanda, horaAbertura, statusComanda } = useLocalSearchParams<ComandaDetalheParams>()
+  const { nomeComanda, numeroComanda, horaAbertura, statusComanda, novosItens } = useLocalSearchParams<{
+    nomeComanda: string,
+    numeroComanda: string,
+    horaAbertura: string,
+    statusComanda: string,
+    novosItens?: string,
+  }>()
+
+   // Quando houver o parâmetro "novosItens", adiciona-os à comanda
+   useEffect(() => {
+    if (novosItens) {
+      try {
+        const itensNovos: ComandaItem[] = JSON.parse(decodeURIComponent(novosItens))
+        // Atualiza o estado adicionando os novos itens
+        setItensComanda(prevItens => [
+          ...prevItens,
+          ...itensNovos.map((item, index) => ({
+            ...item,
+            // Gera um novo número de comanda (ou ID) conforme necessário
+            numeroComanda: prevItens.length + index + 1,
+          }))
+        ])
+      } catch (error) {
+        console.error('Erro ao fazer parse dos novos itens:', error)
+      }
+    }
+  }, [novosItens])
   
   // Estado para os itens da comanda
   const [itensComanda, setItensComanda] = useState<ComandaItem[]>([
