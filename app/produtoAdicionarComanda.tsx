@@ -15,7 +15,8 @@ export default function produtoAdicionarComanda() {
 
   const [selectedItem, setSelectedItem] = useState<string>('');
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
-  const [items, setItems] = useState<{ id: number; itemNome: string; itemQtd: string }[]>([]);
+  const [items, setItems] = useState<{ id: number; itemNome: string; itemQtd: number }[]>([]);
+  // Alterado para string para que o TextInput inicie vazio
   const [itemQtd, setItemQtd] = useState<string>('');
   const [dialogQuantidadeProduto, setDialogQuantidadeProdutoVisible] = useState(false);
 
@@ -27,25 +28,25 @@ export default function produtoAdicionarComanda() {
     setDialogQuantidadeProdutoVisible(false);
   };
 
-  const adicionarItemAoCarrinho = (nomeItem: string, itemQtd: string) => {
+  const adicionarItemAoCarrinho = (nomeItem: string, quantidade: number) => {
     setItems((prevItems) => [
       ...prevItems,
-      { id: prevItems.length + 1, itemNome: nomeItem, itemQtd: itemQtd },
+      { id: prevItems.length + 1, itemNome: nomeItem, itemQtd: quantidade },
     ]);
   };
 
-    // Função para remover itens da lista
-    const removeItem = (id: number) => {
-      setItems(prevItems => prevItems.filter(item => item.id !== id));
-    };
+  // Função para remover itens da lista
+  const removeItem = (id: number) => {
+    setItems(prevItems => prevItems.filter(item => item.id !== id));
+  };
 
   const handleItemSelect = (itemName: string, buttonType?: string) => {
     if (buttonType === "adicionarItemComanda") {
       setSelectedItem(itemName);
-      setItemQtd('');
+      setItemQtd(''); // começa com o TextInput vazio
       setDialogQuantidadeProdutoVisible(true);
     } else if (buttonType === "confirmarItemQuantidade") {
-      adicionarItemAoCarrinho(selectedItem, itemQtd);
+      adicionarItemAoCarrinho(selectedItem, Number(itemQtd));
       setDialogQuantidadeProdutoVisible(false);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     }
@@ -91,23 +92,21 @@ export default function produtoAdicionarComanda() {
   );
 }
 
-
 const styles = StyleSheet.create({
-  viewPrincipal:{
+  viewPrincipal: {
     marginBottom: 65
   },
-
   textInput: {
     borderWidth: 0.3,
     borderColor: '#4F4F4F',
-    color:'white',
-    fontSize:30,
+    color: 'white',
+    fontSize: 30,
     padding: 10,
     marginTop: 10,
     marginBottom: 10,
     borderRadius: 5,
-    alignSelf:'center',
-    height:45,
-    width:'80%'
+    alignSelf: 'center',
+    height: 45,
+    width: '80%'
   },
-})
+});

@@ -6,7 +6,7 @@ import * as Haptics from 'expo-haptics';
 interface ItemConferenciaAddProps {
   id: number;
   itemNome: string;
-  itemQtd: string;
+  itemQtd: number;
   onRemove: (id: number) => void;
 }
 
@@ -22,7 +22,7 @@ export function ItemConferenciaAdd({ id, itemNome, itemQtd, onRemove }: ItemConf
       <TouchableOpacity onPress={excluirItem}>
         <Ionicons name="close-circle-outline" color={'red'} size={30} />
       </TouchableOpacity>
-      <Text style={styles.itemQtd}>{itemQtd == '' ? '1' : itemQtd} -</Text>
+      <Text style={styles.itemQtd}>{itemQtd == 0 ? 1 : itemQtd} -</Text>
       <Text style={styles.textoItem}>{itemNome}</Text>
     </View>
   );
