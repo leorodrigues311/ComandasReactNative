@@ -9,14 +9,14 @@ import * as Haptics from 'expo-haptics';
 
 export default function produtoAdicionarComanda() {
   const produtos = [
-    { nomeItem: 'Pão que o Thiago Amassou', estoque: 3, valorTotal: 10.50, imagem: 'https://emporiokaminski.com.br/wp-content/uploads/2024/06/Pao-Frances-50g-2.jpg'},
-    { nomeItem: 'Caldo de piranha', estoque: 1, valorTotal: 10.50, imagem: 'https://www.joicetur.com.br/arquivos/media/receitas/caldodepiranha-copy-1.jpg'},
+    { nomeItem: 'Pão', estoque: 3, valorTotal: 10.50, imagem: 'https://emporiokaminski.com.br/wp-content/uploads/2024/06/Pao-Frances-50g-2.jpg'},
+    { nomeItem: 'Caldo de galinha', estoque: 1, valorTotal: 10.50, imagem: 'https://www.joicetur.com.br/arquivos/media/receitas/caldodepiranha-copy-1.jpg'},
   ];
 
   const [selectedItem, setSelectedItem] = useState<string>('');
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
-  const [items, setItems] = useState<{ id: number; name: string }[]>([]);
-  const [inputText, setInputText] = useState<string>('');
+  const [items, setItems] = useState<{ id: number; itemNome: string; itemQtd: string }[]>([]);
+  const [itemQtd, setItemQtd] = useState<string>('');
   const [dialogQuantidadeProduto, setDialogQuantidadeProdutoVisible] = useState(false);
 
   const limparSelecao = () => {
@@ -27,10 +27,10 @@ export default function produtoAdicionarComanda() {
     setDialogQuantidadeProdutoVisible(false);
   };
 
-  const adicionarItemAoCarrinho = (nomeItem: string) => {
+  const adicionarItemAoCarrinho = (nomeItem: string, itemQtd: string) => {
     setItems((prevItems) => [
       ...prevItems,
-      { id: prevItems.length + 1, name: nomeItem },
+      { id: prevItems.length + 1, itemNome: nomeItem, itemQtd: itemQtd },
     ]);
   };
 
@@ -42,10 +42,10 @@ export default function produtoAdicionarComanda() {
   const handleItemSelect = (itemName: string, buttonType?: string) => {
     if (buttonType === "adicionarItemComanda") {
       setSelectedItem(itemName);
-      setInputText('');
+      setItemQtd('');
       setDialogQuantidadeProdutoVisible(true);
     } else if (buttonType === "confirmarItemQuantidade") {
-      adicionarItemAoCarrinho(selectedItem);
+      adicionarItemAoCarrinho(selectedItem, itemQtd);
       setDialogQuantidadeProdutoVisible(false);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     }
@@ -60,8 +60,8 @@ export default function produtoAdicionarComanda() {
         <TextInput
           style={styles.textInput}
           placeholder="Quantidade:"
-          value={inputText}
-          onChangeText={setInputText}
+          value={itemQtd}
+          onChangeText={setItemQtd}
           keyboardType="numeric"
         />
         <Dialog.Button onPress={handleCancel} label="Cancelar" />

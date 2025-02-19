@@ -7,7 +7,7 @@ import { ItemConferenciaAdd } from '@/components/ItemConferenciaAdd';
 import * as Haptics from 'expo-haptics';
 import Toast from 'react-native-toast-message';
 
-export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { items: { id: number; name: string }[], limparSelecao: () => void,  removeItem: (id: number) => void; }) {
+export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { items: { id: number; itemNome: string; itemQtd: string }[], limparSelecao: () => void,  removeItem: (id: number) => void; }) {
   
   const router = useRouter();
   const screenHeight = Dimensions.get('window').height;
@@ -70,7 +70,7 @@ export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { i
       {isExpanded && (
         <View style={styles.viewExtra}>
           {items.map(item => (
-            <ItemConferenciaAdd key={item.id} id={item.id} name={item.name} onRemove={removeItem} />
+            <ItemConferenciaAdd key={item.id} id={item.id} itemNome={item.itemNome} itemQtd={item.itemQtd} onRemove={removeItem} />
           ))}
         </View>
       )}

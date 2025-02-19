@@ -5,11 +5,12 @@ import * as Haptics from 'expo-haptics';
 
 interface ItemConferenciaAddProps {
   id: number;
-  name: string;
+  itemNome: string;
+  itemQtd: string;
   onRemove: (id: number) => void;
 }
 
-export function ItemConferenciaAdd({ id, name, onRemove }: ItemConferenciaAddProps) {
+export function ItemConferenciaAdd({ id, itemNome, itemQtd, onRemove }: ItemConferenciaAddProps) {
 
   const excluirItem = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
@@ -21,7 +22,8 @@ export function ItemConferenciaAdd({ id, name, onRemove }: ItemConferenciaAddPro
       <TouchableOpacity onPress={excluirItem}>
         <Ionicons name="close-circle-outline" color={'red'} size={30} />
       </TouchableOpacity>
-      <Text style={styles.textoItem}>{name}</Text>
+      <Text style={styles.itemQtd}>{itemQtd == '' ? '1' : itemQtd} -</Text>
+      <Text style={styles.textoItem}>{itemNome}</Text>
     </View>
   );
 }
@@ -35,6 +37,11 @@ const styles = StyleSheet.create({
   textoItem: {
     color: 'white',
     fontSize: 18,
-    marginLeft: 5,
+    marginLeft: 10,
   },
+  itemQtd:{
+    color: 'white',
+    fontSize: 18,
+    marginLeft: 5,
+  }
 });
