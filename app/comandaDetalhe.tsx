@@ -8,12 +8,68 @@ import { ValorTotalComanda } from '@/components/valorTotalComanda'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Haptics from 'expo-haptics'
 
+interface Comanda {
+  nomeComanda: string
+  numeroComanda: string
+  horaAbertura: string
+  valorTotal: number
+  statusComanda: string
+}
+
 interface ComandaItem {
+  id: string;
   numeroComanda: number
   nomeItem: string
   valorUnit: number
   quantidade: number
 }
+
+const [comandas, setComandas] = useState<Comanda[]>([
+    { nomeComanda: 'João da Silva', numeroComanda: '1', horaAbertura: '10:42', valorTotal: 134.21, statusComanda: 'ativo' },
+    { nomeComanda: 'Roberto', numeroComanda: '2', horaAbertura: '10:42', valorTotal: 14.11, statusComanda: 'ativo' },
+    { nomeComanda: 'Lucas', numeroComanda: '3', horaAbertura: '11:28', valorTotal: 1874.33, statusComanda: 'ativo' },
+    { nomeComanda: 'Maria', numeroComanda: '4', horaAbertura: '09:52', valorTotal: 5.32, statusComanda: 'ativo' },
+    { nomeComanda: 'Ana Clara', numeroComanda: '5', horaAbertura: '15:30', valorTotal: 87.50, statusComanda: 'inativo' },
+    { nomeComanda: 'Pedro Henrique', numeroComanda: '6', horaAbertura: '17:00', valorTotal: 220.25, statusComanda: 'ativo' },
+    { nomeComanda: 'Sofia', numeroComanda: '7', horaAbertura: '18:45', valorTotal: 65.99, statusComanda: 'inativo' },
+    { nomeComanda: 'Lucas Oliveira', numeroComanda: '8', horaAbertura: '19:20', valorTotal: 110.00, statusComanda: 'ativo' },
+    { nomeComanda: 'Camila Souza', numeroComanda: '9', horaAbertura: '20:05', valorTotal: 35.75, statusComanda: 'ativo' },
+
+  ])
+
+const gerarId = () => {
+  return `item${Date.now()}-${Math.floor(Math.random() * 1000)}`; // Gerando um id único baseado no timestamp e número aleatório
+};
+
+const [itensComanda, setItensComanda] = useState<ComandaItem[]>([
+  { id: gerarId(), numeroComanda: 1, nomeItem: 'Teste grelhado', valorUnit: 12.21, quantidade: 3 },
+  { id: gerarId(), numeroComanda: 2, nomeItem: 'Pão com pao', valorUnit: 12.21, quantidade: 3 },
+  { id: gerarId(), numeroComanda: 3, nomeItem: 'Sopa de macaco', valorUnit: 12.21, quantidade: 3 },
+]);
+
+const adicionarComanda = (novaComanda: Comanda, setComandas: React.Dispatch<React.SetStateAction<Comanda[]>>) => {
+  setComandas(prevComandas => [...prevComandas, novaComanda]);
+};
+
+const removerComanda = (numeroComanda: string, setComandas: React.Dispatch<React.SetStateAction<Comanda[]>>) => {
+  setComandas(prevComandas => prevComandas.filter(comanda => comanda.numeroComanda !== numeroComanda));
+};
+/*
+const adicionarItens = (novoItem: Omit<ComandaItem, 'id'>, setItensComanda: React.Dispatch<React.SetStateAction<ComandaItem[]>>) => {
+  const novoItemComId = { ...novoItem, id: gerarId() }; // Gerando id único ao adicionar o item
+  setItensComanda(prevItens => [...prevItens, novoItemComId]);
+};
+*/
+const adicionarItens = () => {
+  console.log('funcionou')
+}
+
+const removerItemComanda = (idItem: string, setItensComanda: React.Dispatch<React.SetStateAction<ComandaItem[]>>) => {
+  setItensComanda(prevItens => prevItens.filter(item => item.id !== idItem)); // Usando o id único para remover
+};
+
+
+export {comandas, setComandas, adicionarItens, removerItemComanda, removerComanda, adicionarComanda, itensComanda, setItensComanda, gerarId }
 
 export default function ComandaDetalhe () {
   const { nomeComanda, numeroComanda, horaAbertura, statusComanda, novosItens } = useLocalSearchParams<{
@@ -23,46 +79,6 @@ export default function ComandaDetalhe () {
     statusComanda: string,
     novosItens?: string,
   }>()
-
-   // Quando houver o parâmetro "novosItens", adiciona-os à comanda
-   useEffect(() => {
-    if (novosItens) {
-      try {
-        const itensNovos: ComandaItem[] = JSON.parse(decodeURIComponent(novosItens))
-        // Atualiza o estado adicionando os novos itens
-        setItensComanda(prevItens => [
-          ...prevItens,
-          ...itensNovos.map((item, index) => ({
-            ...item,
-            // Gera um novo número de comanda (ou ID) conforme necessário
-            numeroComanda: prevItens.length + index + 1,
-          }))
-        ])
-      } catch (error) {
-        console.error('Erro ao fazer parse dos novos itens:', error)
-      }
-    }
-  }, [novosItens])
-  
-  // Estado para os itens da comanda
-  const [itensComanda, setItensComanda] = useState<ComandaItem[]>([
-    { numeroComanda: 1, nomeItem: 'Teste grelhado', valorUnit: 12.21, quantidade: 3 },
-    { numeroComanda: 2, nomeItem: 'Pão com pao', valorUnit: 12.21, quantidade: 3 },
-    { numeroComanda: 3, nomeItem: 'Sopa de macaco', valorUnit: 12.21, quantidade: 3 },
-  ])
-
-  // Função para adicionar itens à comanda usando prevItems
-  const adicionarItemNaComanda = (nomeItem: string, valorUnit: number, quantidade: number) => {
-    setItensComanda(prevItens => [
-      ...prevItens,
-      {
-        numeroComanda: prevItens.length + 1, // Cuidado com possíveis duplicidades se houver remoção
-        nomeItem,
-        valorUnit,
-        quantidade,
-      }
-    ])
-  }
 
   // Estados e funções para seleção de itens (como já estava no seu código)
   const [selectedItems, setSelectedItems] = useState<number[]>([])
@@ -94,13 +110,6 @@ export default function ComandaDetalhe () {
   }
 
   const isBottomBarVisible = selectedItems.length > 0
-
-  // Exemplo de botão para adicionar um novo item à comanda
-  const handleAdicionarNovoItem = () => {
-    // Aqui você pode capturar os dados via um diálogo ou outro método
-    adicionarItemNaComanda('Novo Item', 10.0, 1)
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
-  }
 
   return (
     <SafeAreaView style={styles.viewPrincipal}>

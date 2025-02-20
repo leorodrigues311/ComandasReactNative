@@ -6,11 +6,10 @@ import Dialog from "react-native-dialog";
 import { ItemConferenciaAdd } from '@/components/ItemConferenciaAdd';
 import * as Haptics from 'expo-haptics';
 import Toast from 'react-native-toast-message';
+import { comandas, setItensComanda, adicionarItens } from '@/app/comandaDetalhe'
 
 export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { items: { id: number; itemNome: string; itemQtd: number }[], limparSelecao: () => void,  removeItem: (id: number) => void; }) {
 
-  const { numeroComanda } = useLocalSearchParams<{ numeroComanda: string }>();
-  
   const router = useRouter();
   const screenHeight = Dimensions.get('window').height;
   const [isExpanded, setIsExpanded] = useState(false);
@@ -39,7 +38,8 @@ export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { i
       const itensString = encodeURIComponent(JSON.stringify(items));
       // Navega para a tela de ComandaDetalhe passando os itens e o número da comanda como parâmetros
       console.log(itensString)
-      router.push(`/comandaDetalhe?numeroComanda=${numeroComanda}&novosItens=${itensString}`);
+      adicionarItens()
+      router.back();
     }, 2500);
   };
 

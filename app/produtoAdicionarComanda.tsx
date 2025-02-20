@@ -7,6 +7,7 @@ import Dialog from "react-native-dialog";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { comandas } from '@/app/comandaDetalhe'
 
 export default function produtoAdicionarComanda() {
   // Recupera o numeroComanda dos parâmetros da rota
@@ -56,20 +57,6 @@ export default function produtoAdicionarComanda() {
     }
   };
 
-  /*
-  // Função que navega para a tela de detalhes da comanda, passando o numero e os itens adicionados
-  const adicionaItensComanda = () => {
-    setDialogNovoProdutoVisible(false);
-    showSuccessMessage();
-    setTimeout(() => {
-      // Converte os itens para string JSON e codifica para URL
-      const itensString = encodeURIComponent(JSON.stringify(items));
-      // Navega para a tela de ComandaDetalhe passando o numeroComanda e os novos itens
-      router.push(`/comandaDetalhe?numeroComanda=${numeroComanda}&novosItens=${itensString}`);
-    }, 2500);
-  };
-
-  */
   // Funções e estado relacionados ao diálogo de confirmação na BottomBarConferirItens
   const [dialogNovoProdutoVisible, setDialogNovoProdutoVisible] = useState(false);
   const showSuccessMessage = () => {
