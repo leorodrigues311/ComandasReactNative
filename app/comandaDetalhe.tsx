@@ -54,16 +54,17 @@ const adicionarComanda = (novaComanda: Comanda, setComandas: React.Dispatch<Reac
 const removerComanda = (numeroComanda: string, setComandas: React.Dispatch<React.SetStateAction<Comanda[]>>) => {
   setComandas(prevComandas => prevComandas.filter(comanda => comanda.numeroComanda !== numeroComanda));
 };
-/*
+
 const adicionarItens = (novoItem: Omit<ComandaItem, 'id'>, setItensComanda: React.Dispatch<React.SetStateAction<ComandaItem[]>>) => {
   const novoItemComId = { ...novoItem, id: gerarId() }; // Gerando id único ao adicionar o item
   setItensComanda(prevItens => [...prevItens, novoItemComId]);
 };
-*/
+
+/*
 const adicionarItens = () => {
   console.log('funcionou')
 }
-
+*/
 const removerItemComanda = (idItem: string, setItensComanda: React.Dispatch<React.SetStateAction<ComandaItem[]>>) => {
   setItensComanda(prevItens => prevItens.filter(item => item.id !== idItem)); // Usando o id único para remover
 };

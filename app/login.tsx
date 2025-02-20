@@ -29,6 +29,8 @@ export default function Login() {
   };
 
   const submitLogin = () => {
+    setModalVisible(false);
+    router.push('/(tabs)')
 
   }
 
@@ -146,7 +148,7 @@ export default function Login() {
                   />
                 </View>
                 
-              <TouchableOpacity style={styles.buttonLogin} onPress={submitLogin()}>
+              <TouchableOpacity style={styles.buttonLogin} onPress={submitLogin}>
                 <Text style={styles.buttonText}>Entrar</Text>
               </TouchableOpacity>
               </View>

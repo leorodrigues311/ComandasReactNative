@@ -7,6 +7,8 @@ export function TopBar() {
   const [inputVisivel, setInputVisivel] = useState(true); // Estado para controlar visibilidade
   const animacaoInput = useState(new Animated.Value(0))[0]; // Inicializa a animação
 
+  const router = useRouter()
+
   const alternarPesquisa = () => {
     Animated.timing(animacaoInput, {
       toValue: inputVisivel ? 300 : 0, // Move para fora (300px) ou volta para 0
@@ -15,6 +17,10 @@ export function TopBar() {
     }).start();
     setInputVisivel(!inputVisivel);
   };
+
+  const logout = () => {
+    router.push('/login')
+  }
 
 
   return (
@@ -36,7 +42,7 @@ export function TopBar() {
         {/* Botão "Sair" (só aparece quando a pesquisa está oculta) */}
         {!inputVisivel && (
           <TouchableOpacity style={styles.btnSair} >
-            <Ionicons name="log-out-outline" size={30} color={"red"} />
+            <Ionicons name="log-out-outline" size={30} color={"red"} onPress={logout} />
             <Text style={styles.textoSair}>Sair</Text>
           </TouchableOpacity>
         )}

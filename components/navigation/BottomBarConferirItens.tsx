@@ -38,7 +38,10 @@ export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { i
       const itensString = encodeURIComponent(JSON.stringify(items));
       // Navega para a tela de ComandaDetalhe passando os itens e o número da comanda como parâmetros
       console.log(itensString)
-      adicionarItens()
+      adicionarItens(
+        { numeroComanda: 3, nomeItem: 'Feijão Tropeiro', valorUnit: 15.0, quantidade: 2 },
+        setItensComanda
+      );
       router.back();
     }, 2500);
   };
