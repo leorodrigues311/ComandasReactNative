@@ -7,10 +7,13 @@ import { ItemConferenciaAdd } from '@/components/ItemConferenciaAdd';
 import * as Haptics from 'expo-haptics';
 import Toast from 'react-native-toast-message';
 import { comandas, setItensComanda, adicionarItens } from '@/app/comandaDetalhe'
+import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { items: { id: number; itemNome: string; itemQtd: number }[], limparSelecao: () => void,  removeItem: (id: number) => void; }) {
 
   const router = useRouter();
+  const { adicionarItens } = useComanda(); // Obtém a função do contexto
+
   const screenHeight = Dimensions.get('window').height;
   const [isExpanded, setIsExpanded] = useState(false);
   const heightAnim = useState(new Animated.Value(60))[0];
@@ -39,8 +42,7 @@ export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { i
       // Navega para a tela de ComandaDetalhe passando os itens e o número da comanda como parâmetros
       console.log(itensString)
       adicionarItens(
-        { numeroComanda: 3, nomeItem: 'Feijão Tropeiro', valorUnit: 15.0, quantidade: 2 },
-        setItensComanda
+        { numeroComanda: 3, nomeItem: 'Feijão Tropeiro', valorUnit: 15.0, quantidade: 2 }
       );
       router.back();
     }, 2500);
@@ -70,6 +72,7 @@ export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { i
   };
 
   return (
+
     <Animated.View style={[styles.viewPrincipal, { height: heightAnim }]}>
       <Pressable onPress={handleToggle} style={styles.viewOperacoesComanda}>
         <Text style={styles.itensQtdCarrinho}>{items.length}</Text>
@@ -98,6 +101,7 @@ export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { i
 
       <Toast />
     </Animated.View>
+
   );
 }
 

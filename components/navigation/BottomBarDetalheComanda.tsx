@@ -5,6 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics'
 
+
 // Aqui tivemos que criar um type, para mudar o estado de cada icone ao clicar
 type IconName = 
   | "trash-outline"
@@ -18,6 +19,7 @@ type IconName =
 export function BottomBarDetalheComanda({ selectedItemsLength, limparSelecao }: { selectedItemsLength: number, limparSelecao: () => void }) {
 
   const router = useRouter()
+
 
   // Aqui foi criado um estado para o conteudo dos 'dialog', pois temos vários botões, então cada um usa o 'dialog' com um conteudo diferente
   const [tituloModal, setTituloModal] = useState('')
