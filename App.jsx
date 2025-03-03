@@ -4,7 +4,9 @@ const App = () => {
 
     return (
 
-        <Routes/>
+        <ComandaProvider>
+            <Routes/>
+        </ComandaProvider>
     )
 
 }

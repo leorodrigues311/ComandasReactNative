@@ -72,7 +72,6 @@ export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { i
   };
 
   return (
-
     <Animated.View style={[styles.viewPrincipal, { height: heightAnim }]}>
       <Pressable onPress={handleToggle} style={styles.viewOperacoesComanda}>
         <Text style={styles.itensQtdCarrinho}>{items.length}</Text>
@@ -101,7 +100,6 @@ export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { i
 
       <Toast />
     </Animated.View>
-
   );
 }
 

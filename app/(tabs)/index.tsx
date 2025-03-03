@@ -15,41 +15,39 @@ export default function HomeScreen() {
   const router = useRouter();
 
   return (
-    <ComandaProvider>
-      <SafeAreaView style={styles.container}>
-        <TopBar/>
-        {/* <TopBarDetalheComanda/> */}
-        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+    <SafeAreaView style={styles.container}>
+      <TopBar/>
+      {/* <TopBarDetalheComanda/> */}
+      <ScrollView contentContainerStyle={styles.scrollViewContent}>
 
-          {comandas.map((comanda, index) => (
-                    <Pressable
-                        key={index}
-                        onPress={() => router.push({
-                          pathname: '/comandaDetalhe',
-                          params: {
-                              nomeComanda: comanda.nomeComanda,
-                              numeroComanda: comanda.numeroComanda.toString(), // Convertendo para string
-                              horaAbertura: comanda.horaAbertura,
-                              valorTotal: comanda.valorTotal.toString(), // Convertendo para string
-                              statusComanda: comanda.statusComanda
-                          }
-                      })}
-                      
-                    >
-                        <Comanda
-                            numeroComanda={comanda.numeroComanda}
-                            nomeComanda={comanda.nomeComanda}
-                            valorTotal={comanda.valorTotal}
-                            horaAbertura={comanda.horaAbertura}
-                            statusComanda={comanda.statusComanda}
-                        />
-                    </Pressable>
-                ))}
-                
-        </ScrollView>
-        <ButtonFlutuante/>  
-      </SafeAreaView>
-    </ComandaProvider>
+        {comandas.map((comanda, index) => (
+                  <Pressable
+                      key={index}
+                      onPress={() => router.push({
+                        pathname: '/comandaDetalhe',
+                        params: {
+                            nomeComanda: comanda.nomeComanda,
+                            numeroComanda: comanda.numeroComanda.toString(), // Convertendo para string
+                            horaAbertura: comanda.horaAbertura,
+                            valorTotal: comanda.valorTotal.toString(), // Convertendo para string
+                            statusComanda: comanda.statusComanda
+                        }
+                    })}
+                    
+                  >
+                      <Comanda
+                          numeroComanda={comanda.numeroComanda}
+                          nomeComanda={comanda.nomeComanda}
+                          valorTotal={comanda.valorTotal}
+                          horaAbertura={comanda.horaAbertura}
+                          statusComanda={comanda.statusComanda}
+                      />
+                  </Pressable>
+              ))}
+              
+      </ScrollView>
+      <ButtonFlutuante/>  
+    </SafeAreaView>
 
   );
 }
