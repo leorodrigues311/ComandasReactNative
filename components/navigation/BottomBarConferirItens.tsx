@@ -11,7 +11,7 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { items: { id: number; itemNome: string; itemQtd: number }[], limparSelecao: () => void,  removeItem: (id: number) => void; }) {
 
   const router = useRouter();
-  const { adicionarItens } = useComanda()
+  const { adicionarItens, itensComanda } = useComanda()
 
   const screenHeight = Dimensions.get('window').height;
   const [isExpanded, setIsExpanded] = useState(false);
@@ -39,6 +39,7 @@ export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { i
       adicionarItens(
         { numeroComanda: 3, nomeItem: 'Feijão Tropeiro', valorUnit: 15.0, quantidade: 2 }
       );
+      console.log(itensComanda)
       router.back();
     }, 1500);
   };

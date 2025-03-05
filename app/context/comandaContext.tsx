@@ -23,6 +23,7 @@ interface ComandaContextType {
   adicionarComanda: (novaComanda: Comanda, setComandas: React.Dispatch<React.SetStateAction<Comanda[]>>) => void;
   removerComanda: (numeroComanda: string, setComandas: React.Dispatch<React.SetStateAction<Comanda[]>>) => void;
   removerItemComanda: (idItem: string, setItensComanda: React.Dispatch<React.SetStateAction<ComandaItem[]>>) => void;
+  gerarId: () => string;
 
 }
 
@@ -53,8 +54,8 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       { id: gerarId(), numeroComanda: 1, nomeItem: 'Teste grelhado', valorUnit: 12.21, quantidade: 3 },
       { id: gerarId(), numeroComanda: 1, nomeItem: 'Ovo Cozido', valorUnit: 12.00, quantidade: 1 },
       { id: gerarId(), numeroComanda: 1, nomeItem: 'Batata doce', valorUnit: 9.11, quantidade: 2 },
-      { id: gerarId(), numeroComanda: 2, nomeItem: 'Pão com pao', valorUnit: 12.21, quantidade: 3 },
-      { id: gerarId(), numeroComanda: 3, nomeItem: 'Sopa de macaco', valorUnit: 12.21, quantidade: 3 },
+      { id: gerarId(), numeroComanda: 2, nomeItem: 'Pão', valorUnit: 12.21, quantidade: 3 },
+      { id: gerarId(), numeroComanda: 3, nomeItem: 'Sopa', valorUnit: 12.21, quantidade: 3 },
     ])
     
     const adicionarComanda = (novaComanda: Comanda, setComandas: React.Dispatch<React.SetStateAction<Comanda[]>>) => {
@@ -70,7 +71,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     }
     
   return (
-    <ComandaContext.Provider value={{ itensComanda, comandas, adicionarItens, adicionarComanda, removerComanda, removerItemComanda }}>
+    <ComandaContext.Provider value={{ itensComanda, comandas, adicionarItens, adicionarComanda, removerComanda, removerItemComanda, gerarId }}>
       {children}
     </ComandaContext.Provider>
   );
