@@ -11,7 +11,7 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 
 export default function ComandaDetalhe () {
-  
+
   const { itensComanda } = useComanda()
   const { nomeComanda, numeroComanda, horaAbertura, statusComanda, novosItens } = useLocalSearchParams<{
     nomeComanda: string,
@@ -20,6 +20,8 @@ export default function ComandaDetalhe () {
     statusComanda: string,
     novosItens?: string,
   }>()
+
+  console.log(itensComanda)
 
   // Estados e funções para seleção de itens (como já estava no seu código)
   const [selectedItems, setSelectedItems] = useState<number[]>([])
@@ -76,7 +78,9 @@ export default function ComandaDetalhe () {
 
       <ScrollView>
         <View style={styles.itensComanda}>
-          {itensComanda.map((item) => (
+        {itensComanda
+        .filter(item => item.numeroComanda.toString() === numeroComanda)
+        .map((item) => (
             <Pressable
               key={item.numeroComanda}
               onLongPress={() => handleLongPress(item.numeroComanda)}

@@ -11,7 +11,7 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { items: { id: number; itemNome: string; itemQtd: number }[], limparSelecao: () => void,  removeItem: (id: number) => void; }) {
 
   const router = useRouter();
-  const { adicionarItens } = useComanda(); // Obtém a função do contexto
+  const { adicionarItens } = useComanda()
 
   const screenHeight = Dimensions.get('window').height;
   const [isExpanded, setIsExpanded] = useState(false);
@@ -36,15 +36,11 @@ export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { i
     setDialogNovoProdutoVisible(false);
     showSuccessMessage();
     setTimeout(() => {
-      // Converte os itens para string JSON e codifica para URL
-      const itensString = encodeURIComponent(JSON.stringify(items));
-      // Navega para a tela de ComandaDetalhe passando os itens e o número da comanda como parâmetros
-      console.log(itensString)
       adicionarItens(
         { numeroComanda: 3, nomeItem: 'Feijão Tropeiro', valorUnit: 15.0, quantidade: 2 }
       );
       router.back();
-    }, 2500);
+    }, 1500);
   };
 
   const handleToggle = () => {

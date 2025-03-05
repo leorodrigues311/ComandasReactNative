@@ -51,6 +51,8 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
     const [itensComanda, setItensComanda] = useState<ComandaItem[]>([
       { id: gerarId(), numeroComanda: 1, nomeItem: 'Teste grelhado', valorUnit: 12.21, quantidade: 3 },
+      { id: gerarId(), numeroComanda: 1, nomeItem: 'Ovo Cozido', valorUnit: 12.00, quantidade: 1 },
+      { id: gerarId(), numeroComanda: 1, nomeItem: 'Batata doce', valorUnit: 9.11, quantidade: 2 },
       { id: gerarId(), numeroComanda: 2, nomeItem: 'Pão com pao', valorUnit: 12.21, quantidade: 3 },
       { id: gerarId(), numeroComanda: 3, nomeItem: 'Sopa de macaco', valorUnit: 12.21, quantidade: 3 },
     ])
