@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { ComandaProvider } from './context/comandaContext';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -27,15 +28,17 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DarkTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-        <Stack.Screen name="comandaDetalhe" options={{ headerShown: false }}/>
-        <Stack.Screen name="novaComanda" options={{ headerShown: false }}/>
-        <Stack.Screen name="produtoAdicionarComanda" options={{ headerShown: false }}/>
-        <Stack.Screen name="login" options={{ headerShown: false }}/>
-      </Stack>
-    </ThemeProvider>
+    <ComandaProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DarkTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+            <Stack.Screen name="comandaDetalhe" options={{ headerShown: false }}/>
+            <Stack.Screen name="novaComanda" options={{ headerShown: false }}/>
+            <Stack.Screen name="produtoAdicionarComanda" options={{ headerShown: false }}/>
+            <Stack.Screen name="login" options={{ headerShown: false }}/>
+          </Stack>
+      </ThemeProvider>
+    </ComandaProvider>
   );
 }

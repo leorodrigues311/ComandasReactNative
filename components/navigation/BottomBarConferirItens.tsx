@@ -6,7 +6,6 @@ import Dialog from "react-native-dialog";
 import { ItemConferenciaAdd } from '@/components/ItemConferenciaAdd';
 import * as Haptics from 'expo-haptics';
 import Toast from 'react-native-toast-message';
-import { comandas, setItensComanda, adicionarItens } from '@/app/comandaDetalhe'
 import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { items: { id: number; itemNome: string; itemQtd: number }[], limparSelecao: () => void,  removeItem: (id: number) => void; }) {

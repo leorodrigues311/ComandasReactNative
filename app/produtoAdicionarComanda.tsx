@@ -7,7 +7,6 @@ import Dialog from "react-native-dialog";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { comandas } from '@/app/comandaDetalhe'
 import { ComandaProvider } from './context/comandaContext';
 
 export default function produtoAdicionarComanda() {

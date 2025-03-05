@@ -7,72 +7,12 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { ValorTotalComanda } from '@/components/valorTotalComanda'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Haptics from 'expo-haptics'
+import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
-interface Comanda {
-  nomeComanda: string
-  numeroComanda: string
-  horaAbertura: string
-  valorTotal: number
-  statusComanda: string
-}
-
-interface ComandaItem {
-  id: string;
-  numeroComanda: number
-  nomeItem: string
-  valorUnit: number
-  quantidade: number
-}
-
-const [comandas, setComandas] = useState<Comanda[]>([
-    { nomeComanda: 'João da Silva', numeroComanda: '1', horaAbertura: '10:42', valorTotal: 134.21, statusComanda: 'ativo' },
-    { nomeComanda: 'Roberto', numeroComanda: '2', horaAbertura: '10:42', valorTotal: 14.11, statusComanda: 'ativo' },
-    { nomeComanda: 'Lucas', numeroComanda: '3', horaAbertura: '11:28', valorTotal: 1874.33, statusComanda: 'ativo' },
-    { nomeComanda: 'Maria', numeroComanda: '4', horaAbertura: '09:52', valorTotal: 5.32, statusComanda: 'ativo' },
-    { nomeComanda: 'Ana Clara', numeroComanda: '5', horaAbertura: '15:30', valorTotal: 87.50, statusComanda: 'inativo' },
-    { nomeComanda: 'Pedro Henrique', numeroComanda: '6', horaAbertura: '17:00', valorTotal: 220.25, statusComanda: 'ativo' },
-    { nomeComanda: 'Sofia', numeroComanda: '7', horaAbertura: '18:45', valorTotal: 65.99, statusComanda: 'inativo' },
-    { nomeComanda: 'Lucas Oliveira', numeroComanda: '8', horaAbertura: '19:20', valorTotal: 110.00, statusComanda: 'ativo' },
-    { nomeComanda: 'Camila Souza', numeroComanda: '9', horaAbertura: '20:05', valorTotal: 35.75, statusComanda: 'ativo' },
-
-  ])
-
-const gerarId = () => {
-  return `item${Date.now()}-${Math.floor(Math.random() * 1000)}`; // Gerando um id único baseado no timestamp e número aleatório
-};
-
-const [itensComanda, setItensComanda] = useState<ComandaItem[]>([
-  { id: gerarId(), numeroComanda: 1, nomeItem: 'Teste grelhado', valorUnit: 12.21, quantidade: 3 },
-  { id: gerarId(), numeroComanda: 2, nomeItem: 'Pão com pao', valorUnit: 12.21, quantidade: 3 },
-  { id: gerarId(), numeroComanda: 3, nomeItem: 'Sopa de macaco', valorUnit: 12.21, quantidade: 3 },
-]);
-
-const adicionarComanda = (novaComanda: Comanda, setComandas: React.Dispatch<React.SetStateAction<Comanda[]>>) => {
-  setComandas(prevComandas => [...prevComandas, novaComanda]);
-};
-
-const removerComanda = (numeroComanda: string, setComandas: React.Dispatch<React.SetStateAction<Comanda[]>>) => {
-  setComandas(prevComandas => prevComandas.filter(comanda => comanda.numeroComanda !== numeroComanda));
-};
-
-const adicionarItens = (novoItem: Omit<ComandaItem, 'id'>, setItensComanda: React.Dispatch<React.SetStateAction<ComandaItem[]>>) => {
-  const novoItemComId = { ...novoItem, id: gerarId() }; // Gerando id único ao adicionar o item
-  setItensComanda(prevItens => [...prevItens, novoItemComId]);
-};
-
-/*
-const adicionarItens = () => {
-  console.log('funcionou')
-}
-*/
-const removerItemComanda = (idItem: string, setItensComanda: React.Dispatch<React.SetStateAction<ComandaItem[]>>) => {
-  setItensComanda(prevItens => prevItens.filter(item => item.id !== idItem)); // Usando o id único para remover
-};
-
-
-export {comandas, setComandas, adicionarItens, removerItemComanda, removerComanda, adicionarComanda, itensComanda, setItensComanda, gerarId }
 
 export default function ComandaDetalhe () {
+  
+  const { itensComanda } = useComanda()
   const { nomeComanda, numeroComanda, horaAbertura, statusComanda, novosItens } = useLocalSearchParams<{
     nomeComanda: string,
     numeroComanda: string,
@@ -113,6 +53,7 @@ export default function ComandaDetalhe () {
   const isBottomBarVisible = selectedItems.length > 0
 
   return (
+    <ComandaProvider>
     <SafeAreaView style={styles.viewPrincipal}>
       <TopBarDetalheComanda hideIcons={isBottomBarVisible} />
 
@@ -157,6 +98,7 @@ export default function ComandaDetalhe () {
       {isBottomBarVisible && <BottomBarDetalheComanda selectedItemsLength={selectedItems.length} limparSelecao={limparSelecao} />}
 
     </SafeAreaView>
+    </ComandaProvider>
   )
 }
 
