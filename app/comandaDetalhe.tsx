@@ -21,33 +21,30 @@ export default function ComandaDetalhe () {
     novosItens?: string,
   }>()
 
-  console.log(itensComanda)
-
-  // Estados e funções para seleção de itens (como já estava no seu código)
-  const [selectedItems, setSelectedItems] = useState<number[]>([])
+  const [selectedItems, setSelectedItems] = useState<string[]>([])
 
   const limparSelecao = () => {
     setSelectedItems([])
   }
 
-  const handleLongPress = (numeroComanda: number) => {
+  const handleLongPress = (id: string) => {
     if (selectedItems.length === 0) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
     }
     setSelectedItems(prevSelected =>
-      prevSelected.includes(numeroComanda)
-        ? prevSelected.filter(item => item !== numeroComanda)
-        : [...prevSelected, numeroComanda]
+      prevSelected.includes(id)
+        ? prevSelected.filter(item => item !== id)
+        : [...prevSelected, id]
     )
   }
 
-  const handlePress = (numeroComanda: number) => {
+  const handlePress = (id: string) => {
     if (selectedItems.length !== 0) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
       setSelectedItems(prevSelected =>
-        prevSelected.includes(numeroComanda)
-          ? prevSelected.filter(item => item !== numeroComanda)
-          : [...prevSelected, numeroComanda]
+        prevSelected.includes(id)
+          ? prevSelected.filter(item => item !== id)
+          : [...prevSelected, id]
       )
     }
   }
@@ -82,16 +79,16 @@ export default function ComandaDetalhe () {
         .filter(item => item.numeroComanda.toString() === numeroComanda)
         .map((item) => (
             <Pressable
-              key={item.numeroComanda}
-              onLongPress={() => handleLongPress(item.numeroComanda)}
-              onPress={() => handlePress(item.numeroComanda)}
+              key={item.id}
+              onLongPress={() => handleLongPress(item.id)}
+              onPress={() => handlePress(item.id)}
             >
               <ItemComanda
                 nomeItem={item.nomeItem}
                 valorUnit={item.valorUnit}
                 valorTotal={item.valorUnit * item.quantidade}
                 quantidade={item.quantidade}
-                style={selectedItems.includes(item.numeroComanda) ? styles.selectedItem : {}}
+                style={selectedItems.includes(item.id) ? styles.selectedItem : {}}
               />
             </Pressable>
           ))}
