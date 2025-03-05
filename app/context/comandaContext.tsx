@@ -1,4 +1,5 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import axios from "axios";
 
 interface ComandaItem {
   id: string;
@@ -24,6 +25,7 @@ interface ComandaContextType {
   removerComanda: (numeroComanda: string, setComandas: React.Dispatch<React.SetStateAction<Comanda[]>>) => void;
   removerItemComanda: (idItem: string, setItensComanda: React.Dispatch<React.SetStateAction<ComandaItem[]>>) => void;
   gerarId: () => string;
+  buscaComandas: () => void;
 
 }
 
@@ -40,15 +42,18 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
   const [comandas, setComandas] = useState<Comanda[]>([
       { nomeComanda: 'João da Silva', numeroComanda: '1', horaAbertura: '10:42', valorTotal: 134.21, statusComanda: 'ativo' },
-      { nomeComanda: 'Roberto', numeroComanda: '2', horaAbertura: '10:42', valorTotal: 14.11, statusComanda: 'ativo' },
-      { nomeComanda: 'Lucas', numeroComanda: '3', horaAbertura: '11:28', valorTotal: 1874.33, statusComanda: 'ativo' },
-      { nomeComanda: 'Maria', numeroComanda: '4', horaAbertura: '09:52', valorTotal: 5.32, statusComanda: 'ativo' },
-      { nomeComanda: 'Ana Clara', numeroComanda: '5', horaAbertura: '15:30', valorTotal: 87.50, statusComanda: 'inativo' },
-      { nomeComanda: 'Pedro Henrique', numeroComanda: '6', horaAbertura: '17:00', valorTotal: 220.25, statusComanda: 'ativo' },
-      { nomeComanda: 'Sofia', numeroComanda: '7', horaAbertura: '18:45', valorTotal: 65.99, statusComanda: 'inativo' },
-      { nomeComanda: 'Lucas Oliveira', numeroComanda: '8', horaAbertura: '19:20', valorTotal: 110.00, statusComanda: 'ativo' },
-      { nomeComanda: 'Camila Souza', numeroComanda: '9', horaAbertura: '20:05', valorTotal: 35.75, statusComanda: 'ativo' },
     ])
+
+    const buscaComandas = () => {
+
+      console.log("entrou na function")
+
+      axios.get("http://192.168.1.10:3000/comandas")
+          .then((response) => console.log(response.data))
+          .catch((error) => console.error(error));
+          
+
+    }
 
     const [itensComanda, setItensComanda] = useState<ComandaItem[]>([
       { id: gerarId(), numeroComanda: 1, nomeItem: 'Teste grelhado', valorUnit: 12.21, quantidade: 3 },
@@ -71,7 +76,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     }
     
   return (
-    <ComandaContext.Provider value={{ itensComanda, comandas, adicionarItens, adicionarComanda, removerComanda, removerItemComanda, gerarId }}>
+    <ComandaContext.Provider value={{ itensComanda, comandas, adicionarItens, adicionarComanda, removerComanda, removerItemComanda, gerarId, buscaComandas }}>
       {children}
     </ComandaContext.Provider>
   );
