@@ -7,7 +7,7 @@ import Dialog from "react-native-dialog";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { comandas } from '@/app/comandaDetalhe'
+import { ComandaProvider } from './context/comandaContext';
 
 export default function produtoAdicionarComanda() {
   // Recupera o numeroComanda dos parâmetros da rota
@@ -65,42 +65,44 @@ export default function produtoAdicionarComanda() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <TopBarAdicionarProduto />
+    <ComandaProvider>
+      <SafeAreaView style={{ flex: 1 }}>
+        <TopBarAdicionarProduto />
 
-      <Dialog.Container visible={dialogQuantidadeProduto}>
-        <Dialog.Title>Adicionar "{selectedItem}"</Dialog.Title>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Quantidade:"
-          value={itemQtd}
-          onChangeText={setItemQtd}
-          keyboardType="numeric"
-        />
-        <Dialog.Button onPress={handleCancel} label="Cancelar" />
-        <Dialog.Button onPress={() => handleItemSelect(selectedItem, 'confirmarItemQuantidade')} label="Adicionar" />
-      </Dialog.Container>
+        <Dialog.Container visible={dialogQuantidadeProduto}>
+          <Dialog.Title>Adicionar "{selectedItem}"</Dialog.Title>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Quantidade:"
+            value={itemQtd}
+            onChangeText={setItemQtd}
+            keyboardType="numeric"
+          />
+          <Dialog.Button onPress={handleCancel} label="Cancelar" />
+          <Dialog.Button onPress={() => handleItemSelect(selectedItem, 'confirmarItemQuantidade')} label="Adicionar" />
+        </Dialog.Container>
 
-      <View>
-        <ScrollView style={styles.viewPrincipal}>
-          {produtos.map((produto, index) => (
-            <Pressable
-              key={index}
-              onPress={() => handleItemSelect(produto.nomeItem, 'adicionarItemComanda')}
-            >
-              <ItemProduto
-                nomeItem={produto.nomeItem}
-                estoque={produto.estoque}
-                valorTotal={produto.valorTotal}
-                imagem={produto.imagem}
-              />
-            </Pressable>
-          ))}
-        </ScrollView>
-      </View>
+        <View>
+          <ScrollView style={styles.viewPrincipal}>
+            {produtos.map((produto, index) => (
+              <Pressable
+                key={index}
+                onPress={() => handleItemSelect(produto.nomeItem, 'adicionarItemComanda')}
+              >
+                <ItemProduto
+                  nomeItem={produto.nomeItem}
+                  estoque={produto.estoque}
+                  valorTotal={produto.valorTotal}
+                  imagem={produto.imagem}
+                />
+              </Pressable>
+            ))}
+          </ScrollView>
+        </View>
 
-      <BottomBarConferirItens items={items} limparSelecao={limparSelecao} removeItem={removeItem} />
-    </SafeAreaView>
+        <BottomBarConferirItens items={items} limparSelecao={limparSelecao} removeItem={removeItem} />
+      </SafeAreaView>
+    </ComandaProvider>
   );
 }
 

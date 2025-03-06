@@ -1,10 +1,14 @@
 import { Routes }from './app/routes/Routes'
+import { ComandaProvider } from '@/app/context/comandaContext'
+
 
 const App = () => {
 
     return (
 
-        <Routes/>
+        <ComandaProvider>
+            <Routes/>
+        </ComandaProvider>
     )
 
 }
