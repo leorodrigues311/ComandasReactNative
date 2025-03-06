@@ -13,9 +13,8 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 export default function HomeScreen() {
 
-  const { comandas, buscaComandas } = useComanda();
+  const { comandas } = useComanda();
   const router = useRouter();
-  buscaComandas();
 
   return (
 

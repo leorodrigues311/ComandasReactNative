@@ -1,5 +1,4 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import axios from "axios";
 
 interface ComandaItem {
   id: string;
@@ -25,7 +24,6 @@ interface ComandaContextType {
   removerComanda: (numeroComanda: string, setComandas: React.Dispatch<React.SetStateAction<Comanda[]>>) => void;
   removerItemComanda: (idItem: string, setItensComanda: React.Dispatch<React.SetStateAction<ComandaItem[]>>) => void;
   gerarId: () => string;
-  buscaComandas: () => void;
 
 }
 
@@ -43,17 +41,6 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const [comandas, setComandas] = useState<Comanda[]>([
       { nomeComanda: 'João da Silva', numeroComanda: '1', horaAbertura: '10:42', valorTotal: 134.21, statusComanda: 'ativo' },
     ])
-
-    const buscaComandas = () => {
-
-      console.log("entrou na function")
-
-      axios.get("http://192.168.1.10:3000/comandas")
-          .then((response) => console.log(response.data))
-          .catch((error) => console.error(error));
-          
-
-    }
 
     const [itensComanda, setItensComanda] = useState<ComandaItem[]>([
       { id: gerarId(), numeroComanda: 1, nomeItem: 'Teste grelhado', valorUnit: 12.21, quantidade: 3 },
@@ -76,7 +63,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     }
     
   return (
-    <ComandaContext.Provider value={{ itensComanda, comandas, adicionarItens, adicionarComanda, removerComanda, removerItemComanda, gerarId, buscaComandas }}>
+    <ComandaContext.Provider value={{ itensComanda, comandas, adicionarItens, adicionarComanda, removerComanda, removerItemComanda, gerarId }}>
       {children}
     </ComandaContext.Provider>
   );
