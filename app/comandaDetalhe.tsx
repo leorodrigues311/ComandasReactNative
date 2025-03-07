@@ -13,11 +13,11 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 export default function ComandaDetalhe () {
 
   const { itensComanda } = useComanda()
-  const { nomeComanda, numeroComanda, horaAbertura, statusComanda, novosItens } = useLocalSearchParams<{
-    nomeComanda: string,
-    numeroComanda: string,
-    horaAbertura: string,
-    statusComanda: string,
+  const { nome_comanda, numero_comanda, hora_abertura, status_comanda, novosItens } = useLocalSearchParams<{
+    nome_comanda: string,
+    numero_comanda: string,
+    hora_abertura: string,
+    status_comanda: string,
     novosItens?: string,
   }>()
 
@@ -59,16 +59,16 @@ export default function ComandaDetalhe () {
       <View style={styles.viewInfoComanda}>
         <View style={[
             styles.viewStatus, 
-            { backgroundColor: statusComanda === 'ativo' ? '#00FF00' : '#FF0000' },
-            { borderColor: statusComanda === 'ativo' ? '#00FF00' : '#FF0000' }
+            { backgroundColor: status_comanda === 'ativo' ? '#00FF00' : '#FF0000' },
+            { borderColor: status_comanda === 'ativo' ? '#00FF00' : '#FF0000' }
           ]}
         />
         <View style={styles.viewNumero}>
-          <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
+          <Text style={styles.viewNumeroTexto}>{numero_comanda}</Text>
         </View>
         <View style={styles.viewInfo}>
-          <Text style={styles.viewInfoNome}>{nomeComanda}</Text>
-          <Text style={styles.viewInfoHora}>Hora de Abertura: {horaAbertura}</Text>
+          <Text style={styles.viewInfoNome}>{nome_comanda}</Text>
+          <Text style={styles.viewInfoHora}>Hora de Abertura: {hora_abertura}</Text>
           <Text style={styles.viewInfoHora}>Aberta por: Leonardo</Text>
         </View>
       </View>
@@ -76,7 +76,7 @@ export default function ComandaDetalhe () {
       <ScrollView>
         <View style={styles.itensComanda}>
         {itensComanda
-        .filter(item => item.numeroComanda.toString() === numeroComanda)
+        .filter(item => item.numero_comanda.toString() === numero_comanda)
         .map((item) => (
             <Pressable
               key={item.id}

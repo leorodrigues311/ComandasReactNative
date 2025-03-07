@@ -4,32 +4,32 @@ import react from 'react'
 
 // Aqui nós instanciamos uma interface para definir o tipo de cada variavel
 interface ComandaProps {
-  nomeComanda: string;
-  numeroComanda: string;
+  nome_comanda: string;
+  numero_comanda: string;
+  hora_abertura: string;
   valorTotal: number;
-  horaAbertura: string;
-  statusComanda: string
+  status_comanda: string;
 }
 
-export function Comanda({nomeComanda, numeroComanda, valorTotal, horaAbertura, statusComanda}: ComandaProps){
+export function Comanda({nome_comanda, numero_comanda, valorTotal, hora_abertura, status_comanda}: ComandaProps){
     return (
         <View  style={styles.viewPrincipal}>
           {/*Aqui fica o visualizador do status da comanda, estiver ativo, fica verde, inativo fica vermelho*/}
             <View style={[styles.viewStatus,
-              {backgroundColor: statusComanda === 'ativo' ? '#00FF00' : '#FF0000'},
-              {borderColor: statusComanda === 'ativo' ? '#00FF00' : '#FF0000'}]}>
+              {backgroundColor: status_comanda === 'ativo' ? '#00FF00' : '#FF0000'},
+              {borderColor: status_comanda === 'ativo' ? '#00FF00' : '#FF0000'}]}>
              </View>
 
           {/*Essa é a view que exibe o numero da comanda*/}
             <View style={styles.viewNumero}>
-                <Text style={styles.viewNumeroTexto}>{numeroComanda}</Text>
+                <Text style={styles.viewNumeroTexto}>{numero_comanda}</Text>
             </View>
 
           {/*Essa é a view que traz os detalhes da comanda*/}
             <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>{nomeComanda}</Text>
+              <Text style={styles.viewInfoNome}>{nome_comanda}</Text>
               <Text style={styles.viewInfoValorTotal}>R$ {valorTotal.toFixed(2).replace('.', ',')}</Text>
-              <Text style={styles.viewInfoHora}>Hora de Abertura: {horaAbertura}</Text>
+              <Text style={styles.viewInfoHora}>Hora de Abertura: {hora_abertura}</Text>
             </View>
         </View>  
     );
