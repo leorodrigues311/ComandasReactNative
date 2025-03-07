@@ -24,6 +24,7 @@ interface ComandaContextType {
   removerComanda: (numeroComanda: string, setComandas: React.Dispatch<React.SetStateAction<Comanda[]>>) => void;
   removerItemComanda: (idItem: string, setItensComanda: React.Dispatch<React.SetStateAction<ComandaItem[]>>) => void;
   gerarId: () => string;
+  testeBanco: () => void;
 
 }
 
@@ -31,39 +32,56 @@ const ComandaContext = createContext<ComandaContextType | undefined>(undefined);
 
 export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
-  const gerarId = () => `item${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+  const gerarId = () => `item${Date.now()}-${Math.floor(Math.random() * 1000)}`
 
   const adicionarItens = (novoItem: Omit<ComandaItem, 'id'>) => {
-    const novoItemComId = { ...novoItem, id: gerarId() };
-    setItensComanda(prevItens => [...prevItens, novoItemComId]);
-  };
+    const novoItemComId = { ...novoItem, id: gerarId() }
+    setItensComanda(prevItens => [...prevItens, novoItemComId])
+  }
+
+
+const testeBanco = () => {
+
+  const [dados, setDados] = useState([]);
+
+  useEffect(() => {
+    fetch('http://192.168.1.104:3333/')
+      .then(response => response.json())
+      .then(data => setDados(data))
+      .catch(error => console.error('Erro ao buscar dados:', error));
+    }, []);
+
+  console.log('Entrou no fetch, dados: ', dados)
+
+}
+
 
   const [comandas, setComandas] = useState<Comanda[]>([
       { nomeComanda: 'João da Silva', numeroComanda: '1', horaAbertura: '10:42', valorTotal: 134.21, statusComanda: 'ativo' },
     ])
 
-    const [itensComanda, setItensComanda] = useState<ComandaItem[]>([
-      { id: gerarId(), numeroComanda: 1, nomeItem: 'Teste grelhado', valorUnit: 12.21, quantidade: 3 },
-      { id: gerarId(), numeroComanda: 1, nomeItem: 'Ovo Cozido', valorUnit: 12.00, quantidade: 1 },
-      { id: gerarId(), numeroComanda: 1, nomeItem: 'Batata doce', valorUnit: 9.11, quantidade: 2 },
-      { id: gerarId(), numeroComanda: 2, nomeItem: 'Pão', valorUnit: 12.21, quantidade: 3 },
-      { id: gerarId(), numeroComanda: 3, nomeItem: 'Sopa', valorUnit: 12.21, quantidade: 3 },
-    ])
+  const [itensComanda, setItensComanda] = useState<ComandaItem[]>([
+    { id: gerarId(), numeroComanda: 1, nomeItem: 'Teste grelhado', valorUnit: 12.21, quantidade: 3 },
+    { id: gerarId(), numeroComanda: 1, nomeItem: 'Ovo Cozido', valorUnit: 12.00, quantidade: 1 },
+    { id: gerarId(), numeroComanda: 1, nomeItem: 'Batata doce', valorUnit: 9.11, quantidade: 2 },
+    { id: gerarId(), numeroComanda: 2, nomeItem: 'Pão', valorUnit: 12.21, quantidade: 3 },
+    { id: gerarId(), numeroComanda: 3, nomeItem: 'Sopa', valorUnit: 12.21, quantidade: 3 },
+  ])
     
-    const adicionarComanda = (novaComanda: Comanda, setComandas: React.Dispatch<React.SetStateAction<Comanda[]>>) => {
-      setComandas(prevComandas => [...prevComandas, novaComanda]);
-    }
-    
-    const removerComanda = (numeroComanda: string, setComandas: React.Dispatch<React.SetStateAction<Comanda[]>>) => {
-      setComandas(prevComandas => prevComandas.filter(comanda => comanda.numeroComanda !== numeroComanda));
-    }
- 
-    const removerItemComanda = (idItem: string, setItensComanda: React.Dispatch<React.SetStateAction<ComandaItem[]>>) => {
-      setItensComanda(prevItens => prevItens.filter(item => item.id !== idItem)); // Usando o id único para remover
-    }
-    
+  const adicionarComanda = (novaComanda: Comanda, setComandas: React.Dispatch<React.SetStateAction<Comanda[]>>) => {
+    setComandas(prevComandas => [...prevComandas, novaComanda]);
+  }
+  
+  const removerComanda = (numeroComanda: string, setComandas: React.Dispatch<React.SetStateAction<Comanda[]>>) => {
+    setComandas(prevComandas => prevComandas.filter(comanda => comanda.numeroComanda !== numeroComanda));
+  }
+
+  const removerItemComanda = (idItem: string, setItensComanda: React.Dispatch<React.SetStateAction<ComandaItem[]>>) => {
+    setItensComanda(prevItens => prevItens.filter(item => item.id !== idItem)); // Usando o id único para remover
+  }
+  
   return (
-    <ComandaContext.Provider value={{ itensComanda, comandas, adicionarItens, adicionarComanda, removerComanda, removerItemComanda, gerarId }}>
+    <ComandaContext.Provider value={{ itensComanda, comandas, adicionarItens, adicionarComanda, removerComanda, removerItemComanda, gerarId, testeBanco }}>
       {children}
     </ComandaContext.Provider>
   );
@@ -76,3 +94,5 @@ export const useComanda = () => {
   }
   return context;
 };
+
+export default ComandaContext;

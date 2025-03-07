@@ -1,7 +1,7 @@
 const cors = require('cors');
 const cron = require('node-cron');
 const express = require('express');
-const port = process.env.PORT || 5432;
+const port = process.env.PORT || 3333;
 const server = express();
 const { client, pool } = require('./database/db.js');
 
@@ -14,7 +14,7 @@ let keys = [];
   cron.schedule('*/1 * * * *', async () => {
     const client = await pool.connect()
     const result = await client.query('SELECT * FROM comandas')
-    console.log(result)
+    console.log('buscou no Banco')
     client.release()
 
     keys = result.rows
@@ -30,18 +30,15 @@ let keys = [];
   })
 })()
 
-server.get('/', async (req, res, next) => {
-  const { document, token, key } = req.query;
-
-  let store = keys.filter((storeElement) => {
-    if (document == storeElement.document) {
-      return storeElement;
-    }
-  });
-
-  res.send(store)
+server.get('/', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM comandas');
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+  console.log('foi')
 });
-
 
 
 server.listen(port, () => {
