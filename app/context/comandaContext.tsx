@@ -29,7 +29,9 @@ interface ComandaContextType {
 const ComandaContext = createContext<ComandaContextType | undefined>(undefined);
 
 export const ComandaProvider = ({ children }: { children: ReactNode }) => {
+
   const [comandas, setComandas] = useState<Comanda[]>([]);
+  const [itensComanda, setItensComanda] = useState<ComandaItem[]>([]);
 
   const gerarId = () => `item${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
@@ -38,16 +40,9 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     setItensComanda(prevItens => [...prevItens, novoItemComId]);
   };
 
-  const carregarComandas = async () => {
-    fetch('http://192.168.1.104:3333/')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Dados recebidos:', data);
-        setComandas(data);
-      })
-      .catch(error => console.error('Erro ao buscar dados:', error));
+  const removerItemComanda = (idItem: string) => {
+    setItensComanda(prevItens => prevItens.filter(item => item.id !== idItem));
   };
-
 
   const adicionarComanda = (novaComanda: Comanda) => {
     setComandas(prevComandas => [...prevComandas, novaComanda]);
@@ -57,11 +52,16 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     setComandas(prevComandas => prevComandas.filter(comanda => comanda.numero_comanda !== numero_comanda));
   };
 
-  const [itensComanda, setItensComanda] = useState<ComandaItem[]>([]);
-
-  const removerItemComanda = (idItem: string) => {
-    setItensComanda(prevItens => prevItens.filter(item => item.id !== idItem));
+  const carregarComandas = async () => {
+    await fetch('http://192.168.1.104:3333/')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Dados recebidos no fetch:', data);
+        setComandas(data);
+      })
+      .catch(error => console.error('Erro ao buscar dados:', error));
   };
+
 
   return (
     <ComandaContext.Provider

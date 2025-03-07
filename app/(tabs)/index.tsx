@@ -11,10 +11,10 @@ export default function HomeScreen() {
   const router = useRouter();
 
   useEffect(() => {
-    carregarComandas();
+   carregarComandas();
   }, []);
 
-  console.log('comandas', comandas)
+  console.log('comandas na home:', comandas)
 
   return (
     <SafeAreaView style={styles.container}>
