@@ -12,7 +12,7 @@ interface Comanda {
   nome_comanda: string;
   numero_comanda: string;
   hora_abertura: string;
-  valorTotal: number;
+  valor_total: number;
   status_comanda: string;
 }
 
@@ -53,13 +53,22 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const carregarComandas = async () => {
-    await fetch('http://192.168.1.104:3333/')
-      .then(response => response.json())
-      .then(data => {
-        console.log('Dados recebidos no fetch:', data);
-        setComandas(data);
-      })
-      .catch(error => console.error('Erro ao buscar dados:', error));
+    try {
+      const response = await fetch('http://192.168.1.104:3333/');
+      const data = await response.json();
+      
+      console.log('📌 Dados recebidos no fetch:', data);
+      
+      setComandas(Object.values(data).map(item => ({
+        nome_comanda: item.nome_comanda || "",
+        numero_comanda: String(item.numero_comanda || ""),
+        hora_abertura: item.hora_abertura || "",
+        valorTotal: Number(item.valor_total || 0),,
+        status_comanda: item.status_comanda || "",
+      })));
+    } catch (error) {
+      console.error('❌ Erro ao buscar dados:', error);
+    }
   };
 
 

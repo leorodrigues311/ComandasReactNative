@@ -20,33 +20,30 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container}>
       <TopBar />
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {comandas.length > 0 ? (
-          comandas.map((comanda, index) => (
+          {comandas.map((comanda, index) => (
             <Pressable
               key={index}
               onPress={() => router.push({
                 pathname: '/comandaDetalhe',
                 params: {
                   nome_comanda: comanda.nome_comanda,
-                  numero_comanda: comanda.numero_comanda.toString(),
+                  numero_comanda: comanda.numero_comanda,
                   hora_abertura: comanda.hora_abertura,
-                  valorTotal: comanda.valorTotal.toString(),
-                  status_comanda: comanda.status_comanda
+                  valor_total: comanda.valor_total,
+                  status_comanda: comanda.status_comanda,
                 }
               })}
             >
               <Comanda
                 numero_comanda={comanda.numero_comanda}
                 nome_comanda={comanda.nome_comanda}
-                valorTotal={comanda.valorTotal}
+                valor_total={comanda.valor_total}
                 hora_abertura={comanda.hora_abertura}
                 status_comanda={comanda.status_comanda}
               />
             </Pressable>
-          ))
-        ) : (
-          <Text style={{ textAlign: 'center', marginTop: 20, color:'white' }}>Nenhuma comanda encontrada</Text>
-        )}
+          ))}
+
       </ScrollView>
       <ButtonFlutuante />
     </SafeAreaView>
