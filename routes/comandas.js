@@ -6,28 +6,32 @@ router.use(express.json())
 
 router.get('/', async (req, res, next) => {
     const { offset } = req.query
-    const products = await helper.getProducts(offset)
+    const comandas = await helper.getComandas(offset)
   
     res.status(200).send(products)
 })
 
 router.get('/', async (req, res, next) => {
-  const { offset } = req.query
-  const products = await helper.getProducts(offset)
+  try {
+    const result = await pool.query('SELECT * FROM comandas');
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 
-  res.status(200).send(products)
+  res.status(200).send(res)
 })
 
 router.post('/', async (req, res, next) => {
-  const data = req.body
-  const product = await helper.postProduct(data)
+  const id = req.body
+  const comandas = await helper.putComanda(id)
 
-  res.status(200).send(product)
+  res.status(200).send(comandas)
 })
 
 router.put('/', async (req, res, next) => {
   const { id, quantity } = req.body
-  const stock = await helper.putStock(id, quantity)
+  const comandas = await helper.postComanda(id, quantity)
 
-  res.status(200).send(stock)
+  res.status(200).send(comandas)
 })

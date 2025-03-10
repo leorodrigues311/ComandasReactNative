@@ -1,4 +1,6 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import Helper from '@/database/helper/helper'
+const helper = new Helper()
 
 interface ComandaItem {
   id: string
@@ -54,8 +56,9 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
   const carregarComandas = async () => {
     try {
-      const response = await fetch('http://192.168.0.113:3333/')
-      const data: Comanda[] = await response.json()
+      const response = helper.getComandas()
+      console.log(response)
+      const data: Comanda[] = await response
       
       console.log('Dados recebidos no fetch:', data)
       

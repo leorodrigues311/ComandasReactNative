@@ -1,5 +1,6 @@
 const axios = require('axios')
 require('dotenv').config()
+const { client, pool } = require('./database/db.js');
 
 module.exports = class Helper {
   constructor() {
@@ -96,9 +97,55 @@ module.exports = class Helper {
 
 // ** fim Item Comanda **
 
-// ** Colaboradores **
+// ** Produtos **
 
-  async getColaboradores(offset = 200) {
+async getProdutos(offset = 200) {
+    try{
+      return (await axios.get(`${this.BASE_URL}/produtos?limit=20&offset=${offset}`, {
+      })).data
+    } catch(e){
+      console.log(e)
+    }
+  }
+
+  async getProduto(id) {
+    try{
+      return (await axios.get(`${this.BASE_URL}/produtos/${id}`, {
+      })).data
+    } catch(e){
+      console.log(e)
+    }
+  }
+
+  async postProduto(data) {
+    try{
+      return (await axios.post(`${this.BASE_URL}/produtos/${id}`, data, {
+      })).data
+    } catch(e){
+      console.log(e)
+    }
+  }
+
+  
+  async putProduto(id, data) {
+    try{
+      const data = {
+        gerenciado: true,
+        quantidade: quantity
+      }
+
+      return (await axios.put(`${this.BASE_URL}/produto/${id}`, data, {
+      })).data
+    } catch(e){
+      console.log(e)
+    }
+  }
+
+// ** fim produtos**
+
+// ** usuarios **
+
+  async getUsuarios(offset = 200) {
     try{
       return (await axios.get(`${this.BASE_URL}/colaboradores?limit=20&offset=${offset}`, {
       })).data
@@ -107,7 +154,7 @@ module.exports = class Helper {
     }
   }
 
-  async getColaborador(id) {
+  async getUsuario(id) {
     try{
       return (await axios.get(`${this.BASE_URL}/colaboradores/${id}`, {
       })).data
@@ -116,7 +163,7 @@ module.exports = class Helper {
     }
   }
 
-  async putColaborador(id) {
+  async putUsuario(id) {
     try{
       const data = {
         gerenciado: true,
@@ -130,7 +177,7 @@ module.exports = class Helper {
     }
   }
 
-// ** fim Colaboradores **  
+// ** fim usuarios **  
 
 // ** Empresa **  
 

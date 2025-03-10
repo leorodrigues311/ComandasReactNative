@@ -6,21 +6,23 @@ router.use(express.json())
 
 router.get('/', async (req, res, next) => {
     const { offset } = req.query
-    const usuarios = await helper.getUsuarios(offset)
+    const itens = await helper.getItemComanda(offset)
   
-    res.status(200).send(usuarios)
+    res.status(200).send(itens)
 })
 
 router.post('/', async (req, res, next) => {
-  const id = req.body
-  const usuario = await helper.getUsuario(id)
+  const data = req.body
+  const itens = await helper.postItemComanda(data)
 
-  res.status(200).send(usuario)
+  res.status(200).send(itens)
 })
 
 router.put('/', async (req, res, next) => {
   const { id, quantity } = req.body
-  const usuario = await helper.putUsuario(id, quantity)
+  const itens = await helper.putItemComanda(id, quantity)
 
-  res.status(200).send(usuario)
+  res.status(200).send(itens)
 })
+
+  
