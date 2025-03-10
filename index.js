@@ -1,9 +1,11 @@
 const cors = require('cors');
-const cron = require('node-cron');
 const express = require('express');
 const port = process.env.PORT || 3333;
 const server = express();
-const { client, pool } = require('./database/db.js');
+const produtos = require('./routes/produtos')
+const empresa = require('./routes/empresa')
+const usuarios = require('./routes/usuarios')
+const comandas = require('./routes/comandas')
 
 process.env.TZ = 'America/Sao_Paulo'
 

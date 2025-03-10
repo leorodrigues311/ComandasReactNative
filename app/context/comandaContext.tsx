@@ -56,8 +56,8 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
   const carregarComandas = async () => {
     try {
-      const response = helper.getComandas()
-      console.log(response)
+      const response = await helper.getComandas()
+      console.log(await response)
       const data: Comanda[] = await response
       
       console.log('Dados recebidos no fetch:', data)
