@@ -59,8 +59,8 @@ export default function ComandaDetalhe () {
       <View style={styles.viewInfoComanda}>
         <View style={[
             styles.viewStatus, 
-            { backgroundColor: status_comanda === 'ativo' ? '#00FF00' : '#FF0000' },
-            { borderColor: status_comanda === 'ativo' ? '#00FF00' : '#FF0000' }
+            { backgroundColor: status_comanda === '1' ? '#00FF00' : '#FF0000' },
+            { borderColor: status_comanda === '1' ? '#00FF00' : '#FF0000' }
           ]}
         />
         <View style={styles.viewNumero}>

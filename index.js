@@ -5,41 +5,21 @@ const port = process.env.PORT || 3333;
 const server = express();
 const { client, pool } = require('./database/db.js');
 
-server.use(cors());
-server.use(express.json());
+process.env.TZ = 'America/Sao_Paulo'
 
-let keys = [];
-
-(async () => {
-  cron.schedule('*/1 * * * *', async () => {
-    const client = await pool.connect()
-    const result = await client.query('SELECT * FROM comandas')
-    console.log('buscou no Banco')
-    client.release()
-
-    keys = result.rows
-      .map((value, index) => {
-        return {
-          document: value.chavecnpj,
-          trade_name: value.chaveempresa,
-          validation_date: value.chavedatavalidacao,
-          sync_date: value.chavedatasincronizacao,
-          received: value.chaverecebido
-        }
-      });
-  })
-})()
+server.use(cors())
+server.use(express.json())
+server.use('/routes/produtos', produtos)
+server.use('/routes/empresa', empresa)
+server.use('/routes/usuarios', usuarios)
+server.use('/routes/comandas', comandas)
 
 server.get('/', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM comandas');
-    res.json(result.rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
+  res.status(200).send()
+})
 
 server.listen(port, () => {
   console.log(`server running on port ${port}`)
 })
+
+

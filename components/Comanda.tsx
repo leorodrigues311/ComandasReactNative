@@ -16,8 +16,8 @@ export function Comanda({nome_comanda, numero_comanda, valor_total, hora_abertur
         <View  style={styles.viewPrincipal}>
           {/*Aqui fica o visualizador do status da comanda, estiver ativo, fica verde, inativo fica vermelho*/}
             <View style={[styles.viewStatus,
-              {backgroundColor: status_comanda === 'ativo' ? '#00FF00' : '#FF0000'},
-              {borderColor: status_comanda === 'ativo' ? '#00FF00' : '#FF0000'}]}>
+              {backgroundColor: status_comanda === '1' ? '#00FF00' : '#FF0000'},
+              {borderColor: status_comanda === '1' ? '#00FF00' : '#FF0000'}]}>
              </View>
 
           {/*Essa é a view que exibe o numero da comanda*/}
@@ -33,9 +33,7 @@ export function Comanda({nome_comanda, numero_comanda, valor_total, hora_abertur
             </View>
         </View>  
     );
-
 }
-
 
 const styles = StyleSheet.create({
 
