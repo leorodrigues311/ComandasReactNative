@@ -4,9 +4,9 @@ const helper = new Helper()
 
 interface ComandaItem {
   id: string
-  numero_comanda: number
-  nomeItem: string
-  valorUnit: number
+  numero_comanda: string
+  nome_item: string
+  valor_unit: number
   quantidade: number
 }
 
@@ -25,7 +25,8 @@ interface ComandaContextType {
   adicionarComanda: (novaComanda: Comanda) => void
   removerComanda: (numeroComanda: string) => void
   removerItemComanda: (idItem: string) => void
-  carregarComandas: () => void
+  carregaComandas: () => void
+  carregaItens: () => void
 }
 
 const ComandaContext = createContext<ComandaContextType | undefined>(undefined)
@@ -40,11 +41,11 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const adicionarItens = (novoItem: Omit<ComandaItem, 'id'>) => {
     const novoItemComId = { ...novoItem, id: gerarId() }
     setItensComanda(prevItens => [...prevItens, novoItemComId])
-  };
+  }
 
   const removerItemComanda = (idItem: string) => {
     setItensComanda(prevItens => prevItens.filter(item => item.id !== idItem))
-  };
+  }
 
   const adicionarComanda = (novaComanda: Comanda) => {
     setComandas(prevComandas => [...prevComandas, novaComanda])
@@ -54,13 +55,10 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     setComandas(prevComandas => prevComandas.filter(comanda => comanda.numero_comanda !== numero_comanda))
   }
 
-  const carregarComandas = async () => {
+  const carregaComandas = async () => {
     try {
       const response = await helper.getComandas()
-      console.log(await response)
-      const data: Comanda[] = await response
-      
-      console.log('Dados recebidos no fetch:', data)
+      const data: Comanda[] = response
       
       setComandas(Object.values(data).map(item => ({
         nome_comanda: item.nome_comanda || "",
@@ -68,6 +66,24 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         hora_abertura: item.hora_abertura || "",
         valor_total: Number(item.valor_total || 0),
         status_comanda: item.status_comanda || "",
+      })));
+    } catch (error) {
+      console.error('Erro ao buscar dados:', error)
+    }
+  }
+
+  
+  const carregaItens = async () => {
+    try {
+      const response = await helper.getItensComanda()
+      const data: ComandaItem[] = response
+      
+      setItensComanda(Object.values(data).map(item => ({
+        id: item.id || "",
+        nome_item: item.nome_item,
+        numero_comanda: String(item.numero_comanda || ""),
+        valor_unit: Number(item.valor_unit || 0),
+        quantidade: Number(item.quantidade || 0),
       })));
     } catch (error) {
       console.error('Erro ao buscar dados:', error)
@@ -83,7 +99,8 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         adicionarComanda,
         removerComanda,
         removerItemComanda,
-        carregarComandas
+        carregaComandas,
+        carregaItens
       }}>
       {children}
     </ComandaContext.Provider>

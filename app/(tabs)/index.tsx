@@ -7,14 +7,13 @@ import { useRouter } from "expo-router";
 import { useComanda } from '@/app/context/comandaContext';
 
 export default function HomeScreen() {
-  const { comandas, carregarComandas } = useComanda();
+  const { comandas, carregaComandas } = useComanda();
   const router = useRouter();
 
   useEffect(() => {
-   carregarComandas();
+   carregaComandas();
   }, []);
 
-  console.log('comandas na home:', comandas)
 
   return (
     <SafeAreaView style={styles.container}>

@@ -1,6 +1,7 @@
-const Helper = require('../database/helper/helper.js')
+import Helper from '../database/helper/helper.js'
+import express from 'express'
+import {client, pool} from '../database/db.js'
 const helper = new Helper()
-const express = require('express')
 const router = express.Router()
 router.use(express.json())
 
@@ -25,4 +26,4 @@ router.put('/', async (req, res, next) => {
   res.status(200).send(itens)
 })
 
-  
+export default router;

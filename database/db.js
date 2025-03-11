@@ -1,5 +1,7 @@
-const { Client, Pool } = require('pg');
-require('dotenv').config()
+import pkg from 'pg';
+const { Client, Pool } = pkg;
+import dotenv from 'dotenv'
+dotenv.config()
 const env = process.env
 
 const client = new Client({
@@ -21,7 +23,7 @@ const pool = new Pool({
   connectionTimeoutMillis: 2000,
 })
 
-module.exports = {
+export {
   client,
   pool
 }

@@ -12,7 +12,7 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 export default function ComandaDetalhe () {
 
-  const { itensComanda } = useComanda()
+  const { itensComanda, carregaItens } = useComanda()
   const { nome_comanda, numero_comanda, hora_abertura, status_comanda, novosItens } = useLocalSearchParams<{
     nome_comanda: string,
     numero_comanda: string,
@@ -84,9 +84,9 @@ export default function ComandaDetalhe () {
               onPress={() => handlePress(item.id)}
             >
               <ItemComanda
-                nomeItem={item.nomeItem}
-                valorUnit={item.valorUnit}
-                valorTotal={item.valorUnit * item.quantidade}
+                nomeItem={item.nome_item}
+                valorUnit={item.valor_unit}
+                valorTotal={item.valor_unit * item.quantidade}
                 quantidade={item.quantidade}
                 style={selectedItems.includes(item.id) ? styles.selectedItem : {}}
               />

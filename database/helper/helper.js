@@ -70,9 +70,9 @@ export default class Helper {
 
 // ** Item Comanda **
 
-  async getItemComanda(id) {
+  async getItensComanda() {
     try{
-      return (await axios.get(`${this.BASE_URL}/item/${id}`, {
+      return (await axios.get(`${this.BASE_URL}/item/`, {
       })).data
     } catch(e){
       console.log(e)
