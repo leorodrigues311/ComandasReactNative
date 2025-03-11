@@ -11,10 +11,10 @@ process.env.TZ = 'America/Sao_Paulo'
 
 server.use(cors())
 server.use(express.json())
-server.use('/routes/produtos', produtos)
-server.use('/routes/empresa', empresa)
-server.use('/routes/usuarios', usuarios)
-server.use('/routes/comandas', comandas)
+server.use('/produtos', produtos)
+server.use('/empresa', empresa)
+server.use('/usuarios', usuarios)
+server.use('/comandas', comandas)
 
 server.get('/', async (req, res) => {
   res.status(200).send()
