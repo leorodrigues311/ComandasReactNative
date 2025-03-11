@@ -1,23 +1,19 @@
-const axios = require('axios')
-
-module.exports = class Helper {
-  constructor() {
-    const { BASE_URL, API_KEY, APP_KEY } = process.env
-    this.API_KEY = API_KEY
-    this.APP_KEY = APP_KEY
-    this.BASE_URL = BASE_URL
-  }
-
 
 /*
-  import Constants from "expo-constants";
-const axios = require('axios')
+import * as Constants from "expo-constants";
 
 export default class Helper {
   constructor() {
-    const BASE_URL = Constants.expoConfig?.extra?.BASE_URL;
+    this.BASE_URL = Constants.expoConfig?.extra?.BASE_URL;
   }
 */
+
+import axios from "axios";
+export default class Helper {
+  constructor() {
+    const { BASE_URL } = process.env
+    this.BASE_URL = BASE_URL
+  }
 
   currentDate(seconds = 0) {
     let currentDate = new Date()
@@ -31,7 +27,7 @@ export default class Helper {
 
   async getComandas(offset = 200) {
     try{
-      return (await axios.get(`http://192.168.0.113:3333/comandas`, {
+      return (await axios.get(`http://192.168.1.107:3333/comandas`, {
       })).data
     } catch(e){
       console.log(e)

@@ -1,26 +1,29 @@
-const Helper = require('../database/helper/helper.js')
+import Helper from '../database/helper/helper.js'
+import express from 'express'
 const helper = new Helper()
-const express = require('express')
 const router = express.Router()
 router.use(express.json())
 
-router.get('/', async (req, res, next) => {
-    const { offset } = req.query
-    const usuarios = await helper.getUsuarios(offset)
-  
-    res.status(200).send(usuarios)
-})
+const usuarios = () => {
+  router.get('/', async (req, res, next) => {
+      const { offset } = req.query
+      const usuarios = await helper.getUsuarios(offset)
+    
+      res.status(200).send(usuarios)
+  })
 
-router.post('/', async (req, res, next) => {
-  const id = req.body
-  const usuario = await helper.getUsuario(id)
+  router.post('/', async (req, res, next) => {
+    const id = req.body
+    const usuario = await helper.getUsuario(id)
 
-  res.status(200).send(usuario)
-})
+    res.status(200).send(usuario)
+  })
 
-router.put('/', async (req, res, next) => {
-  const { id, quantity } = req.body
-  const usuario = await helper.putUsuario(id, quantity)
+  router.put('/', async (req, res, next) => {
+    const { id, quantity } = req.body
+    const usuario = await helper.putUsuario(id, quantity)
 
-  res.status(200).send(usuario)
-})
+    res.status(200).send(usuario)
+  })
+}
+export default usuarios

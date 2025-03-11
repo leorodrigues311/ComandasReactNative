@@ -1,11 +1,11 @@
-const cors = require('cors');
-const express = require('express');
+import cors from 'cors';
+import express from 'express';
+import produtos from './routes/produtos.js'
+import empresa from './routes/empresa.js'
+import usuarios from './routes/usuarios.js'
+import comandas from './routes/comandas.js'
 const port = process.env.PORT || 3333;
 const server = express();
-const produtos = require('./routes/produtos')
-const empresa = require('./routes/empresa')
-const usuarios = require('./routes/usuarios')
-const comandas = require('./routes/comandas')
 
 process.env.TZ = 'America/Sao_Paulo'
 
