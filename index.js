@@ -5,7 +5,7 @@ import empresa from './routes/empresa.js'
 import usuarios from './routes/usuarios.js'
 import comandas from './routes/comandas.js'
 import itens from './routes/itens.js'
-const port = process.env.PORT || 3333;
+const port = process.env.PORT || 4000;
 const server = express();
 
 process.env.TZ = 'America/Sao_Paulo'

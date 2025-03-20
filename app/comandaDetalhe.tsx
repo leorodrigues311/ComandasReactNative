@@ -21,6 +21,8 @@ export default function ComandaDetalhe () {
     novosItens?: string,
   }>()
 
+ 
+
   const [selectedItems, setSelectedItems] = useState<string[]>([])
 
   const limparSelecao = () => {
@@ -51,6 +53,9 @@ export default function ComandaDetalhe () {
 
   const isBottomBarVisible = selectedItems.length > 0
 
+  carregaItens()
+  console.log(itensComanda)
+
   return (
     <ComandaProvider>
     <SafeAreaView style={styles.viewPrincipal}>
@@ -74,7 +79,8 @@ export default function ComandaDetalhe () {
       </View>
 
       <ScrollView>
-        <View style={styles.itensComanda}>
+
+      <View style={styles.itensComanda}>
         {itensComanda
         .filter(item => item.numero_comanda.toString() === numero_comanda)
         .map((item) => (
@@ -93,6 +99,7 @@ export default function ComandaDetalhe () {
             </Pressable>
           ))}
         </View>
+
       </ScrollView>
 
       {(!isBottomBarVisible) && <ValorTotalComanda valorTotal={134.21} />}

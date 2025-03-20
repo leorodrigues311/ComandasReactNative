@@ -6,10 +6,12 @@ const router = express.Router()
 router.use(express.json())
 
 router.get('/', async (req, res, next) => {
-    const { offset } = req.query
-    const itens = await helper.getItemComanda(offset)
-  
-    res.status(200).send(itens)
+  try {
+    const result = await pool.query('SELECT * FROM itens_comanda');
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 })
 
 router.post('/', async (req, res, next) => {

@@ -27,7 +27,7 @@ export default class Helper {
 
   async getComandas(offset = 200) {
     try{
-      return (await axios.get(`http://192.168.1.107:3333/comandas`, {
+      return (await axios.get(`http://192.168.0.113:4000/comandas`, {
       })).data
     } catch(e){
       console.log(e)
@@ -72,7 +72,7 @@ export default class Helper {
 
   async getItensComanda() {
     try{
-      return (await axios.get(`${this.BASE_URL}/item/`, {
+      return (await axios.get(`http://192.168.0.113:4000/itens`, {
       })).data
     } catch(e){
       console.log(e)

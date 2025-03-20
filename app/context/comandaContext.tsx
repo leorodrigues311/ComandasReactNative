@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
-import Helper from '@/database/helper/helper'
+import Helper from '@/database/helper/helper.js'
 const helper = new Helper()
 
 interface ComandaItem {
