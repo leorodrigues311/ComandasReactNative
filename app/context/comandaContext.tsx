@@ -4,8 +4,8 @@ const helper = new Helper()
 
 interface ComandaItem {
   id: string
-  numero_comanda: string
-  nome_item: string
+  comanda_id: string
+  item_nome: string
   valor_unit: number
   quantidade: number
 }
@@ -80,8 +80,8 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       
       setItensComanda(Object.values(data).map(item => ({
         id: item.id || "",
-        nome_item: item.nome_item,
-        numero_comanda: String(item.numero_comanda || ""),
+        item_nome: item.item_nome,
+        comanda_id: String(item.comanda_id || ""),
         valor_unit: Number(item.valor_unit || 0),
         quantidade: Number(item.quantidade || 0),
       })));

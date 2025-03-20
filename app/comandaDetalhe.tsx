@@ -53,9 +53,10 @@ export default function ComandaDetalhe () {
 
   const isBottomBarVisible = selectedItems.length > 0
 
-  carregaItens()
-  console.log(itensComanda)
-
+   useEffect(() => {
+    carregaItens();
+   }, []);
+   
   return (
     <ComandaProvider>
     <SafeAreaView style={styles.viewPrincipal}>
@@ -82,7 +83,7 @@ export default function ComandaDetalhe () {
 
       <View style={styles.itensComanda}>
         {itensComanda
-        .filter(item => item.numero_comanda.toString() === numero_comanda)
+        .filter(item => item.comanda_id.toString() === numero_comanda)
         .map((item) => (
             <Pressable
               key={item.id}
@@ -90,7 +91,7 @@ export default function ComandaDetalhe () {
               onPress={() => handlePress(item.id)}
             >
               <ItemComanda
-                nomeItem={item.nome_item}
+                nomeItem={item.item_nome}
                 valorUnit={item.valor_unit}
                 valorTotal={item.valor_unit * item.quantidade}
                 quantidade={item.quantidade}
