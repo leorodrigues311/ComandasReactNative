@@ -27,7 +27,7 @@ export default class Helper {
 
   async getComandas(offset = 200) {
     try{
-      return (await axios.get(`http://192.168.1.108:4000/comandas`, {
+      return (await axios.get(`http://192.168.0.113:4000/comandas`, {
       })).data
     } catch(e){
       console.log(e)
@@ -57,14 +57,23 @@ export default class Helper {
     }
   }
 
-  async postComanda(data) {
-    try{
-      return (await axios.post(`${this.BASE_URL}/comanda/${id}`, data, {
-      })).data
-    } catch(e){
-      console.log(e)
+  async postComanda(nome_comanda, numero_comanda, hora_abertura, status_comanda, valor_total) {
+
+    const data = {nome_comanda, numero_comanda, hora_abertura, status_comanda, valor_total }
+    try {
+      console.log('Enviando para API:', data)
+      const response = await axios.post('http://192.168.0.113:4000/comandas', data, {
+        headers: { 'Content-Type': 'application/json' }
+      })
+  
+      return response.data;
+    } catch (e) {
+      console.error('Erro ao postar comanda:', e.response?.data || e.message);
+      throw e
     }
   }
+  
+  
 
 // ** fim comanda **
 
@@ -72,7 +81,7 @@ export default class Helper {
 
   async getItensComanda() {
     try{
-      return (await axios.get(`http://192.168.1.108:4000/itens`, {
+      return (await axios.get(`http://192.168.0.113:4000/itens`, {
       })).data
     } catch(e){
       console.log(e)

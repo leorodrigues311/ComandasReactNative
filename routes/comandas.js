@@ -14,12 +14,28 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
-  const id = req.body
-  const comandas = await helper.putComanda(id)
+router.post('/', async (req, res) => {
 
-  res.status(200).send(comandas)
-})
+  try {
+    
+    const {nome_comanda, hora_abertura, status_comanda, numero_comanda, valor_total } = req.body;
+
+
+    const result = await pool.query(
+      `INSERT INTO comandas 
+      (nome_comanda, hora_abertura, status_comanda, numero_comanda, valor_total)
+      VALUES ($1, $2, $3, $4, $5) 
+      RETURNING *`,
+      [nome_comanda, hora_abertura, status_comanda, numero_comanda, valor_total]
+    );
+
+    res.json(result.rows[0])
+  } catch (error) {
+    res.status(500).json({ error: error.message});
+    res.body
+  }
+});
+
 
 router.put('/', async (req, res, next) => {
   const { id, quantity } = req.body

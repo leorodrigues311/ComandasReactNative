@@ -21,7 +21,6 @@ export default function ComandaDetalhe () {
     novosItens?: string,
   }>()
 
- 
 
   const [selectedItems, setSelectedItems] = useState<string[]>([])
 

@@ -4,11 +4,14 @@ import React, { useState, useEffect  } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Dialog from "react-native-dialog"
 import { useRouter } from "expo-router";
+import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
+
 
 
 export default function novaComanda (){
 
   const router = useRouter();
+    const { comandas, adicionarComanda } = useComanda()
 
   // Estas instâncias servem para mudar o estado do modal do número da comanda, e para mudar o valor do input quando o usuario digita
   const [modalNumeroComandaVisivel, setModalNumeroComanda] = useState(false)
@@ -51,11 +54,22 @@ export default function novaComanda (){
     }
 
     else if (buttonType === 'finaliza'){
-      router.push({
-        pathname: '/comandaDetalhe',
-        params: { nomeComanda: inputNomeComanda, numeroComanda: inputNumeroComanda, horaAbertura: '10:42', valorTotal: 0, statusComanda: 'ativo' },
-      }),
-      setModalNomeComanda(false);
+
+      if (inputNomeComanda != ''){
+        
+        adicionarComanda({nome_comanda: inputNomeComanda, numero_comanda: inputNumeroComanda, hora_abertura: '10:42', valor_total: 0, status_comanda: '1' })
+        router.push({
+          pathname: '/comandaDetalhe',
+          params: { nome_comanda: inputNomeComanda, numero_comanda: inputNumeroComanda, hora_abertura: '10:42', valor_total: 0, status_comanda: '1' },
+        }),
+        setModalNomeComanda(false);
+      }
+
+      else {
+        alert('Preencha o nome')
+      }
+
+
     }
 
   };
@@ -93,10 +107,18 @@ export default function novaComanda (){
                   <TextInput
                     style={styles.input}
                     value={inputNumeroComanda}
-                    onChangeText={setInputNumeroComanda}
+                    onChangeText={(text) => {
+                      const numericText = text.replace(/[^0-9]/g, '')
+                      if (numericText.length <= 2) {
+                        setInputNumeroComanda(numericText)
+                      }
+                    }}
                     placeholder="Número"
                     keyboardType='numeric'
+                    maxLength={2}
                   />
+
+
 
                   <View style={styles.buttonsContainer}>
                     <Pressable onPress={() => handleButtonPress('cancela')}>
@@ -128,12 +150,23 @@ export default function novaComanda (){
                 <View style={styles.modalContainer}>
                   <Text style={styles.modalTitle}>Nome do cliente:</Text>
 
-
                   <TextInput
                     style={styles.input}
                     value={inputNomeComanda}
-                    onChangeText={setInputNomeComanda}
+                    onChangeText={(text) => {
+                      // Filtra letras, números, espaços e letras com acentuação, e limita a 40 caracteres
+                      const validText = text.replace(/[^a-zA-Z0-9áéíóúãõâêîôûàèìòùçÇ ]/g, '');  // Remove qualquer caractere não válido
+                      if (validText.length <= 40) {
+                        setInputNomeComanda(validText);  // Atualiza o estado com o texto filtrado
+                      }
+                    }}
                     placeholder="Nome"
+                    maxLength={40}  // Limita o número de caracteres para 40
+                    onBlur={() => {
+                      if (inputNomeComanda.trim() === '') {
+                        alert('Preencha o nome');
+                      }
+                    }}
                   />
 
                   <View style={styles.buttonsContainer}>

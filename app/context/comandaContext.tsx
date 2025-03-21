@@ -47,10 +47,25 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     setItensComanda(prevItens => prevItens.filter(item => item.id !== idItem))
   }
 
-  const adicionarComanda = (novaComanda: Comanda) => {
-    setComandas(prevComandas => [...prevComandas, novaComanda])
-  }
-
+  const adicionarComanda = async (novaComanda: Comanda) => {
+    try {
+      console.log('Enviando comanda:', novaComanda); 
+      const response = await helper.postComanda(
+        novaComanda.nome_comanda,
+        novaComanda.numero_comanda,
+        novaComanda.hora_abertura,
+        novaComanda.status_comanda,
+        novaComanda.valor_total
+      );
+  
+      if (response) {
+        setComandas(prevComandas => [...prevComandas, response])
+      }
+    } catch (error) {
+      console.error('Erro ao adicionar comanda:', error)
+    }
+  };
+  
   const removerComanda = (numero_comanda: string) => {
     setComandas(prevComandas => prevComandas.filter(comanda => comanda.numero_comanda !== numero_comanda))
   }
