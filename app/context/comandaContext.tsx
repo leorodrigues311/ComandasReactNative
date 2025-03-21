@@ -18,7 +18,7 @@ interface Comanda {
   status_comanda: string
 }
 
-interface ItemComanda {
+interface ItemCarrinho {
   id: number;
   item_nome: string;
   quantidade: number;
@@ -27,14 +27,14 @@ interface ItemComanda {
 interface ComandaContextType {
   itensComanda: ComandaItem[]
   comandas: Comanda[]
-  items: ItemComanda[]
+  itensCarrinho: ItemCarrinho[]
   adicionarItens: (novoItem: Omit<ComandaItem, 'id'>) => void
   adicionarComanda: (novaComanda: Comanda) => void
   removerComanda: (numeroComanda: string) => void
   removerItemComanda: (idItem: string) => void
   carregaComandas: () => void
   carregaItens: () => void
-  setItems: (item: ItemComanda) => void
+  setItensCarrinho: (itensCarrinho: ItemCarrinho) => void
 }
 
 const ComandaContext = createContext<ComandaContextType | undefined>(undefined)
@@ -43,11 +43,11 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
   const [comandas, setComandas] = useState<Comanda[]>([])
   const [itensComanda, setItensComanda] = useState<ComandaItem[]>([])
+  const [itensCarrinho, setItensCarrinho] = useState<ItemCarrinho[]>([]);
 
   const gerarId = () => `item${Date.now()}-${Math.floor(Math.random() * 1000)}`
 
   const adicionarItens = async (novoItem: Omit<ComandaItem, 'id'>) => {
-
     const novoItemComId = { ...novoItem, id: gerarId() }
     try {
       const response = await helper.postItemComanda(
@@ -56,8 +56,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         novoItemComId.item_nome,
         novoItemComId.valor_unit,
         novoItemComId.quantidade
-      );
-  
+      )
       if (response) {
         setItensComanda(prevItens => [...prevItens, novoItemComId])
       }
@@ -79,15 +78,14 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         novaComanda.hora_abertura,
         novaComanda.status_comanda,
         novaComanda.valor_total
-      );
-  
+      )
       if (response) {
         setComandas(prevComandas => [...prevComandas, response])
       }
     } catch (error) {
       console.error('Erro ao adicionar comanda:', error)
     }
-  };
+  }
   
   const removerComanda = (numero_comanda: string) => {
     setComandas(prevComandas => prevComandas.filter(comanda => comanda.numero_comanda !== numero_comanda))
@@ -110,7 +108,6 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
-  
   const carregaItens = async () => {
     try {
       const response = await helper.getItensComanda()
@@ -128,16 +125,16 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
- 
-  const [items, setItems] = useState<ItemComanda[]>([]);
+  const adicionarItensCarrinho = async
 
+ 
   return (
     <ComandaContext.Provider
       value={{
         itensComanda,
         comandas,
-        items,
-        setItems,
+        itensCarrinho,
+        setItensCarrinho,
         adicionarItens,
         adicionarComanda,
         removerComanda,
