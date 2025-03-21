@@ -88,12 +88,18 @@ export default class Helper {
     }
   }
 
-  async postItemComanda(data) {
-    try{
-      return (await axios.post(`${this.BASE_URL}/item/${id}`, data, {
-      })).data
-    } catch(e){
-      console.log(e)
+  async postItemComanda(id, comanda_id, item_nome, valor_unit, quantidade) {
+    const data = {id, comanda_id, item_nome, valor_unit, quantidade}
+    try {
+      console.log('Enviando para API:', data)
+      const response = await axios.post('http://192.168.0.113:4000/itens', data, {
+        headers: { 'Content-Type': 'application/json' }
+      })
+  
+      return response.data;
+    } catch (e) {
+      console.error('Erro ao postar comanda:', e.response?.data || e.message);
+      throw e
     }
   }
 

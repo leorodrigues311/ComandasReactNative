@@ -35,10 +35,16 @@ export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { i
   const adicionaItensComanda = () => {
     setDialogNovoProdutoVisible(false);
     showSuccessMessage();
+    itensComanda.map( (item) => {
+
+      adicionarItens({
+        comanda_id: item.comanda_id,
+        item_nome: item.item_nome,
+        valor_unit: item.valor_unit,
+        quantidade: item.quantidade
+      })
+    })
     setTimeout(() => {
-      adicionarItens(
-        { numeroComanda: 3, nomeItem: 'Feijão Tropeiro', valorUnit: 15.0, quantidade: 2 }
-      );
       console.log(itensComanda)
       router.back();
     }, 1500);

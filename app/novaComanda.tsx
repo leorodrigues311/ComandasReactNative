@@ -57,7 +57,13 @@ export default function novaComanda (){
 
       if (inputNomeComanda != ''){
         
-        adicionarComanda({nome_comanda: inputNomeComanda, numero_comanda: inputNumeroComanda, hora_abertura: '10:42', valor_total: 0, status_comanda: '1' })
+        adicionarComanda(
+          {nome_comanda: inputNomeComanda,
+          numero_comanda: inputNumeroComanda,
+          hora_abertura: '10:42',
+          valor_total: 0,
+          status_comanda: '1' })
+          
         router.push({
           pathname: '/comandaDetalhe',
           params: { nome_comanda: inputNomeComanda, numero_comanda: inputNumeroComanda, hora_abertura: '10:42', valor_total: 0, status_comanda: '1' },

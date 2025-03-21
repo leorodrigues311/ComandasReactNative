@@ -18,15 +18,23 @@ interface Comanda {
   status_comanda: string
 }
 
+interface ItemComanda {
+  id: number;
+  item_nome: string;
+  quantidade: number;
+}
+
 interface ComandaContextType {
   itensComanda: ComandaItem[]
   comandas: Comanda[]
+  items: ItemComanda[]
   adicionarItens: (novoItem: Omit<ComandaItem, 'id'>) => void
   adicionarComanda: (novaComanda: Comanda) => void
   removerComanda: (numeroComanda: string) => void
   removerItemComanda: (idItem: string) => void
   carregaComandas: () => void
   carregaItens: () => void
+  setItems: (item: ItemComanda) => void
 }
 
 const ComandaContext = createContext<ComandaContextType | undefined>(undefined)
@@ -38,9 +46,24 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
   const gerarId = () => `item${Date.now()}-${Math.floor(Math.random() * 1000)}`
 
-  const adicionarItens = (novoItem: Omit<ComandaItem, 'id'>) => {
+  const adicionarItens = async (novoItem: Omit<ComandaItem, 'id'>) => {
+
     const novoItemComId = { ...novoItem, id: gerarId() }
-    setItensComanda(prevItens => [...prevItens, novoItemComId])
+    try {
+      const response = await helper.postItemComanda(
+        novoItemComId.id,
+        novoItemComId.comanda_id,
+        novoItemComId.item_nome,
+        novoItemComId.valor_unit,
+        novoItemComId.quantidade
+      );
+  
+      if (response) {
+        setItensComanda(prevItens => [...prevItens, novoItemComId])
+      }
+    } catch (error) {
+      console.error('Erro ao adicionar itens:', error)
+    }
   }
 
   const removerItemComanda = (idItem: string) => {
@@ -105,17 +128,22 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+ 
+  const [items, setItems] = useState<ItemComanda[]>([]);
+
   return (
     <ComandaContext.Provider
       value={{
         itensComanda,
         comandas,
+        items,
+        setItems,
         adicionarItens,
         adicionarComanda,
         removerComanda,
         removerItemComanda,
         carregaComandas,
-        carregaItens
+        carregaItens,
       }}>
       {children}
     </ComandaContext.Provider>

@@ -14,11 +14,24 @@ router.get('/', async (req, res, next) => {
   }
 })
 
-router.post('/', async (req, res, next) => {
-  const data = req.body
-  const itens = await helper.postItemComanda(data)
+router.post('/', async (req, res) => {
+  try {
+    const {id, comanda_id, item_nome, valor_unit, quantidade} = req.body;
+    const result = await pool.query(
+      `INSERT INTO itens_comanda 
+      (id, comanda_id, item_nome, valor_unit, quantidade)
+      VALUES ($1, $2, $3, $4, $5) 
+      RETURNING *`,
+      [id, comanda_id, item_nome, valor_unit, quantidade]
+    );
 
-  res.status(200).send(itens)
+    io.emit('comanda-alterada', { action: 'POST', data: result.rows[0] });
+
+    res.json(result.rows[0])
+  } catch (error) {
+    res.status(500).json({ error: error.message});
+    res.body
+  }
 })
 
 router.put('/', async (req, res, next) => {
