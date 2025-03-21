@@ -1,6 +1,7 @@
 import Helper from '../database/helper/helper.js'
 import express from 'express'
 import {client, pool} from '../database/db.js'
+import { io } from '../index.js'
 const helper = new Helper();
 const router = express.Router();
 router.use(express.json());
@@ -28,6 +29,8 @@ router.post('/', async (req, res) => {
       RETURNING *`,
       [nome_comanda, hora_abertura, status_comanda, numero_comanda, valor_total]
     );
+
+    io.emit('comanda-alterada', { action: 'POST', data: result.rows[0] });
 
     res.json(result.rows[0])
   } catch (error) {
