@@ -11,7 +11,7 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 export default function novaComanda (){
 
   const router = useRouter();
-    const { comandas, adicionarComanda } = useComanda()
+  const { comandas, adicionarComanda } = useComanda()
 
   // Estas instâncias servem para mudar o estado do modal do número da comanda, e para mudar o valor do input quando o usuario digita
   const [modalNumeroComandaVisivel, setModalNumeroComanda] = useState(false)

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, View, Pressable, ScrollView, TouchableOpacity, Text } from 'react-native';
 import { ItemProduto } from '@/components/ItemProduto';
 import { BottomBarConferirItens } from '@/components/navigation/BottomBarConferirItens';
@@ -7,61 +7,44 @@ import Dialog from "react-native-dialog";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { ComandaProvider } from './context/comandaContext';
+import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 export default function produtoAdicionarComanda() {
-  // Recupera o numeroComanda dos parâmetros da rota
-  const { numeroComanda } = useLocalSearchParams<{ numeroComanda: string }>();
+
   const router = useRouter();
+  const { comandas, itensSelecionados, produtos, carregaProdutos, adicionarItensCarrinho, removerItemCarrinho, setItensSelecionados } = useComanda()
 
-  const produtos = [
-    { nomeItem: 'Pão', estoque: 3, valorTotal: 10.50, imagem: 'https://emporiokaminski.com.br/wp-content/uploads/2024/06/Pao-Frances-50g-2.jpg'},
-    { nomeItem: 'Caldo de galinha', estoque: 1, valorTotal: 10.50, imagem: 'https://www.joicetur.com.br/arquivos/media/receitas/caldodepiranha-copy-1.jpg'},
-  ];
-
-  const [selectedItem, setSelectedItem] = useState<string>('');
-  const [selectedItems, setSelectedItems] = useState<number[]>([]);
-  const [items, setItems] = useState<{ id: number; itemNome: string; itemQtd: number }[]>([]);
-  const [itemQtd, setItemQtd] = useState<string>(''); // inicia como string vazia
-  const [dialogQuantidadeProduto, setDialogQuantidadeProdutoVisible] = useState(false);
-
-  const limparSelecao = () => {
-    setSelectedItems([]);
-  };
+  useEffect(() => {
+    carregaProdutos();
+  }, []);
+  
+  const [itemQtd, setItemQtd] = useState<string>('')
+  const [dialogQuantidadeProduto, setDialogQuantidadeProdutoVisible] = useState(false)
 
   const handleCancel = () => {
-    setDialogQuantidadeProdutoVisible(false);
-  };
+    setDialogQuantidadeProdutoVisible(false)
+  }
 
-  const adicionarItemAoCarrinho = (nomeItem: string, quantidade: number) => {
-    setItems((prevItems) => [
-      ...prevItems,
-      { id: prevItems.length + 1, itemNome: nomeItem, itemQtd: quantidade },
-    ]);
-  };
-
-  // Função para remover itens da lista
-  const removeItem = (id: number) => {
-    setItems(prevItems => prevItems.filter(item => item.id !== id));
-  };
-
-  const handleItemSelect = (itemName: string, buttonType?: string) => {
+  const handleItemSelect = (itemId: number[], buttonType?: string) => {
     if (buttonType === "adicionarItemComanda") {
-      setSelectedItem(itemName);
+      setItensSelecionados(itemId)
       setItemQtd(''); // inicia o input vazio
-      setDialogQuantidadeProdutoVisible(true);
+      setDialogQuantidadeProdutoVisible(true)
     } else if (buttonType === "confirmarItemQuantidade") {
-      adicionarItemAoCarrinho(selectedItem, Number(itemQtd));
-      setDialogQuantidadeProdutoVisible(false);
-      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      adicionarItensCarrinho({
+        item_codigo: itensSelecionados[0],
+        quantidade: Number(itemQtd)
+      });
+      setDialogQuantidadeProdutoVisible(false)
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
     }
-  };
+  }
 
   // Funções e estado relacionados ao diálogo de confirmação na BottomBarConferirItens
-  const [dialogNovoProdutoVisible, setDialogNovoProdutoVisible] = useState(false);
+  const [dialogNovoProdutoVisible, setDialogNovoProdutoVisible] = useState(false)
   const showSuccessMessage = () => {
     // Aqui você pode implementar o Toast ou outra notificação de sucesso
-    console.log('Itens adicionados com sucesso!');
+    console.log('Itens adicionados com sucesso!')
   };
 
   return (
@@ -70,7 +53,7 @@ export default function produtoAdicionarComanda() {
         <TopBarAdicionarProduto />
 
         <Dialog.Container visible={dialogQuantidadeProduto}>
-          <Dialog.Title>Adicionar "{selectedItem}"</Dialog.Title>
+          <Dialog.Title>Adicionar "{itensSelecionados[0]}"</Dialog.Title>
           <TextInput
             style={styles.textInput}
             placeholder="Quantidade:"
@@ -79,7 +62,7 @@ export default function produtoAdicionarComanda() {
             keyboardType="numeric"
           />
           <Dialog.Button onPress={handleCancel} label="Cancelar" />
-          <Dialog.Button onPress={() => handleItemSelect(selectedItem, 'confirmarItemQuantidade')} label="Adicionar" />
+          <Dialog.Button onPress={() => handleItemSelect(itensSelecionados, 'confirmarItemQuantidade')} label="Adicionar" />
         </Dialog.Container>
 
         <View>
@@ -87,7 +70,7 @@ export default function produtoAdicionarComanda() {
             {produtos.map((produto, index) => (
               <Pressable
                 key={index}
-                onPress={() => handleItemSelect(produto.nomeItem, 'adicionarItemComanda')}
+                onPress={() => handleItemSelect(produto.codigo, 'adicionarItemComanda')}
               >
                 <ItemProduto
                   nomeItem={produto.nomeItem}
@@ -100,7 +83,7 @@ export default function produtoAdicionarComanda() {
           </ScrollView>
         </View>
 
-        <BottomBarConferirItens items={items} limparSelecao={limparSelecao} removeItem={removeItem} />
+        <BottomBarConferirItens items={items} limparSelecao={limparSelecao} removeItem={removerItemCarrinho} />
       </SafeAreaView>
     </ComandaProvider>
   );

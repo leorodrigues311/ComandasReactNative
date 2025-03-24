@@ -25,7 +25,7 @@ export default class Helper {
 
 // ** comandas **
 
-  async getComandas(offset = 200) {
+  async getComandas() {
     try{
       return (await axios.get(`http://192.168.0.113:4000/comandas`, {
       })).data
@@ -121,9 +121,9 @@ export default class Helper {
 
 // ** Produtos **
 
-async getProdutos(offset = 200) {
+async getProdutos() {
     try{
-      return (await axios.get(`${this.BASE_URL}/produtos?limit=20&offset=${offset}`, {
+      return (await axios.get(`http://192.168.0.113:4000/produtos`, {
       })).data
     } catch(e){
       console.log(e)
