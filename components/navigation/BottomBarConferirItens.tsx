@@ -8,36 +8,36 @@ import * as Haptics from 'expo-haptics';
 import Toast from 'react-native-toast-message';
 import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
-export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { items: { id: number; itemNome: string; itemQtd: number }[], limparSelecao: () => void,  removeItem: (id: number) => void; }) {
+export function BottomBarConferirItens() {
 
   const router = useRouter();
-  const { adicionarItens, itensComanda } = useComanda()
+  const {itensComanda, itensCarrinho, removerItemCarrinho, adicionarItens } = useComanda()
 
-  const screenHeight = Dimensions.get('window').height;
-  const [isExpanded, setIsExpanded] = useState(false);
-  const heightAnim = useState(new Animated.Value(60))[0];
+  const screenHeight = Dimensions.get('window').height
+  const [isExpanded, setIsExpanded] = useState(false)
+  const heightAnim = useState(new Animated.Value(60))[0]
 
-  const [dialogActionVisible, setDialogNovoProdutoVisible] = useState(false);
+  const [dialogActionVisible, setDialogNovoProdutoVisible] = useState(false)
 
   const handleCancel = () => {
-    setDialogNovoProdutoVisible(false);
-  };
+    setDialogNovoProdutoVisible(false)
+  }
 
   const handleFeedbackButton = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
-  };
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
+  }
 
   const handleConfirmaInclusao = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
-    setDialogNovoProdutoVisible(true);
-  };
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
+    setDialogNovoProdutoVisible(true)
+  }
 
   const adicionaItensComanda = () => {
     setDialogNovoProdutoVisible(false);
     showSuccessMessage();
     itensComanda.map( (item) => {
-
       adicionarItens({
+        id: item.id,
         comanda_id: item.comanda_id,
         item_nome: item.item_nome,
         valor_unit: item.valor_unit,
@@ -45,7 +45,6 @@ export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { i
       })
     })
     setTimeout(() => {
-      console.log(itensComanda)
       router.back();
     }, 1500);
   };
@@ -76,14 +75,19 @@ export function BottomBarConferirItens({ items, limparSelecao, removeItem }: { i
   return (
     <Animated.View style={[styles.viewPrincipal, { height: heightAnim }]}>
       <Pressable onPress={handleToggle} style={styles.viewOperacoesComanda}>
-        <Text style={styles.itensQtdCarrinho}>{items.length}</Text>
+        <Text style={styles.itensQtdCarrinho}>{itensCarrinho.length}</Text>
         <Ionicons style={styles.btnCarrinho} name="cart-outline" size={38} color="#00FF00" />
       </Pressable>
 
       {isExpanded && (
         <View style={styles.viewExtra}>
-          {items.map(item => (
-            <ItemConferenciaAdd key={item.id} id={item.id} itemNome={item.itemNome} itemQtd={item.itemQtd} onRemove={removeItem} />
+          {itensCarrinho.map(item => (
+            <ItemConferenciaAdd
+             key={item.id}
+             id={item.id}
+             item_nome={item.item_nome}
+             quantidade={item.quantidade} 
+             onRemove={removerItemCarrinho} />
           ))}
         </View>
       )}

@@ -22,6 +22,7 @@ interface Comanda {
 
 interface ItemCarrinho {
   id: string
+  item_nome: string
   item_codigo: number
   quantidade: number
 }

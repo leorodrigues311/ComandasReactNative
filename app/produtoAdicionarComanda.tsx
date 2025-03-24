@@ -12,7 +12,7 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 export default function produtoAdicionarComanda() {
 
   const router = useRouter();
-  const { comandas, itensSelecionados, produtos, carregaProdutos, adicionarItensCarrinho, removerItemCarrinho, setItensSelecionados } = useComanda()
+  const { comandas, itensSelecionados, itensCarrinho, produtos, carregaProdutos, adicionarItensCarrinho, removerItemCarrinho, setItensSelecionados } = useComanda()
 
   useEffect(() => {
     carregaProdutos();
@@ -25,13 +25,14 @@ export default function produtoAdicionarComanda() {
     setDialogQuantidadeProdutoVisible(false)
   }
 
-  const handleItemSelect = (itemId: number[], buttonType?: string) => {
+  const handleItemSelect = (itemId: number[], item_nome: string, buttonType?: string) => {
     if (buttonType === "adicionarItemComanda") {
       setItensSelecionados(itemId)
       setItemQtd(''); // inicia o input vazio
       setDialogQuantidadeProdutoVisible(true)
     } else if (buttonType === "confirmarItemQuantidade") {
       adicionarItensCarrinho({
+        item_nome: item_nome,
         item_codigo: itensSelecionados[0],
         quantidade: Number(itemQtd)
       });
@@ -70,12 +71,12 @@ export default function produtoAdicionarComanda() {
             {produtos.map((produto, index) => (
               <Pressable
                 key={index}
-                onPress={() => handleItemSelect(produto.codigo, 'adicionarItemComanda')}
+                onPress={() => handleItemSelect([produto.codigo_produto], produto.nome_produto, 'adicionarItemComanda')}
               >
                 <ItemProduto
-                  nomeItem={produto.nomeItem}
-                  estoque={produto.estoque}
-                  valorTotal={produto.valorTotal}
+                  nomeItem={produto.nome_produto}
+                  estoque={produto.estoque_produto}
+                  valorTotal={produto.valor_venda}
                   imagem={produto.imagem}
                 />
               </Pressable>
@@ -83,7 +84,7 @@ export default function produtoAdicionarComanda() {
           </ScrollView>
         </View>
 
-        <BottomBarConferirItens items={items} limparSelecao={limparSelecao} removeItem={removerItemCarrinho} />
+        <BottomBarConferirItens />
       </SafeAreaView>
     </ComandaProvider>
   );
