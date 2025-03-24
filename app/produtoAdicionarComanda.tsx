@@ -12,7 +12,7 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 export default function produtoAdicionarComanda() {
 
   const router = useRouter();
-  const { comandas, itensSelecionados, itensCarrinho, produtos, carregaProdutos, adicionarItensCarrinho, removerItemCarrinho, setItensSelecionados } = useComanda()
+  const { comandas, itemSelecionado, itensCarrinho, produtos, carregaProdutos, adicionarItensCarrinho, removerItemCarrinho, setItemSelecionado } = useComanda()
 
   useEffect(() => {
     carregaProdutos();
@@ -26,11 +26,11 @@ export default function produtoAdicionarComanda() {
   }
 
   const handleItemSelect = (itemId: number[], item_nome: string, buttonType?: string) => {
-    if (buttonType === "adicionarItemComanda") {
-      setItensSelecionados(itemId)
+    if (buttonType === "adicionarAoCarrinho") {
+      setItemSelecionado(itemId)
       setItemQtd(''); // inicia o input vazio
       setDialogQuantidadeProdutoVisible(true)
-    } else if (buttonType === "confirmarItemQuantidade") {
+    } else if (buttonType === "confirmarCarrinho") {
       adicionarItensCarrinho({
         item_nome: item_nome,
         item_codigo: itensSelecionados[0],
@@ -63,7 +63,7 @@ export default function produtoAdicionarComanda() {
             keyboardType="numeric"
           />
           <Dialog.Button onPress={handleCancel} label="Cancelar" />
-          <Dialog.Button onPress={() => handleItemSelect(itensSelecionados, 'confirmarItemQuantidade')} label="Adicionar" />
+          <Dialog.Button onPress={() => handleItemSelect(itensSelecionados, 'confirmarCarrinho')} label="Adicionar" />
         </Dialog.Container>
 
         <View>
@@ -71,7 +71,7 @@ export default function produtoAdicionarComanda() {
             {produtos.map((produto, index) => (
               <Pressable
                 key={index}
-                onPress={() => handleItemSelect([produto.codigo_produto], produto.nome_produto, 'adicionarItemComanda')}
+                onPress={() => handleItemSelect([produto.codigo_produto], produto.nome_produto, 'adicionarAoCarrinho')}
               >
                 <ItemProduto
                   nomeItem={produto.nome_produto}

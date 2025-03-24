@@ -39,7 +39,7 @@ interface ComandaContextType {
   itensComanda: ComandaItem[]
   comandas: Comanda[]
   itensCarrinho: ItemCarrinho[]
-  itensSelecionados: number[]
+  itemSelecionado: ItemCarrinho[]
   produtos: Produto[]
   adicionarItens: (novoItem: ComandaItem) => void
   adicionarComanda: (novaComanda: Comanda) => void
@@ -48,8 +48,8 @@ interface ComandaContextType {
   carregaComandas: () => void
   carregaItens: () => void
   carregaProdutos: () => void
-  setItensSelecionados: (itemId: number[]) => void
-  limpaItensSelecionados: () => void
+  setItemSelecionado: (itemSelecionado: ItemCarrinho[]) => void
+  limpaitemSelecionado: () => void
   adicionarItensCarrinho: (novoItemCarrinho: Omit<ItemCarrinho, 'id'>) => void
   removerItemCarrinho: (id:string) => void
 }
@@ -66,7 +66,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const [produtos, setProdutos] = useState<Produto[]>([])
   const [itensComanda, setItensComanda] = useState<ComandaItem[]>([])
   const [itensCarrinho, setItensCarrinho] = useState<ItemCarrinho[]>([]);
-  const [itensSelecionados, setItensSelecionados] = useState<number[]>([])
+  const [itemSelecionado, setItemSelecionado] = useState<ItemCarrinho[]>([])
 
   // aqui nós temos uma função para gerar id's únicos para os itens
   const gerarId = () => `item${Date.now()}-${Math.floor(Math.random() * 1000)}`
@@ -127,8 +127,8 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   }
 
   // aqui nós limpamos o array de seleção de itens
-  const limpaItensSelecionados = () => {
-    setItensSelecionados([])
+  const limpaitemSelecionado = () => {
+    setItemSelecionado([])
   }
 
 //============= Fim Itens =====================
@@ -208,18 +208,18 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         itensComanda,
         comandas,
         itensCarrinho,
-        itensSelecionados,
+        itemSelecionado,
         produtos,
         adicionarItensCarrinho,
         removerItemCarrinho,
-        limpaItensSelecionados, 
+        limpaitemSelecionado, 
         adicionarItens,
         adicionarComanda,
         removerComanda,
         removerItemComanda,
         carregaComandas,
         carregaItens,
-        setItensSelecionados,
+        setItemSelecionado,
         carregaProdutos
       }}>
       {children}
