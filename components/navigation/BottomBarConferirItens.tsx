@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable, Animated, Dimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -11,7 +11,7 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 export function BottomBarConferirItens() {
 
   const router = useRouter();
-  const {itensComanda, itensCarrinho, removerItemCarrinho, adicionarItens } = useComanda()
+  const {itensComanda, itensCarrinho, removerItemCarrinho, adicionarItens, limpaCarrinho } = useComanda()
 
   const screenHeight = Dimensions.get('window').height
   const [isExpanded, setIsExpanded] = useState(false)
@@ -37,7 +37,7 @@ export function BottomBarConferirItens() {
     showSuccessMessage();
     itensComanda.map( (item) => {
       adicionarItens({
-        id: item.id,
+        id_item: item.id_item,
         comanda_id: item.comanda_id,
         item_nome: item.item_nome,
         valor_unit: item.valor_unit,
@@ -47,6 +47,7 @@ export function BottomBarConferirItens() {
     setTimeout(() => {
       router.back();
     }, 1500);
+    limpaCarrinho()
   };
 
   const handleToggle = () => {

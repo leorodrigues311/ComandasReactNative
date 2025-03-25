@@ -12,49 +12,47 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 export default function produtoAdicionarComanda() {
 
   const router = useRouter();
-  const { comandas, itemSelecionado, itensCarrinho, produtos, carregaProdutos, adicionarItensCarrinho, removerItemCarrinho, setItemSelecionado } = useComanda()
+
+  const {produtos, carregaProdutos, adicionarItensCarrinho, limpaCarrinho } = useComanda()
 
   useEffect(() => {
     carregaProdutos();
-  }, []);
+  }, [])
   
   const [itemQtd, setItemQtd] = useState<string>('')
+  const [tituloItem, setTituloItem] = useState<string>('')
+  const [codItem, setCodItem] = useState<number>(0)
   const [dialogQuantidadeProduto, setDialogQuantidadeProdutoVisible] = useState(false)
 
   const handleCancel = () => {
     setDialogQuantidadeProdutoVisible(false)
   }
 
-  const handleItemSelect = (itemId: number[], item_nome: string, buttonType?: string) => {
-    if (buttonType === "adicionarAoCarrinho") {
-      setItemSelecionado(itemId)
+  const handleItemSelect = (produto_codigo: number, produto_nome: string, buttonType?: string) => {
+
+    if (buttonType === "selecionarQuantidade") {
       setItemQtd(''); // inicia o input vazio
       setDialogQuantidadeProdutoVisible(true)
-    } else if (buttonType === "confirmarCarrinho") {
+      setTituloItem(produto_nome)
+      setCodItem(produto_codigo)
+
+    } else if (buttonType === "AdicionarAoCarrinho") {
       adicionarItensCarrinho({
-        item_nome: item_nome,
-        item_codigo: itensSelecionados[0],
+        item_nome: tituloItem,
+        item_codigo: codItem,
         quantidade: Number(itemQtd)
-      });
+      })
       setDialogQuantidadeProdutoVisible(false)
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
     }
   }
 
-  // Funções e estado relacionados ao diálogo de confirmação na BottomBarConferirItens
-  const [dialogNovoProdutoVisible, setDialogNovoProdutoVisible] = useState(false)
-  const showSuccessMessage = () => {
-    // Aqui você pode implementar o Toast ou outra notificação de sucesso
-    console.log('Itens adicionados com sucesso!')
-  };
-
   return (
-    <ComandaProvider>
       <SafeAreaView style={{ flex: 1 }}>
         <TopBarAdicionarProduto />
 
         <Dialog.Container visible={dialogQuantidadeProduto}>
-          <Dialog.Title>Adicionar "{itensSelecionados[0]}"</Dialog.Title>
+        <Dialog.Title>Adicionar "{tituloItem}"</Dialog.Title>
           <TextInput
             style={styles.textInput}
             placeholder="Quantidade:"
@@ -63,7 +61,8 @@ export default function produtoAdicionarComanda() {
             keyboardType="numeric"
           />
           <Dialog.Button onPress={handleCancel} label="Cancelar" />
-          <Dialog.Button onPress={() => handleItemSelect(itensSelecionados, 'confirmarCarrinho')} label="Adicionar" />
+          <Dialog.Button onPress={() => handleItemSelect(codItem, tituloItem, 'AdicionarAoCarrinho')}
+            label="Adicionar" />
         </Dialog.Container>
 
         <View>
@@ -71,7 +70,7 @@ export default function produtoAdicionarComanda() {
             {produtos.map((produto, index) => (
               <Pressable
                 key={index}
-                onPress={() => handleItemSelect([produto.codigo_produto], produto.nome_produto, 'adicionarAoCarrinho')}
+                onPress={() => handleItemSelect(produto.codigo_produto, produto.nome_produto, 'selecionarQuantidade')}
               >
                 <ItemProduto
                   nomeItem={produto.nome_produto}
@@ -86,7 +85,6 @@ export default function produtoAdicionarComanda() {
 
         <BottomBarConferirItens />
       </SafeAreaView>
-    </ComandaProvider>
   );
 }
 

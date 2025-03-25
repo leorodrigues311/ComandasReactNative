@@ -5,7 +5,7 @@ const helper = new Helper()
 // aqui delcaramos os tipos de cada parâmetro
 
 interface ComandaItem {
-  id: string
+  id_item: string
   comanda_id: string
   item_nome: string
   valor_unit: number
@@ -27,6 +27,11 @@ interface ItemCarrinho {
   quantidade: number
 }
 
+interface ItemSelecionado {
+  item_nome: string
+  item_codigo: number
+}
+
 interface Produto {
   nome_produto: string
   codigo_produto: number
@@ -39,7 +44,7 @@ interface ComandaContextType {
   itensComanda: ComandaItem[]
   comandas: Comanda[]
   itensCarrinho: ItemCarrinho[]
-  itemSelecionado: ItemCarrinho[]
+  itemSelecionado: ItemSelecionado | null
   produtos: Produto[]
   adicionarItens: (novoItem: ComandaItem) => void
   adicionarComanda: (novaComanda: Comanda) => void
@@ -48,8 +53,8 @@ interface ComandaContextType {
   carregaComandas: () => void
   carregaItens: () => void
   carregaProdutos: () => void
-  setItemSelecionado: (itemSelecionado: ItemCarrinho[]) => void
-  limpaitemSelecionado: () => void
+  setItemSelecionado: (itemSelecionado: ItemSelecionado | null) => void
+  limpaCarrinho: () => void
   adicionarItensCarrinho: (novoItemCarrinho: Omit<ItemCarrinho, 'id'>) => void
   removerItemCarrinho: (id:string) => void
 }
@@ -66,7 +71,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const [produtos, setProdutos] = useState<Produto[]>([])
   const [itensComanda, setItensComanda] = useState<ComandaItem[]>([])
   const [itensCarrinho, setItensCarrinho] = useState<ItemCarrinho[]>([]);
-  const [itemSelecionado, setItemSelecionado] = useState<ItemCarrinho[]>([])
+  const [itemSelecionado, setItemSelecionado] = useState<ItemSelecionado | null>(null)
 
   // aqui nós temos uma função para gerar id's únicos para os itens
   const gerarId = () => `item${Date.now()}-${Math.floor(Math.random() * 1000)}`
@@ -81,7 +86,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       const data: ComandaItem[] = response
       
       setItensComanda(Object.values(data).map(item => ({
-        id: item.id || "",
+        id_item: item.id_item || "",
         item_nome: item.item_nome,
         comanda_id: String(item.comanda_id || ""),
         valor_unit: Number(item.valor_unit || 0),
@@ -96,7 +101,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const adicionarItens = async (novoItem: ComandaItem) => {
     try {
       const response = await helper.postItemComanda(
-        novoItem.id,
+        novoItem.id_item,
         novoItem.comanda_id,
         novoItem.item_nome,
         novoItem.valor_unit,
@@ -123,12 +128,12 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   
   // essa função remove os itens da comanda
   const removerItemComanda = (id: string) => {
-    setItensComanda(prevItens => prevItens.filter(item => item.id !== id))
+    setItensComanda(prevItens => prevItens.filter(item => item.id_item !== id))
   }
 
   // aqui nós limpamos o array de seleção de itens
-  const limpaitemSelecionado = () => {
-    setItemSelecionado([])
+  const limpaCarrinho = () => {
+    setItensCarrinho([]);
   }
 
 //============= Fim Itens =====================
@@ -212,7 +217,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         produtos,
         adicionarItensCarrinho,
         removerItemCarrinho,
-        limpaitemSelecionado, 
+        limpaCarrinho, 
         adicionarItens,
         adicionarComanda,
         removerComanda,
