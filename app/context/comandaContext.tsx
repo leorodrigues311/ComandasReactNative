@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import uuid from 'react-native-uuid';
 import Helper from '@/database/helper/helper.js'
 const helper = new Helper()
 
@@ -6,13 +7,14 @@ const helper = new Helper()
 
 interface ComandaItem {
   id_item: string
-  comanda_id: string
+  comanda_uuid: string
   item_nome: string
   valor_unit: number
   quantidade: number
 }
 
 interface Comanda {
+  comanda_uuid: string
   nome_comanda: string
   numero_comanda: string
   hora_abertura: string
@@ -25,11 +27,7 @@ interface ItemCarrinho {
   item_nome: string
   item_codigo: number
   quantidade: number
-}
-
-interface ItemSelecionado {
-  item_nome: string
-  item_codigo: number
+  valor_unit: number
 }
 
 interface Produto {
@@ -44,8 +42,8 @@ interface ComandaContextType {
   itensComanda: ComandaItem[]
   comandas: Comanda[]
   itensCarrinho: ItemCarrinho[]
-  itemSelecionado: ItemSelecionado | null
   produtos: Produto[]
+  comandaSelecionada: Comanda | null
   adicionarItens: (novoItem: ComandaItem) => void
   adicionarComanda: (novaComanda: Comanda) => void
   removerComanda: (numeroComanda: string) => void
@@ -53,10 +51,12 @@ interface ComandaContextType {
   carregaComandas: () => void
   carregaItens: () => void
   carregaProdutos: () => void
-  setItemSelecionado: (itemSelecionado: ItemSelecionado | null) => void
   limpaCarrinho: () => void
   adicionarItensCarrinho: (novoItemCarrinho: Omit<ItemCarrinho, 'id'>) => void
   removerItemCarrinho: (id:string) => void
+  setComandaSelecionada: (comandaSelecionada: Comanda | null) => void
+  gerarIdComanda: () => string
+  gerarData: () => string
 }
 // fim da declaração dos tipos
 
@@ -70,11 +70,24 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const [comandas, setComandas] = useState<Comanda[]>([])
   const [produtos, setProdutos] = useState<Produto[]>([])
   const [itensComanda, setItensComanda] = useState<ComandaItem[]>([])
+  const [comandaSelecionada, setComandaSelecionada] = useState<Comanda | null>(null);
   const [itensCarrinho, setItensCarrinho] = useState<ItemCarrinho[]>([]);
-  const [itemSelecionado, setItemSelecionado] = useState<ItemSelecionado | null>(null)
 
   // aqui nós temos uma função para gerar id's únicos para os itens
   const gerarId = () => `item${Date.now()}-${Math.floor(Math.random() * 1000)}`
+  const gerarIdComanda = () => uuid.v4();
+
+  const gerarData = () => {
+    const agora = new Date();
+    const dia = String(agora.getDate()).padStart(2, '0');
+    const mes = String(agora.getMonth() + 1).padStart(2, '0');
+    const ano = agora.getFullYear();
+    const horas = String(agora.getHours()).padStart(2, '0');
+    const minutos = String(agora.getMinutes()).padStart(2, '0');
+    const segundos = String(agora.getSeconds()).padStart(2, '0');
+  
+    return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
+  };
 
 
 // ============= Itens =====================
@@ -88,7 +101,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       setItensComanda(Object.values(data).map(item => ({
         id_item: item.id_item || "",
         item_nome: item.item_nome,
-        comanda_id: String(item.comanda_id || ""),
+        comanda_uuid: String(item.comanda_uuid || ""),
         valor_unit: Number(item.valor_unit || 0),
         quantidade: Number(item.quantidade || 0),
       })));
@@ -102,7 +115,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await helper.postItemComanda(
         novoItem.id_item,
-        novoItem.comanda_id,
+        novoItem.comanda_uuid,
         novoItem.item_nome,
         novoItem.valor_unit,
         novoItem.quantidade
@@ -146,6 +159,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await helper.postComanda(
         novaComanda.nome_comanda,
+        novaComanda.comanda_uuid,
         novaComanda.numero_comanda,
         novaComanda.hora_abertura,
         novaComanda.status_comanda,
@@ -171,6 +185,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       const data: Comanda[] = response
       
       setComandas(Object.values(data).map(item => ({
+        comanda_uuid: item.comanda_uuid || "",
         nome_comanda: item.nome_comanda || "",
         numero_comanda: String(item.numero_comanda || ""),
         hora_abertura: item.hora_abertura || "",
@@ -213,8 +228,8 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         itensComanda,
         comandas,
         itensCarrinho,
-        itemSelecionado,
         produtos,
+        comandaSelecionada,
         adicionarItensCarrinho,
         removerItemCarrinho,
         limpaCarrinho, 
@@ -224,8 +239,10 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         removerItemComanda,
         carregaComandas,
         carregaItens,
-        setItemSelecionado,
-        carregaProdutos
+        carregaProdutos,
+        setComandaSelecionada,
+        gerarIdComanda,
+        gerarData
       }}>
       {children}
     </ComandaContext.Provider>

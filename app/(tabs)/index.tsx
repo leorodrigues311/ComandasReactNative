@@ -7,7 +7,7 @@ import { useRouter } from "expo-router";
 import { useComanda } from '@/app/context/comandaContext';
 
 export default function HomeScreen() {
-  const { comandas, carregaComandas } = useComanda();
+  const { comandas, carregaComandas, setComandaSelecionada } = useComanda();
   const router = useRouter();
 
   useEffect(() => {
@@ -22,16 +22,19 @@ export default function HomeScreen() {
           {comandas.map((comanda, index) => (
             <Pressable
               key={index}
-              onPress={() => router.push({
-                pathname: '/comandaDetalhe',
-                params: {
+              onPress={() => {
+                setComandaSelecionada({
+                  comanda_uuid: comanda.comanda_uuid,
                   nome_comanda: comanda.nome_comanda,
                   numero_comanda: comanda.numero_comanda,
                   hora_abertura: comanda.hora_abertura,
                   valor_total: comanda.valor_total,
-                  status_comanda: comanda.status_comanda,
-                }
+                  status_comanda: comanda.status_comanda
+                  })
+                router.push({
+                pathname: '/comandaDetalhe',
               })}
+            }
             >
               <Comanda
                 numero_comanda={comanda.numero_comanda}

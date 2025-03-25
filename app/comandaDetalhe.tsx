@@ -12,17 +12,13 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 export default function ComandaDetalhe () {
 
-  const { itensComanda, carregaItens } = useComanda()
-  const { nome_comanda, numero_comanda, hora_abertura, status_comanda, novosItens } = useLocalSearchParams<{
-    nome_comanda: string,
-    numero_comanda: string,
-    hora_abertura: string,
-    status_comanda: string,
-    novosItens?: string,
-  }>()
-
+  const { itensComanda, comandaSelecionada, carregaItens } = useComanda()
 
   const [selectedItems, setSelectedItems] = useState<string[]>([])
+
+   useEffect(() => {
+    comandaSelecionada;
+    }, [])
 
   const limparSelecao = () => {
     setSelectedItems([])
@@ -64,16 +60,16 @@ export default function ComandaDetalhe () {
       <View style={styles.viewInfoComanda}>
         <View style={[
             styles.viewStatus, 
-            { backgroundColor: status_comanda === '1' ? '#00FF00' : '#FF0000' },
-            { borderColor: status_comanda === '1' ? '#00FF00' : '#FF0000' }
+            { backgroundColor: comandaSelecionada?.status_comanda === '1' ? '#00FF00' : '#FF0000' },
+            { borderColor: comandaSelecionada?.status_comanda === '1' ? '#00FF00' : '#FF0000' }
           ]}
         />
         <View style={styles.viewNumero}>
-          <Text style={styles.viewNumeroTexto}>{numero_comanda}</Text>
+          <Text style={styles.viewNumeroTexto}>{comandaSelecionada?.numero_comanda || ''}</Text>
         </View>
         <View style={styles.viewInfo}>
-          <Text style={styles.viewInfoNome}>{nome_comanda}</Text>
-          <Text style={styles.viewInfoHora}>Hora de Abertura: {hora_abertura}</Text>
+          <Text style={styles.viewInfoNome}>{comandaSelecionada?.nome_comanda || ''}</Text>
+          <Text style={styles.viewInfoHora}>Abertura: {comandaSelecionada?.hora_abertura || ''}</Text>
           <Text style={styles.viewInfoHora}>Aberta por: Leonardo</Text>
         </View>
       </View>
@@ -82,19 +78,19 @@ export default function ComandaDetalhe () {
 
       <View style={styles.itensComanda}>
         {itensComanda
-        .filter(item => item.comanda_id.toString() === numero_comanda)
+        .filter(item => item.comanda_uuid.toString() === comandaSelecionada?.numero_comanda || '')
         .map((item) => (
             <Pressable
-              key={item.id}
-              onLongPress={() => handleLongPress(item.id)}
-              onPress={() => handlePress(item.id)}
+              key={item.id_item}
+              onLongPress={() => handleLongPress(item.id_item)}
+              onPress={() => handlePress(item.id_item)}
             >
               <ItemComanda
                 nomeItem={item.item_nome}
                 valorUnit={item.valor_unit}
                 valorTotal={item.valor_unit * item.quantidade}
                 quantidade={item.quantidade}
-                style={selectedItems.includes(item.id) ? styles.selectedItem : {}}
+                style={selectedItems.includes(item.id_item) ? styles.selectedItem : {}}
               />
             </Pressable>
           ))}

@@ -11,8 +11,14 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 export function BottomBarConferirItens() {
 
   const router = useRouter();
-  const {itensComanda, itensCarrinho, removerItemCarrinho, adicionarItens, limpaCarrinho } = useComanda()
+  
+  const {itensCarrinho, comandaSelecionada, removerItemCarrinho, adicionarItens, limpaCarrinho } = useComanda()
 
+     useEffect(() => {
+      comandaSelecionada;
+      }, [])
+
+      console.log(comandaSelecionada)
   const screenHeight = Dimensions.get('window').height
   const [isExpanded, setIsExpanded] = useState(false)
   const heightAnim = useState(new Animated.Value(60))[0]
@@ -35,13 +41,13 @@ export function BottomBarConferirItens() {
   const adicionaItensComanda = () => {
     setDialogNovoProdutoVisible(false);
     showSuccessMessage();
-    itensComanda.map( (item) => {
+    itensCarrinho.map( (item) => {
       adicionarItens({
-        id_item: item.id_item,
-        comanda_id: item.comanda_id,
+        id_item: item.id,
+        comanda_uuid: comandaSelecionada?.numero_comanda ?? "",
         item_nome: item.item_nome,
         valor_unit: item.valor_unit,
-        quantidade: item.quantidade
+        quantidade: (item.quantidade == 0 ? 1 : item.quantidade)
       })
     })
     setTimeout(() => {

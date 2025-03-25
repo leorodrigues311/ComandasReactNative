@@ -6,12 +6,10 @@ import Dialog from "react-native-dialog"
 import { useRouter } from "expo-router";
 import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
-
-
 export default function novaComanda (){
 
   const router = useRouter();
-  const { comandas, adicionarComanda } = useComanda()
+  const { comandas, adicionarComanda, gerarIdComanda, gerarData } = useComanda()
 
   // Estas instâncias servem para mudar o estado do modal do número da comanda, e para mudar o valor do input quando o usuario digita
   const [modalNumeroComandaVisivel, setModalNumeroComanda] = useState(false)
@@ -59,8 +57,9 @@ export default function novaComanda (){
         
         adicionarComanda(
           {nome_comanda: inputNomeComanda,
+          comanda_uuid: gerarIdComanda(),
           numero_comanda: inputNumeroComanda,
-          hora_abertura: '10:42',
+          hora_abertura: gerarData(),
           valor_total: 0,
           status_comanda: '1' })
           

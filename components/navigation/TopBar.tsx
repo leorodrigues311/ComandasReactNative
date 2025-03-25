@@ -65,6 +65,7 @@ export function TopBar() {
 const styles = StyleSheet.create({
   viewPrincipal: {
     height: 80,
+    position:'fixed',
     backgroundColor: "#151718",
     borderBottomColor: "#363636",
     borderBottomWidth: 0.2,
@@ -126,14 +127,14 @@ const styles = StyleSheet.create({
   btnPesquisar: {
     position: "absolute",
     right: 60,
-    top: "50%",
+    top: "30%",
     transform: [{ translateY: -12.5 }],
   },
 
   btnFiltro: {
     position: "absolute",
     right: 10,
-    top: "50%",
+    top: "30%",
     transform: [{ translateY: -12.5 }],
   },
 });

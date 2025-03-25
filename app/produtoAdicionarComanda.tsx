@@ -13,7 +13,7 @@ export default function produtoAdicionarComanda() {
 
   const router = useRouter();
 
-  const {produtos, carregaProdutos, adicionarItensCarrinho, limpaCarrinho } = useComanda()
+  const {produtos, comandaSelecionada, carregaProdutos, adicionarItensCarrinho, setComandaSelecionada } = useComanda()
 
   useEffect(() => {
     carregaProdutos();
@@ -28,7 +28,7 @@ export default function produtoAdicionarComanda() {
     setDialogQuantidadeProdutoVisible(false)
   }
 
-  const handleItemSelect = (produto_codigo: number, produto_nome: string, buttonType?: string) => {
+  const handleItemSelect = (produto_codigo: number, produto_nome: string, produto_valor: number,  buttonType?: string) => {
 
     if (buttonType === "selecionarQuantidade") {
       setItemQtd(''); // inicia o input vazio
@@ -40,7 +40,8 @@ export default function produtoAdicionarComanda() {
       adicionarItensCarrinho({
         item_nome: tituloItem,
         item_codigo: codItem,
-        quantidade: Number(itemQtd)
+        quantidade: Number(itemQtd),
+        valor_unit: produto_valor
       })
       setDialogQuantidadeProdutoVisible(false)
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
@@ -61,7 +62,7 @@ export default function produtoAdicionarComanda() {
             keyboardType="numeric"
           />
           <Dialog.Button onPress={handleCancel} label="Cancelar" />
-          <Dialog.Button onPress={() => handleItemSelect(codItem, tituloItem, 'AdicionarAoCarrinho')}
+          <Dialog.Button onPress={() => handleItemSelect(codItem, tituloItem, 0, 'AdicionarAoCarrinho')}
             label="Adicionar" />
         </Dialog.Container>
 
@@ -70,7 +71,7 @@ export default function produtoAdicionarComanda() {
             {produtos.map((produto, index) => (
               <Pressable
                 key={index}
-                onPress={() => handleItemSelect(produto.codigo_produto, produto.nome_produto, 'selecionarQuantidade')}
+                onPress={() => handleItemSelect(produto.codigo_produto, produto.nome_produto, produto.valor_venda, 'selecionarQuantidade')}
               >
                 <ItemProduto
                   nomeItem={produto.nome_produto}
