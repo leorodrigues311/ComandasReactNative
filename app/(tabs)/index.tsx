@@ -19,7 +19,8 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container}>
       <TopBar />
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-          {comandas.map((comanda, index) => (
+      {[...comandas] .sort((a, b) => (parseInt(a.numero_comanda || "0") - parseInt(b.numero_comanda || "0")))
+      .map((comanda, index) => (
             <Pressable
               key={index}
               onPress={() => {
