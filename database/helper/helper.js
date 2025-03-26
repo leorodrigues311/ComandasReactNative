@@ -167,14 +167,14 @@ async getProdutos() {
 
 // ** usuarios **
 
-  async getUsuarios(offset = 200) {
-    try{
-      return (await axios.get(`${this.BASE_URL}/colaboradores?limit=20&offset=${offset}`, {
-      })).data
-    } catch(e){
-      console.log(e)
-    }
+async getUsuarios() {
+  try{
+    return (await axios.get(`http://192.168.0.113:4000/usuarios`, {
+    })).data
+  } catch(e){
+    console.log(e)
   }
+}
 
   async getUsuario(id) {
     try{

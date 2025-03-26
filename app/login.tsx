@@ -1,28 +1,28 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, FlatList, 
   ScrollView, Animated, Dimensions, Switch } from 'react-native';
 import { useRouter } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { TextInputMask } from "react-native-masked-text";
+import { useComanda } from '@/app/context/comandaContext';
 
 const { width } = Dimensions.get('window');
 
 export default function Login() {
+
+  const {usuarios, usuarioSelcionado, carregaUsuarios, setUsuarioSelcionado} = useComanda();
   const [cnpj, setCnpj] = useState('');
   const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
   const scrollX = useRef(new Animated.Value(0)).current;
-  const scrollViewRef = useRef(null);
+  const scrollViewRef = useRef<ScrollView>(null);
   const router = useRouter();
 
-  const usuarios = [
-    { id: '1', nome: 'Leonardo Rodrigues', grupoAcesso: 'Administrador' },
-    { id: '2', nome: 'José Roberto', grupoAcesso: 'Administrador' },
-    { id: '3', nome: 'Luis Henrique', grupoAcesso: 'Administrador' },
-    { id: '4', nome: 'João Felipe', grupoAcesso: 'Administrador' },
-  ];
+    useEffect(() => {
+      carregaUsuarios()
+    }, [])
+  
 
   const handleLogin = () => {
     setModalVisible(true);
@@ -57,8 +57,15 @@ export default function Login() {
     scrollViewRef.current?.scrollTo({ x: direction === "normal" ? 0 : width, animated: true });
   };
   
-  const selecionarUsuario = (usuario) => {
-    setSelectedUser(usuario);
+  const selecionarUsuario = (usuario_id: number, usuario_nome: string, usuario_grupo_acesso: string, usuario_senha: string) => {
+    setUsuarioSelcionado({
+      id: usuario_id || 0,
+      cnpj_loja: cnpj,
+      usuario_nome: usuario_nome,
+      usuario_grupo_acesso: usuario_grupo_acesso,
+      usuario_senha: usuario_senha
+    })
+
     animacaoModal("normal")
   };
 
@@ -114,12 +121,12 @@ export default function Login() {
                 <FlatList
                   style={styles.flatList}
                   data={usuarios}
-                  keyExtractor={(item) => item.id}
+                  keyExtractor={(item) => String(item.id)}
                   renderItem={({ item }) => (
-                    <TouchableOpacity style={styles.modalItem} onPress={() => selecionarUsuario(item)}>
+                    <TouchableOpacity style={styles.modalItem} onPress={() => selecionarUsuario(item.id, item.usuario_nome, item.usuario_grupo_acesso, item.usuario_senha)}>
                       <View style={styles.modalItemDadosLogin}>
-                        <Text style={styles.modalItemNome}>{item.nome}</Text>
-                        <Text style={styles.modalItemGrupoAcesso}>{item.grupoAcesso}</Text>
+                        <Text style={styles.modalItemNome}>{item.usuario_nome}</Text>
+                        <Text style={styles.modalItemGrupoAcesso}>{(item.usuario_grupo_acesso == '1' ? 'Administrador' : 'Vendedor')}</Text>
                       </View>
                       <Ionicons style={styles.modalItemArrow} name="arrow-forward-outline" size={30} color={'#ccc8c8'} />
                     </TouchableOpacity>
@@ -136,8 +143,8 @@ export default function Login() {
                 </TouchableOpacity>
 
                 <View style={styles.modalItemSelecionado} >
-                  {selectedUser && <Text style={styles.selectedUser}>{selectedUser.nome}</Text>}
-                  {selectedUser && <Text style={styles.selectedUserGrupoAcesso}>{selectedUser.grupoAcesso}</Text>}
+                  {usuarioSelcionado && <Text style={styles.usuarioSelcionado}>{usuarioSelcionado.usuario_nome}</Text>}
+                  {usuarioSelcionado && <Text style={styles.usuarioSelcionadoGrupoAcesso}>{(usuarioSelcionado.usuario_grupo_acesso == '1' ? 'Administrador' : 'Vendedor')}</Text>}
                   <TextInput
                     style={styles.inputPassword}
                     placeholder="Senha"
@@ -152,15 +159,12 @@ export default function Login() {
                 <Text style={styles.buttonText}>Entrar</Text>
               </TouchableOpacity>
               </View>
-
-
             </ScrollView>
           </Animated.View>
         </View>
       </Modal>
     </View>
-
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -313,14 +317,14 @@ const styles = StyleSheet.create({
     top: 20,
     right: 20,
   },
-  selectedUser: {
+  usuarioSelcionado: {
     fontSize: 22,
     fontWeight: 'bold',
     color: 'white',
     marginTop:8,
     marginLeft:5
   },
-  selectedUserGrupoAcesso: {
+  usuarioSelcionadoGrupoAcesso: {
     fontSize: 15,
     fontWeight: 'bold',
     color: '#c7c3c3',

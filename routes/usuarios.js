@@ -7,10 +7,12 @@ router.use(express.json())
 
 
 router.get('/', async (req, res, next) => {
-    const { offset } = req.query
-    const usuarios = await helper.getUsuarios(offset)
-  
-    res.status(200).send(usuarios)
+  try {
+    const result = await pool.query('SELECT * FROM usuarios');
+    res.json(result.rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 })
 
 router.post('/', async (req, res, next) => {

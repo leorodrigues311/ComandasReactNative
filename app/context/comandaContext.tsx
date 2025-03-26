@@ -4,7 +4,6 @@ import Helper from '@/database/helper/helper.js'
 const helper = new Helper()
 
 // aqui delcaramos os tipos de cada parâmetro
-
 interface ComandaItem {
   id_item: string
   comanda_uuid: string
@@ -38,12 +37,22 @@ interface Produto {
   imagem?: string
 }
 
+interface Usuario {
+  id: number
+  cnpj_loja: string
+  usuario_nome: string
+  usuario_grupo_acesso: string
+  usuario_senha: string
+}
+
 interface ComandaContextType {
   itensComanda: ComandaItem[]
   comandas: Comanda[]
+  comandaSelecionada: Comanda | null
   itensCarrinho: ItemCarrinho[]
   produtos: Produto[]
-  comandaSelecionada: Comanda | null
+  usuarios: Usuario[] | null
+  usuarioSelcionado: Usuario | null
   adicionarItens: (novoItem: ComandaItem) => void
   adicionarComanda: (novaComanda: Comanda) => void
   removerComanda: (numeroComanda: string) => void
@@ -55,8 +64,10 @@ interface ComandaContextType {
   adicionarItensCarrinho: (novoItemCarrinho: Omit<ItemCarrinho, 'id'>) => void
   removerItemCarrinho: (id:string) => void
   setComandaSelecionada: (comandaSelecionada: Comanda | null) => void
+  setUsuarioSelcionado: (setUsuarioSelcionado: Usuario | null) => void
   gerarIdComanda: () => string
   gerarData: () => string
+  carregaUsuarios: () => void
 }
 // fim da declaração dos tipos
 
@@ -69,14 +80,19 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   // estes são os useState's de cada parte, eles adicionam e removem itens dos arrays
   const [comandas, setComandas] = useState<Comanda[]>([])
   const [produtos, setProdutos] = useState<Produto[]>([])
+  const [usuarios, setUsuarios] = useState<Usuario[]>([])
   const [itensComanda, setItensComanda] = useState<ComandaItem[]>([])
   const [comandaSelecionada, setComandaSelecionada] = useState<Comanda | null>(null);
+  const [usuarioSelcionado, setUsuarioSelcionado] = useState<Usuario | null>(null);
   const [itensCarrinho, setItensCarrinho] = useState<ItemCarrinho[]>([]);
 
-  // aqui nós temos uma função para gerar id's únicos para os itens
+// ============= Geradores =====================
+
+  // aqui nós temos uma função para gerar id's únicos para os itens e para as comandas
   const gerarId = () => `item${Date.now()}-${Math.floor(Math.random() * 1000)}`
   const gerarIdComanda = () => uuid.v4();
 
+  // essa função gera data formatada
   const gerarData = () => {
     const agora = new Date();
     const dia = String(agora.getDate()).padStart(2, '0');
@@ -87,7 +103,9 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     const segundos = String(agora.getSeconds()).padStart(2, '0');
   
     return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
-  };
+  }
+
+// ============= Fim Geradores =====================
 
 
 // ============= Itens =====================
@@ -221,6 +239,29 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
 //============= Fim Produtos =====================
 
+//============= Usuarios =====================
+
+const carregaUsuarios = async () => {
+  try {
+    const response = await helper.getUsuarios()
+    const data: Usuario[] = response
+    
+    setUsuarios(Object.values(data).map(item => ({
+      id: item.id || 0,
+      cnpj_loja: item.cnpj_loja || "",
+      usuario_nome: item.usuario_nome || "",
+      usuario_grupo_acesso: item.usuario_grupo_acesso || "",
+      usuario_senha: item.usuario_senha || "",
+    })));
+
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error)
+  }
+}
+
+//============= Fim Usuarios =====================
+
+
   // aqui precisamos passar as funções que queremos usar em outros documentos
   return (
     <ComandaContext.Provider
@@ -230,6 +271,8 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         itensCarrinho,
         produtos,
         comandaSelecionada,
+        usuarios,
+        usuarioSelcionado,
         adicionarItensCarrinho,
         removerItemCarrinho,
         limpaCarrinho, 
@@ -242,7 +285,9 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         carregaProdutos,
         setComandaSelecionada,
         gerarIdComanda,
-        gerarData
+        gerarData,
+        carregaUsuarios,
+        setUsuarioSelcionado
       }}>
       {children}
     </ComandaContext.Provider>

@@ -65,11 +65,11 @@ export default function novaComanda (){
 
         const uuid = gerarIdComanda()
         const date = gerarData()
-        
+        // criar aqui um esquema que traz o numero da ultima comanda
         adicionarComanda(
           {nome_comanda: inputNomeComanda,
           comanda_uuid: uuid,
-          numero_comanda: inputNumeroComanda,
+          numero_comanda: inputNumeroComanda /*(inputNumeroComanda == '' ? ultima_comanda : inputNumeroComanda)*/,
           hora_abertura: date,
           valor_total: 0,
           status_comanda: '1' })
@@ -77,7 +77,7 @@ export default function novaComanda (){
         setComandaSelecionada({
           comanda_uuid: uuid,
           nome_comanda: inputNomeComanda,
-          numero_comanda: inputNumeroComanda,
+          numero_comanda: inputNumeroComanda /*(inputNumeroComanda == '' ? ultima_comanda : inputNumeroComanda)*/,
           hora_abertura: date,
           valor_total: 0,
           status_comanda: '1'})
