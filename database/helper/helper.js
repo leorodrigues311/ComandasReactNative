@@ -57,9 +57,9 @@ export default class Helper {
     }
   }
 
-  async postComanda(nome_comanda, comanda_uuid, numero_comanda, hora_abertura, status_comanda, valor_total) {
+  async postComanda(nome_comanda, comanda_uuid, numero_comanda, hora_abertura, status_comanda, valor_total, usuario_responsavel, usuario_responsavel_id) {
 
-    const data = {nome_comanda, comanda_uuid, numero_comanda, hora_abertura, status_comanda, valor_total }
+    const data = {nome_comanda, comanda_uuid, numero_comanda, hora_abertura, status_comanda, valor_total,  usuario_responsavel, usuario_responsavel_id }
     try {
       console.log('Enviando para API:', data)
       const response = await axios.post('http://192.168.0.113:4000/comandas', data, {

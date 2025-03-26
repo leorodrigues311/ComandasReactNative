@@ -19,6 +19,8 @@ interface Comanda {
   hora_abertura: string
   valor_total: number
   status_comanda: string
+  usuario_responsavel: string
+  usuario_responsavel_id: number
 }
 
 interface ItemCarrinho {
@@ -52,7 +54,7 @@ interface ComandaContextType {
   itensCarrinho: ItemCarrinho[]
   produtos: Produto[]
   usuarios: Usuario[] | null
-  usuarioSelcionado: Usuario | null
+  usuarioSelecionado: Usuario | null
   adicionarItens: (novoItem: ComandaItem) => void
   adicionarComanda: (novaComanda: Comanda) => void
   removerComanda: (numeroComanda: string) => void
@@ -64,7 +66,7 @@ interface ComandaContextType {
   adicionarItensCarrinho: (novoItemCarrinho: Omit<ItemCarrinho, 'id'>) => void
   removerItemCarrinho: (id:string) => void
   setComandaSelecionada: (comandaSelecionada: Comanda | null) => void
-  setUsuarioSelcionado: (setUsuarioSelcionado: Usuario | null) => void
+  setusuarioSelecionado: (setusuarioSelecionado: Usuario | null) => void
   gerarIdComanda: () => string
   gerarData: () => string
   carregaUsuarios: () => void
@@ -83,7 +85,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([])
   const [itensComanda, setItensComanda] = useState<ComandaItem[]>([])
   const [comandaSelecionada, setComandaSelecionada] = useState<Comanda | null>(null);
-  const [usuarioSelcionado, setUsuarioSelcionado] = useState<Usuario | null>(null);
+  const [usuarioSelecionado, setusuarioSelecionado] = useState<Usuario | null>(null);
   const [itensCarrinho, setItensCarrinho] = useState<ItemCarrinho[]>([]);
 
 // ============= Geradores =====================
@@ -181,7 +183,9 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         novaComanda.numero_comanda,
         novaComanda.hora_abertura,
         novaComanda.status_comanda,
-        novaComanda.valor_total
+        novaComanda.valor_total,
+        novaComanda.usuario_responsavel,
+        novaComanda.usuario_responsavel_id
       )
       if (response) {
         setComandas(prevComandas => [...prevComandas, response])
@@ -209,6 +213,8 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         hora_abertura: item.hora_abertura || "",
         valor_total: Number(item.valor_total || 0),
         status_comanda: item.status_comanda || "",
+        usuario_responsavel: item.usuario_responsavel || "",
+        usuario_responsavel_id: item.usuario_responsavel_id || 0
       })));
     } catch (error) {
       console.error('Erro ao buscar dados:', error)
@@ -272,7 +278,7 @@ const carregaUsuarios = async () => {
         produtos,
         comandaSelecionada,
         usuarios,
-        usuarioSelcionado,
+        usuarioSelecionado,
         adicionarItensCarrinho,
         removerItemCarrinho,
         limpaCarrinho, 
@@ -287,7 +293,7 @@ const carregaUsuarios = async () => {
         gerarIdComanda,
         gerarData,
         carregaUsuarios,
-        setUsuarioSelcionado
+        setusuarioSelecionado
       }}>
       {children}
     </ComandaContext.Provider>

@@ -11,7 +11,7 @@ const { width } = Dimensions.get('window');
 
 export default function Login() {
 
-  const {usuarios, usuarioSelcionado, carregaUsuarios, setUsuarioSelcionado} = useComanda();
+  const {usuarios, usuarioSelecionado, carregaUsuarios, setusuarioSelecionado} = useComanda();
   const [cnpj, setCnpj] = useState('');
   const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -57,7 +57,7 @@ export default function Login() {
   };
   
   const selecionarUsuario = (usuario_id: number, usuario_nome: string, usuario_grupo_acesso: string, usuario_senha: string) => {
-    setUsuarioSelcionado({
+    setusuarioSelecionado({
       id: usuario_id || 0,
       cnpj_loja: cnpj,
       usuario_nome: usuario_nome,
@@ -142,8 +142,8 @@ export default function Login() {
                 </TouchableOpacity>
 
                 <View style={styles.modalItemSelecionado} >
-                  {usuarioSelcionado && <Text style={styles.usuarioSelcionado}>{usuarioSelcionado.usuario_nome}</Text>}
-                  {usuarioSelcionado && <Text style={styles.usuarioSelcionadoGrupoAcesso}>{(usuarioSelcionado.usuario_grupo_acesso == '1' ? 'Administrador' : 'Vendedor')}</Text>}
+                  {usuarioSelecionado && <Text style={styles.usuarioSelecionado}>{usuarioSelecionado.usuario_nome}</Text>}
+                  {usuarioSelecionado && <Text style={styles.usuarioSelecionadoGrupoAcesso}>{(usuarioSelecionado.usuario_grupo_acesso == '1' ? 'Administrador' : 'Vendedor')}</Text>}
                   <TextInput
                     style={styles.inputPassword}
                     placeholder="Senha"
@@ -316,14 +316,14 @@ const styles = StyleSheet.create({
     top: 20,
     right: 20,
   },
-  usuarioSelcionado: {
+  usuarioSelecionado: {
     fontSize: 22,
     fontWeight: 'bold',
     color: 'white',
     marginTop:8,
     marginLeft:5
   },
-  usuarioSelcionadoGrupoAcesso: {
+  usuarioSelecionadoGrupoAcesso: {
     fontSize: 15,
     fontWeight: 'bold',
     color: '#c7c3c3',

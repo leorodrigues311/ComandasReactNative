@@ -4,7 +4,6 @@ import { ItemComanda } from '@/components/ItemComanda'
 import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda'
 import { BottomBarDetalheComanda } from '@/components/navigation/BottomBarDetalheComanda'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { ValorTotalComanda } from '@/components/valorTotalComanda'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Haptics from 'expo-haptics'
 import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
@@ -70,7 +69,7 @@ export default function ComandaDetalhe () {
         <View style={styles.viewInfo}>
           <Text style={styles.viewInfoNome}>{comandaSelecionada?.nome_comanda || ''}</Text>
           <Text style={styles.viewInfoHora}>Abertura: {comandaSelecionada?.hora_abertura || ''}</Text>
-          <Text style={styles.viewInfoHora}>Aberta por: Leonardo</Text>
+          <Text style={styles.viewInfoHora}>Aberta por: {comandaSelecionada?.usuario_responsavel}</Text>
         </View>
       </View>
 
@@ -105,7 +104,6 @@ export default function ComandaDetalhe () {
         </View>}
 
       {isBottomBarVisible && <BottomBarDetalheComanda selectedItemsLength={selectedItems.length} limparSelecao={limparSelecao} />}
-
     </SafeAreaView>
     </ComandaProvider>
   )

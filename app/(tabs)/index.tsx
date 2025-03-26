@@ -45,7 +45,9 @@ export default function HomeScreen() {
                     numero_comanda: comanda.numero_comanda,
                     hora_abertura: comanda.hora_abertura,
                     valor_total: comanda.valor_total,
-                    status_comanda: comanda.status_comanda
+                    status_comanda: comanda.status_comanda,
+                    usuario_responsavel: comanda.usuario_responsavel,
+                    usuario_responsavel_id: comanda.usuario_responsavel_id
                   });
                   router.push({ pathname: '/comandaDetalhe' });
                 }}

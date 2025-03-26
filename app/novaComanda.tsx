@@ -9,7 +9,7 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 export default function novaComanda (){
 
   const router = useRouter();
-  const { comandas, adicionarComanda, gerarIdComanda, gerarData, setComandaSelecionada } = useComanda()
+  const { comandas, usuarioSelecionado, adicionarComanda, gerarIdComanda, gerarData, setComandaSelecionada } = useComanda()
 
   // Estas instâncias servem para mudar o estado do modal do número da comanda, e para mudar o valor do input quando o usuario digita
   const [modalNumeroComandaVisivel, setModalNumeroComanda] = useState(false)
@@ -65,14 +65,16 @@ export default function novaComanda (){
 
         const uuid = gerarIdComanda()
         const date = gerarData()
-        // criar aqui um esquema que traz o numero da ultima comanda
+        // **************************criar aqui um esquema que traz o numero da ultima comanda
         adicionarComanda(
           {nome_comanda: inputNomeComanda,
           comanda_uuid: uuid,
           numero_comanda: inputNumeroComanda /*(inputNumeroComanda == '' ? ultima_comanda : inputNumeroComanda)*/,
           hora_abertura: date,
           valor_total: 0,
-          status_comanda: '1' })
+          status_comanda: '1' ,
+          usuario_responsavel: usuarioSelecionado?.usuario_nome || '',
+          usuario_responsavel_id: usuarioSelecionado?.id || 0})
 
         setComandaSelecionada({
           comanda_uuid: uuid,
@@ -80,7 +82,9 @@ export default function novaComanda (){
           numero_comanda: inputNumeroComanda /*(inputNumeroComanda == '' ? ultima_comanda : inputNumeroComanda)*/,
           hora_abertura: date,
           valor_total: 0,
-          status_comanda: '1'})
+          status_comanda: '1',
+          usuario_responsavel: usuarioSelecionado?.usuario_nome || '',
+          usuario_responsavel_id: usuarioSelecionado?.id || 0})
           
         router.push({
           pathname: '/comandaDetalhe',

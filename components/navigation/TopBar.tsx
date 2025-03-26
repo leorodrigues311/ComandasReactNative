@@ -8,7 +8,7 @@ export function TopBar() {
   const [inputVisivel, setInputVisivel] = useState(true); // Estado para controlar visibilidade
   const animacaoInput = useState(new Animated.Value(0))[0]; // Inicializa a animação
 
-  const {usuarios, usuarioSelcionado, carregaUsuarios, setUsuarioSelcionado} = useComanda();
+  const {usuarios, usuarioSelecionado, carregaUsuarios, setusuarioSelecionado} = useComanda();
 
   const router = useRouter()
 
@@ -32,7 +32,7 @@ export function TopBar() {
         {/* Ícone do usuário */}
         <TouchableOpacity style={styles.viewOperador} onPress={alternarPesquisa}>
           <Ionicons name="person-circle-outline" size={30} color={inputVisivel == true ? "gray" : "white"} />
-          <Text style={styles.nomeOperador}>{usuarioSelcionado?.usuario_nome}</Text>
+          <Text style={styles.nomeOperador}>{usuarioSelecionado?.usuario_nome}</Text>
         </TouchableOpacity>
 
         {!inputVisivel && (

@@ -17,13 +17,13 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res) => {
   try {
-    const {nome_comanda, comanda_uuid, hora_abertura, status_comanda, numero_comanda, valor_total } = req.body
+    const {nome_comanda, comanda_uuid, hora_abertura, status_comanda, numero_comanda, valor_total, usuario_responsavel, usuario_responsavel_id } = req.body
     const result = await pool.query(
       `INSERT INTO comandas 
-      (nome_comanda, comanda_uuid, hora_abertura, status_comanda, numero_comanda, valor_total)
-      VALUES ($1, $2, $3, $4, $5, $6) 
+      (nome_comanda, comanda_uuid, hora_abertura, status_comanda, numero_comanda, valor_total, usuario_responsavel, usuario_responsavel_id)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
       RETURNING *`,
-      [nome_comanda, comanda_uuid, hora_abertura, status_comanda, numero_comanda, valor_total]
+      [nome_comanda, comanda_uuid, hora_abertura, status_comanda, numero_comanda, valor_total, usuario_responsavel, usuario_responsavel_id]
     )
 
     io.emit('comanda-alterada', { action: 'POST', data: result.rows[0] })
