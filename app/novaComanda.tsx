@@ -9,7 +9,7 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 export default function novaComanda (){
 
   const router = useRouter();
-  const { comandas, adicionarComanda, gerarIdComanda, gerarData } = useComanda()
+  const { comandas, adicionarComanda, gerarIdComanda, gerarData, setComandaSelecionada } = useComanda()
 
   // Estas instâncias servem para mudar o estado do modal do número da comanda, e para mudar o valor do input quando o usuario digita
   const [modalNumeroComandaVisivel, setModalNumeroComanda] = useState(false)
@@ -22,18 +22,22 @@ export default function novaComanda (){
   // Este serve para mudar o estado do "dialog", no caso aquele aviso para cancelar a abertura da comanda
   const [dialogVisible, setDialogVisible] = useState(false)
 
+  useEffect(() => {
+    console.log("Estado de dialogVisible:", dialogVisible);
+  }, [dialogVisible]);
+
   const [text, setText] = useState('');
 
   // Essa função muda o estado do "dialog", é acionada pelo botão "cancelar" do "dialog"
   const handleCancel = () => {
     setDialogVisible(false);
-  };
+  }
 
   // Essa função confirma o cancelamento, levando o usuário para a página inicial
   const handleConfirm = () => {
-    router.back()
-  };
-
+    router.push('/');
+    setDialogVisible(false)
+  }
 
   // aqui a função captura o clique do botão, e verifica se o botão retornou com os nomes correspondentes. E então executa a ação
   const handleButtonPress = (buttonType: string) => {
@@ -43,7 +47,11 @@ export default function novaComanda (){
     } 
 
     else if (buttonType === 'cancela') {
+      console.log('clicou no cancela')
+      setModalNumeroComanda(false);
+      setTimeout(() => {
       setDialogVisible(true)
+    }, 100);
     }
     
     else if (buttonType === 'voltaEtapa'){
@@ -54,30 +62,36 @@ export default function novaComanda (){
     else if (buttonType === 'finaliza'){
 
       if (inputNomeComanda != ''){
+
+        const uuid = gerarIdComanda()
+        const date = gerarData()
         
         adicionarComanda(
           {nome_comanda: inputNomeComanda,
-          comanda_uuid: gerarIdComanda(),
+          comanda_uuid: uuid,
           numero_comanda: inputNumeroComanda,
-          hora_abertura: gerarData(),
+          hora_abertura: date,
           valor_total: 0,
           status_comanda: '1' })
+
+        setComandaSelecionada({
+          comanda_uuid: uuid,
+          nome_comanda: inputNomeComanda,
+          numero_comanda: inputNumeroComanda,
+          hora_abertura: date,
+          valor_total: 0,
+          status_comanda: '1'})
           
         router.push({
           pathname: '/comandaDetalhe',
-          params: { nome_comanda: inputNomeComanda, numero_comanda: inputNumeroComanda, hora_abertura: '10:42', valor_total: 0, status_comanda: '1' },
         }),
         setModalNomeComanda(false);
       }
-
       else {
         alert('Preencha o nome')
       }
-
-
     }
-
-  };
+  }
 
   // Aqui ele abre o modal assim que o documento é carregado
   useEffect(() => { setTimeout(() => { setModalNumeroComanda(true) }, 500) }, []);
@@ -92,8 +106,9 @@ export default function novaComanda (){
               <Dialog.Description>
                 Deseja Cancelar o Cadastro da Nova Comanda?
               </Dialog.Description>
-              <Dialog.Button onPress={handleCancel} label="Não" />
-              <Dialog.Button onPress={handleConfirm} label="Sim" />
+              <Dialog.Button label="Não" onPress={() => handleCancel()} />
+              <Dialog.Button label="Sim" onPress={() => handleConfirm()} />
+
             </Dialog.Container>
  
             {/*Este é o primeiro modal, que recebe o número da comanda*/}
@@ -108,7 +123,6 @@ export default function novaComanda (){
                 <View style={styles.modalContainer}>
                   <Text style={styles.modalTitle}>Número da comanda:</Text>
 
-
                   <TextInput
                     style={styles.input}
                     value={inputNumeroComanda}
@@ -122,8 +136,6 @@ export default function novaComanda (){
                     keyboardType='numeric'
                     maxLength={2}
                   />
-
-
 
                   <View style={styles.buttonsContainer}>
                     <Pressable onPress={() => handleButtonPress('cancela')}>
@@ -187,13 +199,10 @@ export default function novaComanda (){
                 </View>
               </View>
             </Modal>
-
           </View>
         </SafeAreaView>  
-    );
-
+    )
 }
-
 
 const styles = StyleSheet.create({
 

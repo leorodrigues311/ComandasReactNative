@@ -91,7 +91,7 @@ export default function produtoAdicionarComanda() {
 
 const styles = StyleSheet.create({
   viewPrincipal: {
-    marginBottom: 65,
+    marginBottom: 130,
   },
   textInput: {
     borderWidth: 0.3,

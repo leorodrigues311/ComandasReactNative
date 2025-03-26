@@ -60,9 +60,10 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
   const handleAddProduto = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
     setIconeAdd('add-circle-outline')
-    setDialogNovoProdutoVisible(true)
-    setTituloModal('Adicionar Produto')
-    setConteudoModal('Deseja adicionar um novo produto à comanda?')
+    router.push({
+      pathname: '/produtoAdicionarComanda',
+      params: {numeroComanda: numeroComanda},
+    })
   }
  
   // Esta é a ação real do botão de imprimir, junto com o feedback tátil (acionado no OnPressOut)
@@ -93,13 +94,6 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
     setDialogNovoProdutoVisible(false)
 
     if (buttonType === 'adicionarItemComanda') {
-
-      console.log('Topbardetalhecomanda', numeroComanda)
-
-      router.push({
-        pathname: '/produtoAdicionarComanda',
-        params: {numeroComanda: numeroComanda},
-      })
       
     }
 

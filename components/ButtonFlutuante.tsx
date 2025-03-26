@@ -14,25 +14,27 @@ export function ButtonFlutuante() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
     setViewColor('gray')
   }
-
+  /*
   const showDialog = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
     setViewColor('white')
     setVisible(true)
   };
 
+
   const handleCancel = () => {
     setVisible(false);
   };
-
+*/
   const handleConfirm = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
     setVisible(false)
     router.push('/novaComanda')
   };
 
   return (
     <View style={[styles.viewPrincipal, { backgroundColor: viewColor }]}>
-      <Pressable onPressIn={handleFeedbackButton} onPressOut={showDialog}> 
+      <Pressable onPressIn={handleFeedbackButton} onPressOut={handleConfirm}> 
         <Ionicons
           style={styles.btnNovaComanda}
           name="add-outline"
@@ -40,6 +42,7 @@ export function ButtonFlutuante() {
         />
       </Pressable>
 
+    {/*
       <Dialog.Container visible={visible}>
         <Dialog.Title>Nova Comanda</Dialog.Title>
         <Dialog.Description>
@@ -48,6 +51,7 @@ export function ButtonFlutuante() {
         <Dialog.Button onPress={handleCancel} label="Não" />
         <Dialog.Button onPress={handleConfirm} label="Sim" />
       </Dialog.Container>
+      */}
     </View>
   );
 }

@@ -18,7 +18,7 @@ export function BottomBarConferirItens() {
       comandaSelecionada;
       }, [])
 
-      console.log(comandaSelecionada)
+      console.log('comandaSelecionada', comandaSelecionada)
   const screenHeight = Dimensions.get('window').height
   const [isExpanded, setIsExpanded] = useState(false)
   const heightAnim = useState(new Animated.Value(60))[0]
