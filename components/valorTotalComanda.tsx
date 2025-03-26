@@ -1,4 +1,6 @@
-import { StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View, } from 'react-native';
+import React, { useEffect } from "react";
+import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 interface ComandaProps {
   valorTotal: number;
@@ -6,11 +8,20 @@ interface ComandaProps {
 
 export function ValorTotalComanda({valorTotal}: ComandaProps){
 
+    const {comandaSelecionada} = useComanda();
+
+        useEffect(() => {
+          comandaSelecionada
+        }, [])
+
+        console.log(comandaSelecionada?.valor_total)
+      
+
     return (
 
         <View style={styles.viewValorTotal}>
             <Text style={styles.textValorTotal}>Valor Total:</Text>
-            <Text style={styles.textValorTotalNumero}>R$ {valorTotal}</Text>
+            <Text style={styles.textValorTotalNumero}>R$ {comandaSelecionada?.valor_total}</Text>
 
         </View>
  

@@ -98,7 +98,12 @@ export default function ComandaDetalhe () {
 
       </ScrollView>
 
-      {(!isBottomBarVisible) && <ValorTotalComanda valorTotal={134.21} />}
+      {(!isBottomBarVisible) && 
+        <View style={styles.viewValorTotal}>
+          <Text style={styles.textValorTotal}>Valor Total:</Text>
+          <Text style={styles.textValorTotalNumero}>R$ {comandaSelecionada?.valor_total}</Text>
+        </View>}
+
       {isBottomBarVisible && <BottomBarDetalheComanda selectedItemsLength={selectedItems.length} limparSelecao={limparSelecao} />}
 
     </SafeAreaView>
@@ -189,4 +194,32 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
   },
+
+  viewValorTotal:{
+    backgroundColor:'#363636',
+    width:'100%',
+    height:60,
+    bottom:0,
+    borderRadius:5,
+    flexDirection:'row',
+    justifyContent:'space-between',
+    position:'absolute',
+    marginBottom:10,
+  },
+  textValorTotal:{
+    color:'white',
+    fontSize:26,
+    marginTop:15,
+    marginLeft:15,
+    fontWeight:'bold'
+  },
+
+  textValorTotalNumero:{
+    color:'#00FF00',
+    fontSize:26,
+    marginTop:15,
+    marginRight:15,
+    fontWeight:'bold'
+
+  }
 })
