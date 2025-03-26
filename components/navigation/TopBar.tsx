@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Animated } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from 'expo-router';
+import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 export function TopBar() {
   const [inputVisivel, setInputVisivel] = useState(true); // Estado para controlar visibilidade
   const animacaoInput = useState(new Animated.Value(0))[0]; // Inicializa a animação
+
+  const {usuarios, usuarioSelcionado, carregaUsuarios, setUsuarioSelcionado} = useComanda();
 
   const router = useRouter()
 
@@ -22,7 +25,6 @@ export function TopBar() {
     router.push('/login')
   }
 
-
   return (
     <View style={styles.viewPrincipal}>
       {/* Container para ícone + botão "Sair" */}
@@ -30,7 +32,7 @@ export function TopBar() {
         {/* Ícone do usuário */}
         <TouchableOpacity style={styles.viewOperador} onPress={alternarPesquisa}>
           <Ionicons name="person-circle-outline" size={30} color={inputVisivel == true ? "gray" : "white"} />
-          <Text style={styles.nomeOperador}>Leonardo</Text>
+          <Text style={styles.nomeOperador}>{usuarioSelcionado?.usuario_nome}</Text>
         </TouchableOpacity>
 
         {!inputVisivel && (

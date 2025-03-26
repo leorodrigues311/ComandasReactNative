@@ -43,7 +43,6 @@ export default function Login() {
     setPassword('')
   }
 
-
   const animacaoModal = (direction: "normal" | "reverse") => {
     const directionValue = direction === "normal" ? -width : 0;
   
@@ -67,7 +66,7 @@ export default function Login() {
     })
 
     animacaoModal("normal")
-  };
+  }
 
   return (
     <View style={styles.viewPrincipal}>
