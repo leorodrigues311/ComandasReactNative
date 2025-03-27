@@ -32,7 +32,9 @@ export function TopBar() {
         {/* Ícone do usuário */}
         <TouchableOpacity style={styles.viewOperador} onPress={alternarPesquisa}>
           <Ionicons name="person-circle-outline" size={30} color={inputVisivel == true ? "gray" : "white"} />
-          <Text style={styles.nomeOperador}>{usuarioSelecionado?.usuario_nome}</Text>
+          <Text style={styles.nomeOperador}
+            numberOfLines={1}
+            adjustsFontSizeToFit>{usuarioSelecionado?.usuario_nome.split(' ')[0]}</Text>
         </TouchableOpacity>
 
         {!inputVisivel && (
@@ -66,7 +68,7 @@ export function TopBar() {
 
 const styles = StyleSheet.create({
   viewPrincipal: {
-    height: 80,
+    height: 80, // usar rem aqui
     position:'fixed',
     backgroundColor: "#151718",
     borderBottomColor: "#363636",
@@ -84,6 +86,7 @@ const styles = StyleSheet.create({
   },
 
   viewOperador: {
+    width:60,
     alignItems: "center",
   },
 
@@ -129,14 +132,14 @@ const styles = StyleSheet.create({
   btnPesquisar: {
     position: "absolute",
     right: 60,
-    top: "30%",
+    top: "50%",
     transform: [{ translateY: -12.5 }],
   },
 
   btnFiltro: {
     position: "absolute",
     right: 10,
-    top: "30%",
+    top: "50%",
     transform: [{ translateY: -12.5 }],
   },
 });

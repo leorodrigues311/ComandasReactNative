@@ -1,68 +1,91 @@
 import React, { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, SafeAreaView, ScrollView, View, RefreshControl } from 'react-native';
+import { Pressable, StyleSheet, Text, SafeAreaView, FlatList, View, RefreshControl } from 'react-native';
 import { Comanda } from '@/components/Comanda';
 import { TopBar } from '@/components/navigation/TopBar';
 import { ButtonFlutuante } from '@/components/ButtonFlutuante';
 import { useRouter } from "expo-router";
 import { useComanda } from '@/app/context/comandaContext';
 
+const PAGE_SIZE = 30;
+
 export default function HomeScreen() {
   const { comandas, carregaComandas, setComandaSelecionada } = useComanda();
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
+  const [visibleComandas, setVisibleComandas] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     carregaComandas();
   }, []);
 
+  useEffect(() => {
+    if (comandas.length > 0) {
+      setVisibleComandas(comandas.slice(0, PAGE_SIZE));
+      setPage(1);
+    }
+  }, [comandas]);
+
   const handleRefresh = async () => {
     setRefreshing(true);
-    await carregaComandas();  // Recarrega os dados
+    await carregaComandas();
     setRefreshing(false);
   };
+
+  const loadMore = () => {
+    const nextPage = page + 1;
+    const start = (nextPage - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    const nextData = comandas.slice(start, end);
+
+    if (nextData.length > 0) {
+      setVisibleComandas([...visibleComandas, ...nextData]);
+      setPage(nextPage);
+    }
+  };
+
+  const renderItem = ({ item }: any) => (
+    <Pressable
+      onPress={() => {
+        setComandaSelecionada({
+          comanda_uuid: item.comanda_uuid,
+          nome_comanda: item.nome_comanda,
+          numero_comanda: item.numero_comanda,
+          hora_abertura: item.hora_abertura,
+          valor_total: item.valor_total,
+          status_comanda: item.status_comanda,
+          usuario_responsavel: item.usuario_responsavel,
+          usuario_responsavel_id: item.usuario_responsavel_id,
+        });
+        router.push({ pathname: '/comandaDetalhe' });
+      }}
+    >
+      <Comanda
+        numero_comanda={item.numero_comanda}
+        nome_comanda={item.nome_comanda}
+        valor_total={item.valor_total}
+        hora_abertura={item.hora_abertura}
+        status_comanda={item.status_comanda}
+      />
+    </Pressable>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
       <TopBar />
-      <ScrollView
-        contentContainerStyle={styles.scrollViewContent}
+      <FlatList
+        data={visibleComandas.sort((a, b) => parseInt(a.numero_comanda || "0") - parseInt(b.numero_comanda || "0"))}
+        keyExtractor={(item, index) => `${item.comanda_uuid}_${index}`}
+        renderItem={renderItem}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
-      >
-        {comandas.length === 0 ? (
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.2}
+        ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>Nenhuma comanda aberta</Text>
           </View>
-        ) : (
-          [...comandas]
-            .sort((a, b) => (parseInt(a.numero_comanda || "0") - parseInt(b.numero_comanda || "0")))
-            .map((comanda, index) => (
-              <Pressable
-                key={index}
-                onPress={() => {
-                  setComandaSelecionada({
-                    comanda_uuid: comanda.comanda_uuid,
-                    nome_comanda: comanda.nome_comanda,
-                    numero_comanda: comanda.numero_comanda,
-                    hora_abertura: comanda.hora_abertura,
-                    valor_total: comanda.valor_total,
-                    status_comanda: comanda.status_comanda,
-                    usuario_responsavel: comanda.usuario_responsavel,
-                    usuario_responsavel_id: comanda.usuario_responsavel_id
-                  });
-                  router.push({ pathname: '/comandaDetalhe' });
-                }}
-              >
-                <Comanda
-                  numero_comanda={comanda.numero_comanda}
-                  nome_comanda={comanda.nome_comanda}
-                  valor_total={comanda.valor_total}
-                  hora_abertura={comanda.hora_abertura}
-                  status_comanda={comanda.status_comanda}
-                />
-              </Pressable>
-            ))
-        )}
-      </ScrollView>
+        }
+      />
       <ButtonFlutuante />
     </SafeAreaView>
   );
@@ -71,9 +94,6 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  scrollViewContent: {
-    flexGrow: 1,
   },
   emptyContainer: {
     flex: 1,
