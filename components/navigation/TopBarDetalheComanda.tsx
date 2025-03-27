@@ -99,12 +99,7 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
 
     else if (buttonType === 'finaliza'){
     }
-
-  };
-
-
-
-
+  }
 
   return (
     <View style={[styles.viewPrincipal, style]}>

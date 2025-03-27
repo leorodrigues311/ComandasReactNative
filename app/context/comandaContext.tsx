@@ -68,8 +68,9 @@ interface ComandaContextType {
   setComandaSelecionada: (comandaSelecionada: Comanda | null) => void
   setusuarioSelecionado: (setusuarioSelecionado: Usuario | null) => void
   gerarIdComanda: () => string
-  gerarData: () => string
+  gerarData: (hora: string) => string
   carregaUsuarios: () => void
+  formataValor: (valor_total: number) => string
 }
 // fim da declaração dos tipos
 
@@ -94,19 +95,45 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const gerarId = () => `item${Date.now()}-${Math.floor(Math.random() * 1000)}`
   const gerarIdComanda = () => uuid.v4();
 
-  // essa função gera data formatada
-  const gerarData = () => {
+  const gerarData = (hora: string): string => {
     const agora = new Date();
+    const dataAbertura = new Date(hora.split(' ')[0].split('/').reverse().join('-') + 'T' + hora.split(' ')[1]);
+
     const dia = String(agora.getDate()).padStart(2, '0');
     const mes = String(agora.getMonth() + 1).padStart(2, '0');
     const ano = agora.getFullYear();
     const horas = String(agora.getHours()).padStart(2, '0');
     const minutos = String(agora.getMinutes()).padStart(2, '0');
     const segundos = String(agora.getSeconds()).padStart(2, '0');
-  
-    return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
+
+    // Verificar se a data é igual à data de hoje
+    const mesmaData =
+      dataAbertura.getDate() === agora.getDate() &&
+      dataAbertura.getMonth() === agora.getMonth() &&
+      dataAbertura.getFullYear() === agora.getFullYear();
+
+    // Retornar apenas a hora e os minutos
+    if (mesmaData) {
+      return hora.split(' ')[1].slice(0, 5);
+    } 
+    // utilize 'completo' para gerar a data para salvar no banco de dados
+    else if (hora ==='completo') {
+      return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
+    }
+    else{
+      // Formatar sem os segundos
+      const [dataParte, horaParte] = hora.split(' ');
+      const horaSemSegundos = horaParte.slice(0, 5);
+      return `${dataParte} ${horaSemSegundos}`;
+    }
   }
 
+  const formataValor: (valor_total: number) => string = (valor_total) => {
+    return valor_total.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
+  };
 // ============= Fim Geradores =====================
 
 
@@ -293,7 +320,8 @@ const carregaUsuarios = async () => {
         gerarIdComanda,
         gerarData,
         carregaUsuarios,
-        setusuarioSelecionado
+        setusuarioSelecionado,
+        formataValor
       }}>
       {children}
     </ComandaContext.Provider>

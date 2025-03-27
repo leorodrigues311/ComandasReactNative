@@ -64,7 +64,7 @@ export default function novaComanda (){
       if (inputNomeComanda != ''){
 
         const uuid = gerarIdComanda()
-        const date = gerarData()
+        const date = gerarData('completo')
         // **************************criar aqui um esquema que traz o numero da ultima comanda
         adicionarComanda(
           {nome_comanda: inputNomeComanda,

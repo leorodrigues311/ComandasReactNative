@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft:10,
     marginTop:5,
+    fontWeight:300,
     color:'white',
     fontSize:17
   },
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
   viewInfoValorTotal: {
     marginLeft:10,
     marginTop:8,
-    color:'#00FF00',
+    color:'white',
     fontSize:23
   },
 
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
 
   valorTotalItem: {
     fontSize: 16,
-    color: '#00CC00',
+    color: 'white',
     fontWeight: '800',
     right: '2%',
     top: '30%',

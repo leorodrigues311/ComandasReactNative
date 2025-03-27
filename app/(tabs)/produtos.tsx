@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, Pressable, ScrollView, Image, RefreshControl } from 'react-native'
+import { StyleSheet, Text, View, Pressable, FlatList, RefreshControl } from 'react-native'
 import { TopBarProdutos } from '@/components/navigation/TopBarProdutos'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useLocalSearchParams, useRouter } from 'expo-router'
@@ -7,11 +7,25 @@ import ItemProdutoCardapio from '@/components/ItemProdutoCardapio'
 import { useComanda } from '@/app/context/comandaContext';
 
 export default function Produto() {
+
+  const PAGE_SIZE = 30;
   const router = useRouter();
   const { carregaProdutos, produtos } = useComanda();
+  const [produtosVisiveis, setProdutosVisiveis] = useState<any[]>([]);
+  const [page, setPage] = useState(1);
   
-  // Estado para controlar a atualização (refresh)
   const [refreshing, setRefreshing] = useState(false)
+
+  useEffect(() => {
+    carregaProdutos()
+  }, [])
+
+  useEffect(() => {
+    if (produtos.length > 0) {
+      setProdutosVisiveis(produtos.slice(0, PAGE_SIZE));
+      setPage(1);
+    }
+  }, [produtos]);
 
   const onRefresh = () => {
     setRefreshing(true)
@@ -19,49 +33,60 @@ export default function Produto() {
     setRefreshing(false)
   }
 
-  useEffect(() => {
-    carregaProdutos()
-  }, [])
+  const loadMore = () => {
+    const nextPage = page + 1;
+    const start = (nextPage - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    const nextData = produtos.slice(start, end);
+
+    if (nextData.length > 0) {
+      setProdutosVisiveis([...produtosVisiveis, ...nextData]);
+      setPage(nextPage);
+    }
+  };
+
+  const renderItem = ({ item }: any) => (
+    <Pressable>
+      <ItemProdutoCardapio
+        nomeItem={item?.nome_produto || 'Produto sem nome'}
+        estoque={item?.estoque_produto || 0}
+        valorTotal={item?.valor_venda || 0}
+        imagem={item?.imagem || 'default_image.png'}
+      />
+    </Pressable>
+  );
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <TopBarProdutos />
-      <ScrollView
-        style={styles.scrollview}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
+      <FlatList
+        data={produtosVisiveis.sort((a, b) => parseInt(a.codigo_produto || "0") - parseInt(b.codigo_produto || "0"))}
+        keyExtractor={(item, index) => `${item.codigo_produto}_${index}`}
+        renderItem={renderItem}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.2}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>Nenhum item para exibir</Text>
+          </View>
         }
-      >
-        {produtos.map((produto, index) => (
-          <Pressable key={index}>
-            <ItemProdutoCardapio
-              nomeItem={produto.nome_produto}
-              estoque={produto.estoque_produto}
-              valorTotal={produto.valor_venda}
-              imagem={produto.imagem}
-            />
-          </Pressable>
-        ))}
-      </ScrollView>
+      />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  viewPrincipal: {
-    height: 100,
-    borderWidth: 0.5,
-    borderRadius: 5,
-    borderColor: '#4F4F4F',
-    margin: 12,
-    marginBottom: 1,
-    backgroundColor: '#1C1C1C',
-    flexDirection: 'row',
+  container: {
+    flex: 1,
   },
-  scrollview: {
-    marginBottom: 60,
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    fontSize: 18,
+    color: 'gray',
   },
 });

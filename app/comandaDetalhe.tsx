@@ -59,8 +59,8 @@ export default function ComandaDetalhe () {
       <View style={styles.viewInfoComanda}>
         <View style={[
             styles.viewStatus, 
-            { backgroundColor: comandaSelecionada?.status_comanda === '1' ? '#00FF00' : '#FF0000' },
-            { borderColor: comandaSelecionada?.status_comanda === '1' ? '#00FF00' : '#FF0000' }
+            { backgroundColor: comandaSelecionada?.status_comanda === '1' ? '#06d691' : (comandaSelecionada?.status_comanda === '2' ?'#e11d48' :'#383737') },
+            { borderColor: comandaSelecionada?.status_comanda === '1' ? '#06d691' : (comandaSelecionada?.status_comanda === '2' ?'#e11d48' :'#383737') }
           ]}
         />
         <View style={styles.viewNumero}>
@@ -94,7 +94,6 @@ export default function ComandaDetalhe () {
             </Pressable>
           ))}
         </View>
-
       </ScrollView>
 
       {(!isBottomBarVisible) && 
@@ -114,14 +113,14 @@ const styles = StyleSheet.create({
     margin: 12,
     marginTop: 0,
     marginBottom: 16,
-    backgroundColor: '#1C1C1C',
+    backgroundColor: 'black',
     flexDirection: 'column',
     flex: 1,
     borderRadius: 5
   },
   viewInfoComanda: {
     flexDirection: 'row',
-    backgroundColor: '#363636',
+    backgroundColor: '#1C1C1C',
     borderRadius: 5,
     height: 99,
     marginBottom: 25
@@ -139,7 +138,7 @@ const styles = StyleSheet.create({
     height: 99,
     width: 99,
     alignItems: 'center',
-    backgroundColor: '#696969',
+    backgroundColor: '#383737',
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
   },
