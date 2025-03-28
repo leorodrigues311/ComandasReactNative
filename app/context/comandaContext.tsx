@@ -24,7 +24,7 @@ interface Comanda {
 }
 
 interface ItemCarrinho {
-  item_uuid: string
+  item_uuid?: string
   item_nome: string
   item_codigo: number
   quantidade: number

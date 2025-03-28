@@ -98,6 +98,7 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
     }
 
     else if (buttonType === 'finaliza'){
+      router.push('/finalizarComanda')
     }
   }
 
@@ -109,7 +110,7 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
         <Dialog.Title>{tituloModal}</Dialog.Title>
         <Dialog.Description>{conteudoModal}</Dialog.Description>
         <Dialog.Button onPress={handleCancel} label="Não" />
-        <Dialog.Button onPress={() => handleConfirm('adicionarItemComanda')} label="Sim" />
+        <Dialog.Button onPress={() => handleConfirm('finaliza')} label="Sim" />
       </Dialog.Container>
 
     {/*O "hideIcons traz se o icone deve ser ocultado ou não, então se ele for false, ele exibe os icones*/}
