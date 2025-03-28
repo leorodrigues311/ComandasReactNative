@@ -8,16 +8,18 @@ import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Haptics from 'expo-haptics'
 import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
-
 export default function ComandaDetalhe () {
 
   const { itensComanda, comandaSelecionada, carregaItens, formataValor } = useComanda()
 
   const [selectedItems, setSelectedItems] = useState<string[]>([])
+  const [comandaFinalizada, setComandaFinalizada] = useState(false)
+  const [taxaGarcom, setTaxaGarcom] = useState(false)
 
-   useEffect(() => {
+  useEffect(() => {
     comandaSelecionada;
-    }, [])
+    carregaItens();
+  }, [])
 
   const limparSelecao = () => {
     setSelectedItems([])
@@ -47,12 +49,15 @@ export default function ComandaDetalhe () {
 
   const isBottomBarVisible = selectedItems.length > 0
 
-   useEffect(() => {
-    carregaItens();
-   }, []);
-   
+  useEffect(() => {
+    if (comandaSelecionada?.status_comanda === '4') {
+      setComandaFinalizada(true)
+    } else {
+      setComandaFinalizada(false)
+    }
+  }, [comandaSelecionada?.status_comanda])
+
   return (
-    <ComandaProvider>
     <SafeAreaView style={styles.viewPrincipal}>
       <TopBarDetalheComanda hideIcons={isBottomBarVisible} />
 
@@ -66,35 +71,45 @@ export default function ComandaDetalhe () {
         <View style={styles.viewNumero}>
           <Text style={styles.viewNumeroTexto}  
             numberOfLines={1}
-            adjustsFontSizeToFit>{comandaSelecionada?.numero_comanda || ''}</Text>
+            adjustsFontSizeToFit>{comandaSelecionada?.numero_comanda || ''}
+          </Text>
         </View>
         <View style={styles.viewInfo}>
-          <Text style={styles.viewInfoNome}numberOfLines={1}>{comandaSelecionada?.nome_comanda || ''}</Text>
-          <Text style={styles.viewInfoHora}>Abertura: {comandaSelecionada?.hora_abertura || ''}</Text>
-          <Text style={styles.viewInfoHora}>Aberta por: {comandaSelecionada?.usuario_responsavel}</Text>
+          <Text style={[styles.viewInfoNome,
+             {color: comandaSelecionada?.status_comanda === '4' ? 'gray' : 'white' }]}
+              numberOfLines={1}>
+              {comandaSelecionada?.nome_comanda || ''}
+          </Text>
+          
+          <Text style={[styles.viewInfoHora,
+            {color: comandaSelecionada?.status_comanda === '4' ? 'gray' : 'white' }]}>
+            Abertura: {comandaSelecionada?.hora_abertura || ''}
+          </Text>
+          <Text style={[styles.viewInfoHora,
+            {color: comandaSelecionada?.status_comanda === '4' ? 'gray' : 'white' }]}>
+            Aberta por: {comandaSelecionada?.usuario_responsavel}</Text>
         </View>
       </View>
 
       <ScrollView>
-
-      <View style={styles.itensComanda}>
-        {itensComanda
-        .filter(item => item.comanda_uuid.toString() === comandaSelecionada?.comanda_uuid || '')
-        .map((item) => (
-            <Pressable
-              key={item.item_uuid}
-              onLongPress={() => handleLongPress(item.item_uuid)}
-              onPress={() => handlePress(item.item_uuid)}
-            >
-              <ItemComanda
-                nomeItem={item.item_nome}
-                valorUnit={formataValor(item.valor_unit)}
-                valorTotal={formataValor(item.valor_unit * item.quantidade)}
-                quantidade={item.quantidade}
-                style={selectedItems.includes(item.item_uuid) ? styles.selectedItem : {}}
-              />
-            </Pressable>
-          ))}
+        <View style={styles.itensComanda}>
+          {itensComanda
+            .filter(item => item.comanda_uuid.toString() === comandaSelecionada?.comanda_uuid || '')
+            .map((item) => (
+              <Pressable
+                key={item.item_uuid}
+                onLongPress={() => handleLongPress(item.item_uuid)}
+                onPress={() => handlePress(item.item_uuid)}
+              >
+                <ItemComanda
+                  nomeItem={item.item_nome}
+                  valorUnit={formataValor(item.valor_unit)}
+                  valorTotal={formataValor(item.valor_unit * item.quantidade)}
+                  quantidade={item.quantidade}
+                  style={selectedItems.includes(item.item_uuid) ? styles.selectedItem : {}}
+                />
+              </Pressable>
+            ))}
         </View>
       </ScrollView>
 
@@ -102,11 +117,36 @@ export default function ComandaDetalhe () {
         <View style={styles.viewValorTotal}>
           <Text style={styles.textValorTotal}>Valor Total:</Text>
           <Text style={styles.textValorTotalNumero}>{formataValor(comandaSelecionada?.valor_total === undefined ? 0 : comandaSelecionada?.valor_total)}</Text>
-        </View>}
+        </View>
+      }
 
-      {isBottomBarVisible && <BottomBarDetalheComanda selectedItemsLength={selectedItems.length} limparSelecao={limparSelecao} />}
+      {comandaFinalizada && !isBottomBarVisible && (
+        <View style={styles.viewBtnPagar}>
+          <Pressable 
+            style={styles.btnTaxaServico} 
+            onPress={() => setTaxaGarcom(!taxaGarcom)}
+          >
+            <View style={[styles.checkBtnTaxaServico, { backgroundColor: taxaGarcom ? '#04c78a' : 'transparent' }]}  />
+            <Text style={{ color: '#fff' }}>Taxa do Garçom</Text>
+          </Pressable>
+
+          <Pressable 
+            style={[styles.btnPagar]} 
+            onPress={() => console.log('Pagar')}
+          >
+            <Text style={styles.textoBtnPagar}>Pagar</Text>
+          </Pressable>
+
+        </View>
+      )}
+
+      {isBottomBarVisible && 
+        <BottomBarDetalheComanda 
+          selectedItemsLength={selectedItems.length} 
+          limparSelecao={limparSelecao} 
+        />
+      }
     </SafeAreaView>
-    </ComandaProvider>
   )
 }
 
@@ -190,18 +230,35 @@ const styles = StyleSheet.create({
     borderColor:'#A9A9A9',
     borderWidth: 0.6
   },
-  btnAdicionarItem: {
-    backgroundColor: '#02bf02',
+  btnTaxaServico: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+    marginLeft: 10 
+  },
+  checkBtnTaxaServico: {
+    height: 20,
+    width: 20,
+    borderRadius: 3,
+    borderWidth: 1,
+    borderColor: '#fff',
+    marginRight: 10
+  },
+  viewBtnPagar: {
+    marginHorizontal:0,
+    marginBottom:30
+  },
+  btnPagar: {
+    backgroundColor: '#04c78a',
     padding: 15,
     alignItems: 'center',
-    margin: 10,
+    marginVertical: 10,
     borderRadius: 5,
   },
-  textoAdicionarItem: {
+  textoBtnPagar: {
     color: 'white',
     fontSize: 18,
   },
-
   viewValorTotal:{
     backgroundColor:'#363636',
     width:'100%',
@@ -220,13 +277,11 @@ const styles = StyleSheet.create({
     marginLeft:15,
     fontWeight:'bold'
   },
-
   textValorTotalNumero:{
     color:'#04c78a',
     fontSize:26,
     marginTop:15,
     marginRight:15,
     fontWeight:'bold'
-
   }
 })

@@ -4,6 +4,7 @@ import Dialog from "react-native-dialog"
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Haptics from 'expo-haptics'
+import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 // Aqui tivemos que criar um type, para mudar o estado de cada icone ao clicar
 type IconName = 
@@ -25,6 +26,8 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
   const router = useRouter()
 
   const { numeroComanda } = useLocalSearchParams<{ numeroComanda: string }>();
+
+  const { itensComanda, comandaSelecionada, carregaItens, formataValor, setComandaSelecionada } = useComanda()
 
   // Aqui foi criado um estado para o conteudo dos 'dialog', pois temos vários botões, então cada um usa o 'dialog' com um conteudo diferente
   const [tituloModal, setTituloModal] = useState('')
@@ -96,9 +99,12 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
     if (buttonType === 'adicionarItemComanda') {
       
     }
-
-    else if (buttonType === 'finaliza'){
-      router.push('/finalizarComanda')
+ 
+    else if (buttonType === 'finaliza' && comandaSelecionada) {
+      setComandaSelecionada({
+        ...comandaSelecionada,
+        status_comanda: '4',
+      })
     }
   }
 
