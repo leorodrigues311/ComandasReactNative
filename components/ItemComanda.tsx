@@ -4,8 +4,8 @@ import { StyleSheet, Text, View } from 'react-native';
 interface itemProps {
     nomeItem: string;
     quantidade: number;
-    valorUnit: number;
-    valorTotal: number;
+    valorUnit: string;
+    valorTotal: string;
     style?: object;
 }
 
@@ -18,20 +18,18 @@ export function ItemComanda({ nomeItem, quantidade, valorUnit, valorTotal, style
 
             <View style={styles.viewValorUnitItem}>
                 <Text style={styles.quantidadeItem}>QTD: {quantidade}</Text>
-                <Text style={styles.valorUnitItem}>UN R$ {valorUnit}</Text>
+                <Text style={styles.valorUnitItem}>UN  {valorUnit}</Text>
             </View>
 
-            <Text style={styles.valorTotalItem}>R$ {valorTotal}</Text>
+            <Text style={styles.valorTotalItem}>{valorTotal}</Text>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
   viewPrincipal: {
-    margin: 5,
-    marginLeft: 10,
-    marginRight: 10,
-    backgroundColor: '#282828',
+    backgroundColor: '#1C1C1C',
+    marginBottom:10,
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     height: 60,
@@ -81,7 +79,7 @@ const styles = StyleSheet.create({
 
   valorTotalItem: {
     fontSize: 16,
-    color: '#00CC00',
+    color: '#04c78a',
     fontWeight: '800',
     right: '2%',
     top: '30%',

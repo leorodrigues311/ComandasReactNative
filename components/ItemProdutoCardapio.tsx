@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, Pressable, ScrollView, Image } from 'react-native'
 import { useLocalSearchParams, useRouter } from 'expo-router'
+import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 interface itemProps {
     nomeItem: string;
@@ -14,6 +15,8 @@ interface itemProps {
 
 export default function ItemProdutoCardapio({ nomeItem, estoque, valorTotal, imagem, style }: itemProps){
 
+
+  const {formataValor} = useComanda()
     return(
 
         <View style={styles.viewPrincipal}>
@@ -25,8 +28,8 @@ export default function ItemProdutoCardapio({ nomeItem, estoque, valorTotal, ima
             </View>
 
             <View style={styles.viewInfo}>
-                <Text style={styles.viewInfoNome}>{nomeItem}</Text>
-                <Text style={styles.viewInfoValorTotal}>R$: {valorTotal.toFixed(2).replace('.', ',')}</Text>
+                <Text style={styles.viewInfoNome} numberOfLines={1}>{nomeItem.length > 20 ? nomeItem.slice(0, 20) + '...' : nomeItem}</Text>
+                <Text style={styles.viewInfoValorTotal}>{formataValor(valorTotal)}</Text>
                 <View style={styles.viewValorUnitItem}>
                     <Text style={styles.quantidadeItem}>Estoque: {estoque}</Text>
                 </View>

@@ -5,7 +5,7 @@ const helper = new Helper()
 
 // aqui delcaramos os tipos de cada parâmetro
 interface ComandaItem {
-  id_item: string
+  item_uuid: string
   comanda_uuid: string
   item_nome: string
   valor_unit: number
@@ -24,7 +24,7 @@ interface Comanda {
 }
 
 interface ItemCarrinho {
-  id: string
+  item_uuid: string
   item_nome: string
   item_codigo: number
   quantidade: number
@@ -71,6 +71,7 @@ interface ComandaContextType {
   gerarData: (hora: string) => string
   carregaUsuarios: () => void
   formataValor: (valor_total: number) => string
+  mudaQuantidade: (id: string, tipo: 'soma' | 'subtrai' ) => void
 }
 // fim da declaração dos tipos
 
@@ -92,7 +93,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 // ============= Geradores =====================
 
   // aqui nós temos uma função para gerar id's únicos para os itens e para as comandas
-  const gerarId = () => `item${Date.now()}-${Math.floor(Math.random() * 1000)}`
+  const gerarId = () => `item`+uuid.v4()
   const gerarIdComanda = () => uuid.v4();
 
   const gerarData = (hora: string): string => {
@@ -146,7 +147,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       const data: ComandaItem[] = response
       
       setItensComanda(Object.values(data).map(item => ({
-        id_item: item.id_item || "",
+        item_uuid: item.item_uuid || "",
         item_nome: item.item_nome,
         comanda_uuid: String(item.comanda_uuid || ""),
         valor_unit: Number(item.valor_unit || 0),
@@ -161,7 +162,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const adicionarItens = async (novoItem: ComandaItem) => {
     try {
       const response = await helper.postItemComanda(
-        novoItem.id_item,
+        novoItem.item_uuid,
         novoItem.comanda_uuid,
         novoItem.item_nome,
         novoItem.valor_unit,
@@ -177,18 +178,37 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
   // aqui adicionamos itens ao carrinho, antes de adicionar à comanda
   const adicionarItensCarrinho = (novoItemCarrinho: Omit<ItemCarrinho, 'id'>) => {
-    const itemCarrinhoComId = { ...novoItemCarrinho, id: gerarId() }
+    const itemCarrinhoComId = { ...novoItemCarrinho, item_uuid: gerarId() }
     setItensCarrinho((prevItems) => [...prevItems, itemCarrinhoComId]);
   }
 
   // essa função remove os itens do carrinho
   const removerItemCarrinho = (id: string) => {
-    setItensCarrinho(prevItems => prevItems.filter(item => item.id !== id));
+    setItensCarrinho(prevItems => prevItems.filter(item => item.item_uuid !== id));
   }
-  
+
+  // essa função remove os itens do carrinho
+  const mudaQuantidade = (id: string, tipo: 'soma' | 'subtrai') => {
+    setItensCarrinho(prevItems =>
+      prevItems.map(item =>
+        item.item_uuid === id
+          ? {
+              ...item,
+              quantidade:
+                tipo === 'soma'
+                  ? item.quantidade + 1
+                  : item.quantidade > 1
+                  ? item.quantidade - 1
+                  : 1, // mantém no mínimo 1
+            }
+          : item
+      )
+    )
+  }
+
   // essa função remove os itens da comanda
   const removerItemComanda = (id: string) => {
-    setItensComanda(prevItens => prevItens.filter(item => item.id_item !== id))
+    setItensComanda(prevItens => prevItens.filter(item => item.item_uuid !== id))
   }
 
   // aqui nós limpamos o array de seleção de itens
@@ -321,7 +341,8 @@ const carregaUsuarios = async () => {
         gerarData,
         carregaUsuarios,
         setusuarioSelecionado,
-        formataValor
+        formataValor,
+        mudaQuantidade
       }}>
       {children}
     </ComandaContext.Provider>

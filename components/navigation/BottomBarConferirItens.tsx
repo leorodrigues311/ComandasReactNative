@@ -12,7 +12,7 @@ export function BottomBarConferirItens() {
 
   const router = useRouter();
   
-  const {itensCarrinho, comandaSelecionada, removerItemCarrinho, adicionarItens, limpaCarrinho } = useComanda()
+  const {itensCarrinho, comandaSelecionada, removerItemCarrinho, adicionarItens, limpaCarrinho, mudaQuantidade } = useComanda()
 
      useEffect(() => {
       comandaSelecionada;
@@ -43,8 +43,8 @@ export function BottomBarConferirItens() {
     showSuccessMessage();
     itensCarrinho.map( (item) => {
       adicionarItens({
-        id_item: item.id,
-        comanda_uuid: comandaSelecionada?.numero_comanda ?? "",
+        item_uuid: item.item_uuid,
+        comanda_uuid: comandaSelecionada?.comanda_uuid ?? "",
         item_nome: item.item_nome,
         valor_unit: item.valor_unit,
         quantidade: (item.quantidade == 0 ? 1 : item.quantidade)
@@ -83,18 +83,20 @@ export function BottomBarConferirItens() {
     <Animated.View style={[styles.viewPrincipal, { height: heightAnim }]}>
       <Pressable onPress={handleToggle} style={styles.viewOperacoesComanda}>
         <Text style={styles.itensQtdCarrinho}>{itensCarrinho.length}</Text>
-        <Ionicons style={styles.btnCarrinho} name="cart-outline" size={38} color="#00FF00" />
+        <Ionicons style={styles.btnCarrinho} name="cart-outline" size={38} color="#04c78a" />
       </Pressable>
 
       {isExpanded && (
         <View style={styles.viewExtra}>
           {itensCarrinho.map(item => (
             <ItemConferenciaAdd
-             key={item.id}
-             id={item.id}
+             key={item.item_uuid}
+             id={item.item_uuid}
              item_nome={item.item_nome}
              quantidade={item.quantidade} 
-             onRemove={removerItemCarrinho} />
+             onRemove={removerItemCarrinho}
+             onIncrement={mudaQuantidade}
+             onDecrement={mudaQuantidade} />
           ))}
         </View>
       )}
@@ -146,7 +148,7 @@ const styles = StyleSheet.create({
   viewExtra: {
     backgroundColor: '#202122',
     flex: 1,
-    padding: 30,
+    padding: 8,
     borderTopWidth: 1,
     borderTopColor: '#363636',
     alignItems: 'flex-start',
@@ -159,7 +161,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 15,
     zIndex:1,
-    backgroundColor:'#02bf02',
+    backgroundColor:'#04c78a',
     borderRadius:8
   },
   textoBtnIncluir:{

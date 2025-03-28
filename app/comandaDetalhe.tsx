@@ -11,7 +11,7 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 export default function ComandaDetalhe () {
 
-  const { itensComanda, comandaSelecionada, carregaItens } = useComanda()
+  const { itensComanda, comandaSelecionada, carregaItens, formataValor } = useComanda()
 
   const [selectedItems, setSelectedItems] = useState<string[]>([])
 
@@ -23,14 +23,14 @@ export default function ComandaDetalhe () {
     setSelectedItems([])
   }
 
-  const handleLongPress = (id: string) => {
+  const handleLongPress = (item_uuid: string) => {
     if (selectedItems.length === 0) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
     }
     setSelectedItems(prevSelected =>
-      prevSelected.includes(id)
-        ? prevSelected.filter(item => item !== id)
-        : [...prevSelected, id]
+      prevSelected.includes(item_uuid)
+        ? prevSelected.filter(item => item !== item_uuid)
+        : [...prevSelected, item_uuid]
     )
   }
 
@@ -64,10 +64,12 @@ export default function ComandaDetalhe () {
           ]}
         />
         <View style={styles.viewNumero}>
-          <Text style={styles.viewNumeroTexto}>{comandaSelecionada?.numero_comanda || ''}</Text>
+          <Text style={styles.viewNumeroTexto}  
+            numberOfLines={1}
+            adjustsFontSizeToFit>{comandaSelecionada?.numero_comanda || ''}</Text>
         </View>
         <View style={styles.viewInfo}>
-          <Text style={styles.viewInfoNome}>{comandaSelecionada?.nome_comanda || ''}</Text>
+          <Text style={styles.viewInfoNome}numberOfLines={1}>{comandaSelecionada?.nome_comanda || ''}</Text>
           <Text style={styles.viewInfoHora}>Abertura: {comandaSelecionada?.hora_abertura || ''}</Text>
           <Text style={styles.viewInfoHora}>Aberta por: {comandaSelecionada?.usuario_responsavel}</Text>
         </View>
@@ -77,19 +79,19 @@ export default function ComandaDetalhe () {
 
       <View style={styles.itensComanda}>
         {itensComanda
-        .filter(item => item.comanda_uuid.toString() === comandaSelecionada?.numero_comanda || '')
+        .filter(item => item.comanda_uuid.toString() === comandaSelecionada?.comanda_uuid || '')
         .map((item) => (
             <Pressable
-              key={item.id_item}
-              onLongPress={() => handleLongPress(item.id_item)}
-              onPress={() => handlePress(item.id_item)}
+              key={item.item_uuid}
+              onLongPress={() => handleLongPress(item.item_uuid)}
+              onPress={() => handlePress(item.item_uuid)}
             >
               <ItemComanda
                 nomeItem={item.item_nome}
-                valorUnit={item.valor_unit}
-                valorTotal={item.valor_unit * item.quantidade}
+                valorUnit={formataValor(item.valor_unit)}
+                valorTotal={formataValor(item.valor_unit * item.quantidade)}
                 quantidade={item.quantidade}
-                style={selectedItems.includes(item.id_item) ? styles.selectedItem : {}}
+                style={selectedItems.includes(item.item_uuid) ? styles.selectedItem : {}}
               />
             </Pressable>
           ))}
@@ -99,7 +101,7 @@ export default function ComandaDetalhe () {
       {(!isBottomBarVisible) && 
         <View style={styles.viewValorTotal}>
           <Text style={styles.textValorTotal}>Valor Total:</Text>
-          <Text style={styles.textValorTotalNumero}>R$ {comandaSelecionada?.valor_total}</Text>
+          <Text style={styles.textValorTotalNumero}>{formataValor(comandaSelecionada?.valor_total === undefined ? 0 : comandaSelecionada?.valor_total)}</Text>
         </View>}
 
       {isBottomBarVisible && <BottomBarDetalheComanda selectedItemsLength={selectedItems.length} limparSelecao={limparSelecao} />}
@@ -135,28 +137,36 @@ const styles = StyleSheet.create({
     marginLeft: 0,
   },
   viewNumero: {
-    height: 99,
-    width: 99,
+    height:99,
+    width:99,
     alignItems: 'center',
-    backgroundColor: '#383737',
-    borderTopRightRadius: 5,
-    borderBottomRightRadius: 5,
+    display:'flex',
+    justifyContent:'center',
+    backgroundColor:'#383737',
+    borderTopRightRadius:5,
+    borderBottomRightRadius:5,
   },
   viewNumeroTexto: {
     alignItems: 'center',
-    margin: 20,
-    color: 'white',
-    fontSize: 50
+    textAlign:'center',
+    fontWeight:'500',
+    gap: 6,
+    color:'#adacac',
+    margin:10,
+    fontSize:50,
   },
   viewInfo: {
     alignItems: 'flex-start',
     margin: 3,
+    flex:1
   },
   viewInfoNome: {
     marginLeft: 10,
     marginTop: 5,
     color: 'white',
-    fontSize: 25
+    fontSize: 25,
+    maxHeight:30,
+    flex:1
   },
   viewInfoHora: {
     marginLeft: 10,
@@ -169,8 +179,8 @@ const styles = StyleSheet.create({
     marginBottom: 50
   },
   selectedItem: {
+    marginBottom:10,
     margin: 5,
-    marginHorizontal: 10,
     backgroundColor: '#696969',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
@@ -212,7 +222,7 @@ const styles = StyleSheet.create({
   },
 
   textValorTotalNumero:{
-    color:'#00FF00',
+    color:'#04c78a',
     fontSize:26,
     marginTop:15,
     marginRight:15,

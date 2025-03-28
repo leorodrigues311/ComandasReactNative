@@ -1,0 +1,10 @@
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Text, View, Pressable, ScrollView, Animated } from 'react-native'
+import { ItemComanda } from '@/components/ItemComanda'
+import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda'
+import { BottomBarDetalheComanda } from '@/components/navigation/BottomBarDetalheComanda'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useLocalSearchParams, useRouter } from 'expo-router'
+import * as Haptics from 'expo-haptics'
+import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
+

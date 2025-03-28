@@ -122,7 +122,7 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
     {!hideIcons && (
       <View style={styles.viewOperacoesComanda}>
         <Pressable onPressIn={() => handleFeedbackComanda()} onPressOut={() => handleFinalizarComanda()}>
-          <Ionicons style={styles.btnFinalizarComanda} name={iconeComanda} size={32} color="red" />
+          <Ionicons style={styles.btnFinalizarComanda} name={iconeComanda} size={32} color="#e11d48" />
         </Pressable>
 
         <Pressable onPressIn={() => handleFeedbackPrint()} onPressOut={() => handleImprimir()}>
@@ -130,7 +130,7 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
         </Pressable>
 
         <Pressable onPressIn={() => handleFeedbackAdd()} onPressOut={() => handleAddProduto()}>
-          <Ionicons style={styles.btnAdicionarItens} name={iconeAdd} size={32} color="#00FF00" />
+          <Ionicons style={styles.btnAdicionarItens} name={iconeAdd} size={32} color="#04c78a" />
         </Pressable>
       </View>
       )}

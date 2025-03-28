@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View, Image } from 'react-native';
+import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 
 
@@ -11,6 +12,9 @@ interface itemProps {
 }
 
 export function ItemProduto({ nomeItem, estoque, valorTotal, imagem, style }: itemProps) {
+
+  const {formataValor} = useComanda() 
+
     return (
         <View  style={styles.viewPrincipal}>
 
@@ -22,9 +26,9 @@ export function ItemProduto({ nomeItem, estoque, valorTotal, imagem, style }: it
           </View>
 
           <View style={styles.viewInfo}>
-            <Text style={styles.viewInfoNome}>{nomeItem}</Text>
+            <Text style={styles.viewInfoNome}numberOfLines={1}>{nomeItem}</Text>
             <View style={styles.viewValorUnitItem}>
-              <Text style={styles.viewInfoValorTotal}>R$: {valorTotal.toFixed(2).replace('.', ',')}</Text>
+              <Text style={styles.viewInfoValorTotal}>{formataValor(valorTotal)}</Text>
               <Text style={styles.quantidadeItem}>Estoque: {estoque}</Text>
             </View>
           </View>
@@ -42,6 +46,7 @@ const styles = StyleSheet.create({
     marginBottom:1,
     backgroundColor:'#1C1C1C',
     flexDirection: 'row'
+    
   },
 
   viewNumero: {
@@ -64,6 +69,7 @@ const styles = StyleSheet.create({
 
   viewInfo: {
     alignItems: 'flex-start',
+    flex: 1,
     margin:3,
   },
 
@@ -71,6 +77,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft:10,
     marginTop:5,
+    flex: 1, // ocupa o espaço disponível
+    marginRight: 10, // margem que você quiser
     fontWeight:300,
     color:'white',
     fontSize:17

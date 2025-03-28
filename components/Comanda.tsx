@@ -33,7 +33,7 @@ export function Comanda({nome_comanda, numero_comanda, valor_total, hora_abertur
 
           {/*Essa é a view que traz os detalhes da comanda*/}
             <View style={styles.viewInfo}>
-              <Text style={styles.viewInfoNome}>{nome_comanda}</Text>
+              <Text style={styles.viewInfoNome}numberOfLines={1}>{nome_comanda}</Text>
               <Text style={styles.viewInfoValorTotal}>{formataValor(valor_total)}</Text>
               <Text style={styles.viewInfoHora}>{gerarData(hora_abertura)}</Text>
             </View>
@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   viewInfo: {
     alignItems: 'flex-start',
     margin:3,
+    flex:1,
   },
 
   viewInfoNome: {
@@ -98,7 +99,9 @@ const styles = StyleSheet.create({
     marginTop:5,
     color:'white',
     fontWeight:300,
-    fontSize:20
+    fontSize:20,
+    flex:1,
+    maxHeight:25
   },
 
   viewInfoValorTotal: {

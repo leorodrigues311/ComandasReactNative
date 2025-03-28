@@ -46,7 +46,7 @@ export function TopBar() {
         {/* Botão "Sair" (só aparece quando a pesquisa está oculta) */}
         {!inputVisivel && (
           <TouchableOpacity style={styles.btnSair} >
-            <Ionicons name="log-out-outline" size={30} color={"red"} onPress={logout} />
+            <Ionicons name="log-out-outline" size={30} color={"#e11d48"} onPress={logout} />
             <Text style={styles.textoSair}>Sair</Text>
           </TouchableOpacity>
         )}
