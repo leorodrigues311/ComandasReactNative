@@ -167,9 +167,9 @@ async getProdutos() {
 
 // ** usuarios **
 
-async getUsuarios() {
+async getUsuarios(cnpj) {
   try{
-    return (await axios.get(`http://192.168.0.113:4000/usuarios`, {
+    return (await axios.get(`http://192.168.0.113:4000/usuarios?cnpj=${cnpj}`, {
     })).data
   } catch(e){
     console.log(e)

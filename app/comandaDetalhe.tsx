@@ -127,7 +127,7 @@ export default function ComandaDetalhe () {
             onPress={() => setTaxaGarcom(!taxaGarcom)}
           >
             <View style={[styles.checkBtnTaxaServico, { backgroundColor: taxaGarcom ? '#04c78a' : 'transparent' }]}  />
-            <Text style={{ color: '#fff' }}>Taxa do Garçom</Text>
+            <Text style={{ color: '#fff' }}>Taxa do Garçom - R$ 10,50</Text>
           </Pressable>
 
           <Pressable 

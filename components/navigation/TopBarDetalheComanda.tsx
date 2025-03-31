@@ -129,7 +129,7 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
     {!hideIcons && (
       <View style={styles.viewOperacoesComanda}>
         <Pressable onPressIn={() => handleFeedbackComanda()} onPressOut={() => handleFinalizarComanda()}>
-          <Ionicons style={styles.btnFinalizarComanda} name={iconeComanda} size={32} color="#e11d48" />
+          <Ionicons style={styles.btnFinalizarComanda} disabled={true} name={iconeComanda} size={32} color="#e11d48" />
         </Pressable>
 
         <Pressable onPressIn={() => handleFeedbackPrint()} onPressOut={() => handleImprimir()}>

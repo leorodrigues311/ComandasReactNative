@@ -69,7 +69,7 @@ interface ComandaContextType {
   setusuarioSelecionado: (setusuarioSelecionado: Usuario | null) => void
   gerarIdComanda: () => string
   gerarData: (hora: string) => string
-  carregaUsuarios: () => void
+  carregaUsuarios: (cnpj:string) => void
   formataValor: (valor_total: number) => string
   mudaQuantidade: (id: string, tipo: 'soma' | 'subtrai' ) => void
 }
@@ -294,9 +294,9 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
 //============= Usuarios =====================
 
-const carregaUsuarios = async () => {
+const carregaUsuarios = async (cnpj: string) => {
   try {
-    const response = await helper.getUsuarios()
+    const response = await helper.getUsuarios(cnpj)
     const data: Usuario[] = response
     
     setUsuarios(Object.values(data).map(item => ({

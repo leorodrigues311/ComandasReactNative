@@ -19,19 +19,22 @@ export default function Login() {
   const scrollViewRef = useRef<ScrollView>(null);
   const router = useRouter();
 
-    useEffect(() => {
-      carregaUsuarios()
-    }, [])
-  
 
   const handleLogin = () => {
+    carregaUsuarios(cnpj.replace(/[.\-/]/g, ""))
     setModalVisible(true);
   };
 
-  const submitLogin = () => {
-    setModalVisible(false);
-    router.push('/(tabs)')
+  const submitLogin = (password: string) => {
+    console.log('SENHA',password)
 
+    if (usuarioSelecionado?.usuario_senha == password){
+      setModalVisible(false);
+      router.push('/(tabs)')
+    } 
+    else {
+      alert('Senha incorreta')
+    }
   }
 
   const [mantenhaLogado, setMantenhaLogado] = useState(false);
@@ -154,7 +157,7 @@ export default function Login() {
                   />
                 </View>
                 
-              <TouchableOpacity style={styles.buttonLogin} onPress={submitLogin}>
+                <TouchableOpacity style={styles.buttonLogin} onPress={() => submitLogin(password)}>
                 <Text style={styles.buttonText}>Entrar</Text>
               </TouchableOpacity>
               </View>
