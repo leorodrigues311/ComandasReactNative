@@ -6,6 +6,7 @@ import { useRouter } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { TextInputMask } from "react-native-masked-text";
 import { useComanda } from '@/app/context/comandaContext';
+import * as Haptics from 'expo-haptics'
 
 const { width } = Dimensions.get('window');
 
@@ -20,10 +21,18 @@ export default function Login() {
   const router = useRouter();
 
 
-  const handleLogin = () => {
-    carregaUsuarios(cnpj.replace(/[.\-/]/g, ""))
-    setModalVisible(true);
+  const handleLogin = async ()  => {
+    await carregaUsuarios(cnpj.replace(/[.\-/]/g, ""))
   };
+
+  useEffect(() => {
+    if (Array.isArray(usuarios) && usuarios.length === 0) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      alert('Loja não encontrada ou usuários não cadastrados')
+    } else if (usuarios.length > 0) {
+      setModalVisible(true);
+    }
+  }, [usuarios])
 
   const submitLogin = (password: string) => {
     if (usuarioSelecionado?.usuario_senha == password){

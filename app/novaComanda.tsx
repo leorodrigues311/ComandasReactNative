@@ -31,6 +31,7 @@ export default function novaComanda (){
   // Essa função muda o estado do "dialog", é acionada pelo botão "cancelar" do "dialog"
   const handleCancel = () => {
     setDialogVisible(false);
+    setTimeout(() => {setModalNumeroComanda(true)}, 600);
   }
 
   // Essa função confirma o cancelamento, levando o usuário para a página inicial

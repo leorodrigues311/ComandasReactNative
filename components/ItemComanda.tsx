@@ -17,7 +17,9 @@ export function ItemComanda({ nomeItem, quantidade, valorUnit, valorTotal, style
         <View style={[styles.viewPrincipal, style]}>
             <View style={styles.viewNomeItem}>
                 <Text style={[styles.nomeItem,
-                  {color: comandaSelecionada?.status_comanda === '4' ? 'gray' : 'white' }]}>
+                  {color: comandaSelecionada?.status_comanda === '4' ||
+                          comandaSelecionada?.status_comanda === '3' || 
+                          comandaSelecionada?.status_comanda === '2' ? 'gray' : 'white' }]}>
                   {nomeItem}
                 </Text>
             </View>

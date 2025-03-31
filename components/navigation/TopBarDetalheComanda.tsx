@@ -108,15 +108,20 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
       })
     }
     else if (buttonType === 'retorna' && comandaSelecionada){
-      setComandaSelecionada({
-        ...comandaSelecionada,
-        status_comanda: '1',
-      })
+      if (comandaSelecionada.status_comanda === '4' && isDisabled){
+        setComandaSelecionada({
+          ...comandaSelecionada,
+          status_comanda: '1',
+        })
+      }
+      else {
+        router.replace('/(tabs)')
+      }
     }
   }
 
   useEffect(() => {
-    if (comandaSelecionada?.status_comanda === '4'){
+    if (comandaSelecionada?.status_comanda === '4' || comandaSelecionada?.status_comanda === '3' || comandaSelecionada?.status_comanda === '2'){
       setIsDisabled(true)
     } else {
       setIsDisabled(false)
@@ -136,7 +141,7 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
 
     {/*O "hideIcons traz se o icone deve ser ocultado ou não, então se ele for false, ele exibe os icones*/}
     {!hideIcons && (
-      <Pressable onPress={() => {isDisabled === true ? handleConfirm('retorna') : router.replace('/(tabs)')}}>
+      <Pressable onPress={() => handleConfirm('retorna')}>
         <Ionicons style={styles.viewBtnSair} name="arrow-back-outline" size={32} color="white" />
       </Pressable>
     )}
