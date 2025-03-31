@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, Pressable, ViewStyle } from 'react-native'
 import Dialog from "react-native-dialog"
 import Ionicons from '@expo/vector-icons/Ionicons'
@@ -32,6 +32,7 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
   // Aqui foi criado um estado para o conteudo dos 'dialog', pois temos vários botões, então cada um usa o 'dialog' com um conteudo diferente
   const [tituloModal, setTituloModal] = useState('')
   const [conteudoModal, setConteudoModal] = useState('')
+  const [isDisabled, setIsDisabled] = useState(false)
 
   // Aqui ficam os estados normais dos icones, que são todos 'outline', é através dessas funções que trocamos o tipo do icone
   const [iconeImpressora, setIconeImpressora] = useState<IconName>('print-outline')
@@ -106,7 +107,21 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
         status_comanda: '4',
       })
     }
+    else if (buttonType === 'retorna' && comandaSelecionada){
+      setComandaSelecionada({
+        ...comandaSelecionada,
+        status_comanda: '1',
+      })
+    }
   }
+
+  useEffect(() => {
+    if (comandaSelecionada?.status_comanda === '4'){
+      setIsDisabled(true)
+    } else {
+      setIsDisabled(false)
+    }
+    }, [comandaSelecionada]);
 
   return (
     <View style={[styles.viewPrincipal, style]}>
@@ -121,23 +136,23 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
 
     {/*O "hideIcons traz se o icone deve ser ocultado ou não, então se ele for false, ele exibe os icones*/}
     {!hideIcons && (
-      <Pressable onPress={() => router.replace('/(tabs)')}>
+      <Pressable onPress={() => {isDisabled === true ? handleConfirm('retorna') : router.replace('/(tabs)')}}>
         <Ionicons style={styles.viewBtnSair} name="arrow-back-outline" size={32} color="white" />
       </Pressable>
     )}
 
     {!hideIcons && (
       <View style={styles.viewOperacoesComanda}>
-        <Pressable onPressIn={() => handleFeedbackComanda()} onPressOut={() => handleFinalizarComanda()}>
-          <Ionicons style={styles.btnFinalizarComanda} disabled={true} name={iconeComanda} size={32} color="#e11d48" />
+        <Pressable disabled={isDisabled} onPressIn={() => handleFeedbackComanda()} onPressOut={() => handleFinalizarComanda()}>
+          <Ionicons style={styles.btnFinalizarComanda} name={iconeComanda} size={32} color={isDisabled ? "#454444" : "#e11d48"}  />
         </Pressable>
 
-        <Pressable onPressIn={() => handleFeedbackPrint()} onPressOut={() => handleImprimir()}>
-          <Ionicons style={styles.btnImprimir} name={iconeImpressora} size={32} color="white" />
+        <Pressable disabled={isDisabled} onPressIn={() => handleFeedbackPrint()} onPressOut={() => handleImprimir()}>
+          <Ionicons style={styles.btnImprimir} name={iconeImpressora} size={32}color={isDisabled ? "#454444" : "white"}  />
         </Pressable>
 
-        <Pressable onPressIn={() => handleFeedbackAdd()} onPressOut={() => handleAddProduto()}>
-          <Ionicons style={styles.btnAdicionarItens} name={iconeAdd} size={32} color="#04c78a" />
+        <Pressable disabled={isDisabled} onPressIn={() => handleFeedbackAdd()} onPressOut={() => handleAddProduto()}>
+          <Ionicons style={styles.btnAdicionarItens} name={iconeAdd} size={32} color={isDisabled ? "#454444" : "#04c78a"}  />
         </Pressable>
       </View>
       )}

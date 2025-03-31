@@ -26,8 +26,6 @@ export default function Login() {
   };
 
   const submitLogin = (password: string) => {
-    console.log('SENHA',password)
-
     if (usuarioSelecionado?.usuario_senha == password){
       setModalVisible(false);
       router.push('/(tabs)')

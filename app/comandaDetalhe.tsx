@@ -98,8 +98,8 @@ export default function ComandaDetalhe () {
             .map((item) => (
               <Pressable
                 key={item.item_uuid}
-                onLongPress={() => handleLongPress(item.item_uuid)}
-                onPress={() => handlePress(item.item_uuid)}
+                onLongPress={() => {comandaSelecionada?.status_comanda === '1' ? handleLongPress(item.item_uuid) : ''}}
+                onPress={() => {comandaSelecionada?.status_comanda === '1' ? handlePress(item.item_uuid) : ''}}
               >
                 <ItemComanda
                   nomeItem={item.item_nome}
