@@ -10,6 +10,8 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 export default function ComandaDetalhe () {
 
+
+  const router = useRouter()
   const { itensComanda, selectedItems, comandaSelecionada, carregaItens, formataValor, toggleLongPressItens, limparSelecao} = useComanda()
 
   const [comandaFinalizada, setComandaFinalizada] = useState(false)
@@ -18,7 +20,7 @@ export default function ComandaDetalhe () {
   useEffect(() => {
     comandaSelecionada;
     carregaItens();
-  }, [])
+  }, [itensComanda, comandaSelecionada])
 
   const handleLongPress = (item_uuid: string) => {
     if (selectedItems?.length === 0) {
@@ -32,6 +34,10 @@ export default function ComandaDetalhe () {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
       toggleLongPressItens(item_uuid)
     }
+  }
+
+  const handlePagar = () => {
+    router.push('./pagamento')
   }
 
   const isBottomBarVisible = (selectedItems || []).length > 0
@@ -119,7 +125,7 @@ export default function ComandaDetalhe () {
 
           <Pressable 
             style={[styles.btnPagar]} 
-            onPress={() => console.log('Pagar')}
+            onPress={() => handlePagar()}
           >
             <Text style={styles.textoBtnPagar}>Pagar</Text>
           </Pressable>

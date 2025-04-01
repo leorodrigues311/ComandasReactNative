@@ -37,9 +37,9 @@ router.post('/', async (req, res) => {
 
 router.put('/', async (req, res, next) => {
   try {
-  const { item_uuid, comanda_uuid, item_status } = req.body
+  const { item_status, comanda_uuid, item_uuid } = req.body
   const result = await pool.query(
-    `UPDATE itens_comanda SET item_status = $1 WHERE item_uuid = $2 AND comanda_uuid = $3)
+    `UPDATE itens_comanda SET item_status = $1 WHERE item_uuid = $2 AND comanda_uuid = $3
     RETURNING *`,
     [ item_status, item_uuid, comanda_uuid ]
   )

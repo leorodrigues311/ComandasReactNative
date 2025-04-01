@@ -64,7 +64,6 @@ interface ComandaContextType {
   adicionarItens: (novoItem: ComandaItem) => void
   adicionarComanda: (novaComanda: Comanda) => void
   removerComanda: (numeroComanda: string) => void
-  removerItemComanda: (idItem: string) => void
   carregaComandas: () => void
   carregaItens: () => void
   carregaProdutos: () => void
@@ -206,7 +205,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     try {
       for (const item of itens) {
         const response = await helper.putItemComanda(
-          item.item_status,
+          false,
           item.comanda_uuid,
           item.item_uuid
         );
@@ -254,11 +253,6 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
           : item
       )
     )
-  }
-
-  // essa função remove os itens da comanda
-  const removerItemComanda = (id: string) => {
-    setItensComanda(prevItens => prevItens.filter(item => item.item_uuid !== id))
   }
 
   // aqui nós limpamos o array de seleção de itens
@@ -384,7 +378,6 @@ const carregaUsuarios = async (cnpj: string) => {
         adicionarItens,
         adicionarComanda,
         removerComanda,
-        removerItemComanda,
         carregaComandas,
         carregaItens,
         carregaProdutos,

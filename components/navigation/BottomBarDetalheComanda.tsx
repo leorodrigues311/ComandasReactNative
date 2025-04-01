@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Pressable} from 'react-native';
 import Dialog from "react-native-dialog"
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -21,7 +21,7 @@ export function BottomBarDetalheComanda({ selectedItemsLength, limparSelecao }: 
 
   const router = useRouter()
 
-  const {selectedItems, removerItens} = useComanda();
+  const {selectedItems, itensComanda, removerItens, carregaItens} = useComanda();
 
 
   // Aqui foi criado um estado para o conteudo dos 'dialog', pois temos vários botões, então cada um usa o 'dialog' com um conteudo diferente
@@ -91,15 +91,21 @@ export function BottomBarDetalheComanda({ selectedItemsLength, limparSelecao }: 
 
   // Esta função executa a ação do dialogo ****** ainda em desenvolvimento ******
   const handleConfirm = () => {
-    selectedItems?.map((item) => (
-      removerItens(
-        item.item_status,
-        item.comanda_uuid,
-        item.item_uuid
-      )
-    ))
+    try{
+      const itensParaRemover = itensComanda.filter(item =>
+        selectedItems?.includes(item.item_uuid)
+      );
+    
+      removerItens(itensParaRemover);
 
-    router.back()
+    } catch{
+      console.log('Erro ao excluir produtos da comanda')
+    }
+  
+    setDialogBottomBarVisible(false)
+    limparSelecao()
+    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+    carregaItens()
   };
 
     return (

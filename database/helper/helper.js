@@ -11,7 +11,7 @@ export default class Helper {
 import axios from "axios";
 export default class Helper {
   constructor() {
-    const { BASE_URL } = process.env
+    const { BASE_URL } ='test'
     this.BASE_URL = BASE_URL
   }
 
@@ -103,12 +103,12 @@ export default class Helper {
     }
   }
 
-  async putItemComanda(item_uuid, comanda_uuid, item_status) {
+  async putItemComanda(item_status, comanda_uuid, item_uuid) {
     try{
       const data = {
-        item_uuid: item_uuid,
+        item_status: item_status,
         comanda_uuid: comanda_uuid,
-        item_status: item_status
+        item_uuid: item_uuid,
       }
 
       return (await axios.put('http://192.168.0.113:4000/itens', data, {

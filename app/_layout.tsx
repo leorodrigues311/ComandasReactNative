@@ -37,7 +37,7 @@ export default function RootLayout() {
             <Stack.Screen name="novaComanda" options={{ headerShown: false }}/>
             <Stack.Screen name="produtoAdicionarComanda" options={{ headerShown: false }}/>
             <Stack.Screen name="login" options={{ headerShown: false }}/>
-            <Stack.Screen name="finalizarComanda" options={{ headerShown: false }}/>
+            <Stack.Screen name="pagamento" options={{ headerShown: false }}/>
           </Stack>
       </ThemeProvider>
     </ComandaProvider>
