@@ -13,7 +13,7 @@ export default function produtoAdicionarComanda() {
 
   const router = useRouter();
 
-  const {produtos, comandaSelecionada, carregaProdutos, adicionarItensCarrinho, setComandaSelecionada } = useComanda()
+  const {produtos, comandaSelecionada, carregaProdutos, adicionarItensCarrinho, setComandaSelecionada,gerarData } = useComanda()
 
   useEffect(() => {
     carregaProdutos();
@@ -41,7 +41,9 @@ export default function produtoAdicionarComanda() {
         item_nome: tituloItem,
         item_codigo: codItem,
         quantidade: Number(itemQtd),
-        valor_unit: produto_valor
+        valor_unit: produto_valor,
+        item_status: true,
+        hora_inclusao: gerarData('completo')
       })
       setDialogQuantidadeProdutoVisible(false)
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)

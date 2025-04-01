@@ -10,9 +10,8 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 export default function ComandaDetalhe () {
 
-  const { itensComanda, comandaSelecionada, carregaItens, formataValor } = useComanda()
+  const { itensComanda, selectedItems, comandaSelecionada, carregaItens, formataValor, toggleLongPressItens, limparSelecao} = useComanda()
 
-  const [selectedItems, setSelectedItems] = useState<string[]>([])
   const [comandaFinalizada, setComandaFinalizada] = useState(false)
   const [taxaGarcom, setTaxaGarcom] = useState(false)
 
@@ -21,33 +20,21 @@ export default function ComandaDetalhe () {
     carregaItens();
   }, [])
 
-  const limparSelecao = () => {
-    setSelectedItems([])
-  }
-
   const handleLongPress = (item_uuid: string) => {
-    if (selectedItems.length === 0) {
+    if (selectedItems?.length === 0) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
     }
-    setSelectedItems(prevSelected =>
-      prevSelected.includes(item_uuid)
-        ? prevSelected.filter(item => item !== item_uuid)
-        : [...prevSelected, item_uuid]
-    )
+    toggleLongPressItens(item_uuid)
   }
 
-  const handlePress = (id: string) => {
-    if (selectedItems.length !== 0) {
+  const handlePress = (item_uuid: string) => {
+    if (selectedItems?.length !== 0) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Soft)
-      setSelectedItems(prevSelected =>
-        prevSelected.includes(id)
-          ? prevSelected.filter(item => item !== id)
-          : [...prevSelected, id]
-      )
+      toggleLongPressItens(item_uuid)
     }
   }
 
-  const isBottomBarVisible = selectedItems.length > 0
+  const isBottomBarVisible = (selectedItems || []).length > 0
 
   useEffect(() => {
     if (comandaSelecionada?.status_comanda === '4') {
@@ -94,7 +81,7 @@ export default function ComandaDetalhe () {
       <ScrollView>
         <View style={styles.itensComanda}>
           {itensComanda
-            .filter(item => item.comanda_uuid.toString() === comandaSelecionada?.comanda_uuid || '')
+            .filter(item => item.comanda_uuid.toString() === comandaSelecionada?.comanda_uuid && item.item_status === true)
             .map((item) => (
               <Pressable
                 key={item.item_uuid}
@@ -106,7 +93,7 @@ export default function ComandaDetalhe () {
                   valorUnit={formataValor(item.valor_unit)}
                   valorTotal={formataValor(item.valor_unit * item.quantidade)}
                   quantidade={item.quantidade}
-                  style={selectedItems.includes(item.item_uuid) ? styles.selectedItem : {}}
+                  style={selectedItems?.includes(item.item_uuid) ? styles.selectedItem : {}}
                 />
               </Pressable>
             ))}
@@ -142,7 +129,7 @@ export default function ComandaDetalhe () {
 
       {isBottomBarVisible && 
         <BottomBarDetalheComanda 
-          selectedItemsLength={selectedItems.length} 
+          selectedItemsLength={(selectedItems || []).length} 
           limparSelecao={limparSelecao} 
         />
       }

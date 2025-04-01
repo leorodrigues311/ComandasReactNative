@@ -4,6 +4,7 @@ import Dialog from "react-native-dialog"
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics'
+import { useComanda } from '@/app/context/comandaContext';
 
 
 // Aqui tivemos que criar um type, para mudar o estado de cada icone ao clicar
@@ -19,6 +20,8 @@ type IconName =
 export function BottomBarDetalheComanda({ selectedItemsLength, limparSelecao }: { selectedItemsLength: number, limparSelecao: () => void }) {
 
   const router = useRouter()
+
+  const {selectedItems, removerItens} = useComanda();
 
 
   // Aqui foi criado um estado para o conteudo dos 'dialog', pois temos vários botões, então cada um usa o 'dialog' com um conteudo diferente
@@ -88,6 +91,14 @@ export function BottomBarDetalheComanda({ selectedItemsLength, limparSelecao }: 
 
   // Esta função executa a ação do dialogo ****** ainda em desenvolvimento ******
   const handleConfirm = () => {
+    selectedItems?.map((item) => (
+      removerItens(
+        item.item_status,
+        item.comanda_uuid,
+        item.item_uuid
+      )
+    ))
+
     router.back()
   };
 

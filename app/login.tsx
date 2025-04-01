@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, FlatList, 
-  ScrollView, Animated, Dimensions, Switch } from 'react-native';
+  ScrollView, Animated, Dimensions, Switch, ActivityIndicator  } from 'react-native';
 import { useRouter } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { TextInputMask } from "react-native-masked-text";
@@ -16,31 +16,42 @@ export default function Login() {
   const [cnpj, setCnpj] = useState('');
   const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [loadignBtnEntrar, setLoadignBtnEntrar] = useState(false)
+  const [pesquisarUsuarios, setPesquisarUsuarios] = useState(false);
   const scrollX = useRef(new Animated.Value(0)).current;
   const scrollViewRef = useRef<ScrollView>(null);
   const router = useRouter();
 
 
   const handleLogin = async ()  => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
+    setLoadignBtnEntrar(true)
     await carregaUsuarios(cnpj.replace(/[.\-/]/g, ""))
+    setPesquisarUsuarios(true)
   };
 
   useEffect(() => {
-    if (Array.isArray(usuarios) && usuarios.length === 0) {
+    if (Array.isArray(usuarios) && usuarios.length === 0 && pesquisarUsuarios) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       alert('Loja não encontrada ou usuários não cadastrados')
-    } else if (usuarios.length > 0) {
+      setLoadignBtnEntrar(false)
+    } 
+    else if ( (usuarios || []).length > 0 && pesquisarUsuarios) {
       setModalVisible(true);
+      setLoadignBtnEntrar(false)
     }
-  }, [usuarios])
+  }, [usuarios, pesquisarUsuarios])
 
   const submitLogin = (password: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
+    setLoadignBtnEntrar(true)
     if (usuarioSelecionado?.usuario_senha == password){
       setModalVisible(false);
       router.push('/(tabs)')
     } 
     else {
       alert('Senha incorreta')
+      setLoadignBtnEntrar(false)
     }
   }
 
@@ -105,8 +116,16 @@ export default function Login() {
         />
         <Text style={styles.textoMantenhaConectado}>Mantenha-me conectado</Text>
       </View>
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Entrar</Text>
+      <TouchableOpacity 
+        style={[styles.button, loadignBtnEntrar && { backgroundColor: '#0056b3' }]} 
+        onPress={handleLogin} 
+        disabled={loadignBtnEntrar} 
+      >
+        {loadignBtnEntrar ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <Text style={styles.buttonText}>Entrar</Text>
+        )}
       </TouchableOpacity>
 
       {/* Modal */}
@@ -164,9 +183,17 @@ export default function Login() {
                   />
                 </View>
                 
-                <TouchableOpacity style={styles.buttonLogin} onPress={() => submitLogin(password)}>
-                <Text style={styles.buttonText}>Entrar</Text>
-              </TouchableOpacity>
+                <TouchableOpacity 
+                  style={[styles.button, loadignBtnEntrar && { backgroundColor: '#0056b3' }]} 
+                  onPress={() => submitLogin(password)}
+                  disabled={loadignBtnEntrar} 
+                >
+                  {loadignBtnEntrar ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                  ) : (
+                    <Text style={styles.buttonText}>Entrar</Text>
+                  )}
+                </TouchableOpacity>
               </View>
             </ScrollView>
           </Animated.View>

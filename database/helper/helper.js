@@ -88,8 +88,8 @@ export default class Helper {
     }
   }
 
-  async postItemComanda(item_uuid, comanda_uuid, item_nome, valor_unit, quantidade) {
-    const data = {item_uuid, comanda_uuid, item_nome, valor_unit, quantidade}
+  async postItemComanda(item_uuid, comanda_uuid, item_nome, valor_unit, quantidade, item_status, hora_inclusao) {
+    const data = {item_uuid, comanda_uuid, item_nome, valor_unit, quantidade, item_status, hora_inclusao}
     try {
       console.log('Enviando para API:', data)
       const response = await axios.post('http://192.168.0.113:4000/itens', data, {
@@ -103,14 +103,15 @@ export default class Helper {
     }
   }
 
-  async putItemComanda(id) {
+  async putItemComanda(item_uuid, comanda_uuid, item_status) {
     try{
       const data = {
-        gerenciado: true,
-        quantidade: quantity
+        item_uuid: item_uuid,
+        comanda_uuid: comanda_uuid,
+        item_status: item_status
       }
 
-      return (await axios.put(`${this.BASE_URL}/item/${id}`, data, {
+      return (await axios.put('http://192.168.0.113:4000/itens', data, {
       })).data
     } catch(e){
       console.log(e)

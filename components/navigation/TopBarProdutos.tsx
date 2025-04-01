@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Pressable } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 
@@ -8,9 +8,8 @@ export function TopBarProdutos(){
     const [inputValue, setInputValue] = useState('');
     return (
         <View style={styles.viewPrincipal}>
-
-
             <View style={styles.inputContainer}>
+              <View style={styles.containerPesquisar}>
                 <TextInput
                 style={styles.inputPesquisar}
                 placeholder="Procurar..."
@@ -18,12 +17,14 @@ export function TopBarProdutos(){
                 value={inputValue}
                 onChangeText={setInputValue}
                 />
-                <Ionicons style={styles.btnPesquisar} name="search-outline" size={20} color="white" />
+                <Pressable style={styles.viewBtnPesquisar}>
+                 <Ionicons style={styles.btnPesquisar} name="search-outline" size={20} color="white" />
+                </Pressable>
+              </View>
+              <Pressable style={styles.viewBtnFiltro}>
                 <Ionicons style={styles.btnFiltro} name="filter-outline" size={20} color="white" ></Ionicons>
+              </Pressable>
           </View>
-          
-
-
         </View>  
     );
 
@@ -33,17 +34,15 @@ export function TopBarProdutos(){
 const styles = StyleSheet.create({
 
   viewPrincipal: {
-    height:80,
-    bottom: 0,
-    top: 0,
-    right: 0,
-    backgroundColor:'#151718',
-    borderBottomColor:'#363636',
+    height: '12%',
+    position:'fixed',
+    backgroundColor: "#151718",
+    borderBottomColor: "#363636",
     borderBottomWidth: 0.2,
-    flexDirection: 'row',
-    zIndex:1,
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    zIndex: 1,
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 15,
   },
 
@@ -59,35 +58,51 @@ const styles = StyleSheet.create({
 
   },
 
+  containerPesquisar:{
+    position:'relative',
+    width:'85%'
+  },
+
   inputPesquisar:{
     height: 45,
-    width: '80%',
-    borderColor: 'gray',
+    width: "100%",
+    borderColor: "gray",
     borderWidth: 1,
     borderRadius: 50,
     paddingHorizontal: 10,
-    color: 'white',
+    color: "white",
     paddingRight: 40,
-    marginLeft:10
+    marginLeft: 10,
   },
 
   inputContainer:{
-    position: 'relative',
-    flex: 1,
+    flex:1,
+    flexDirection:'row',
+    width:'100%',
+  },
+  viewBtnPesquisar:{
+    position: "absolute",
+    height:'100%',
+    flex:1,
+    justifyContent:'center',
+    right:0,
+
+  },
+
+  viewBtnFiltro:{
+    position: "absolute",
+    height:'90%',
+    flex:1,
+    justifyContent:'center',
+    right:0,
   },
 
   btnPesquisar:{
-    position: 'absolute',
-    right: 80,
-    top: '25%',
-    transform: [{ translateY: -12.5 }]
+   // transform: [{ translateY: -12.5 }]
   }, 
 
   btnFiltro:{
-    position: 'absolute',
-    right: 10,
-    top: '25%',
-    transform: [{ translateY: -12.5 }]
+    //transform: [{ translateY: -12.5 }]
   }
 
 

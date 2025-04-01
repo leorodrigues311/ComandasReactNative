@@ -9,7 +9,6 @@ router.use(express.json())
 router.get('/', async (req, res, next) => {
   try {
     const {cnpj} = req.query
-    console.log(cnpj)
     const result = await pool.query('SELECT * FROM usuarios where cnpj_loja = $1', [cnpj]);
     res.json(result.rows);
   } catch (error) {

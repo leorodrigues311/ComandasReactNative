@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Animated } from "react-native";
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Animated, Pressable } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from 'expo-router';
 import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
@@ -22,6 +22,7 @@ export function TopBar() {
   };
 
   const logout = () => {
+    setusuarioSelecionado(null)
     router.push('/login')
   }
 
@@ -54,13 +55,22 @@ export function TopBar() {
 
       {/* Campo de pesquisa animado */}
       <Animated.View style={[styles.inputContainer, { transform: [{ translateX: animacaoInput }] }]}>
-        <TextInput
-          style={styles.inputPesquisar}
-          placeholder="Procurar..."
-          placeholderTextColor="gray"
-        />
-        <Ionicons style={styles.btnPesquisar} name="search-outline" size={20} color="white" />
-        <Ionicons style={styles.btnFiltro} name="filter-outline" size={20} color="white" />
+        <View style={styles.containerPesquisar}>
+          <View style={styles.containerPesquisar2}>
+            <TextInput
+              style={styles.inputPesquisar}
+              placeholder="Procurar..."
+              placeholderTextColor="gray"
+            />
+            <Pressable style={styles.viewBtnPesquisar}>
+              <Ionicons style={styles.btnPesquisar} name="search-outline" size={20} color="white" />
+            </Pressable>
+          </View>
+
+          <Pressable style={styles.viewBtnFiltro}>
+            <Ionicons style={styles.btnFiltro} name="filter-outline" size={20} color="white" />
+          </Pressable>
+        </View>
       </Animated.View>
     </View>
   );
@@ -68,7 +78,7 @@ export function TopBar() {
 
 const styles = StyleSheet.create({
   viewPrincipal: {
-    height: 80, // usar rem aqui
+    height: '12%', // usar rem aqui
     position:'fixed',
     backgroundColor: "#151718",
     borderBottomColor: "#363636",
@@ -111,10 +121,21 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
+  containerPesquisar: {
+    flex:1,
+    flexDirection:'row',
+    width:'100%',
+  },
+
+  containerPesquisar2: {
+    position:'relative',
+    width:'85%'
+
+  },
 
   inputPesquisar: {
     height: 45,
-    width: "80%",
+    width: "100%",
     borderColor: "gray",
     borderWidth: 1,
     borderRadius: 50,
@@ -126,21 +147,34 @@ const styles = StyleSheet.create({
 
   inputContainer: {
     position: "relative",
-    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    width: "80%",
+  },
+
+  viewBtnPesquisar:{
+    position: "absolute",
+    height:'100%',
+    flex:1,
+    justifyContent:'center',
+    right:0,
   },
 
   btnPesquisar: {
+
+    //transform: [{ translateY: -12.5 }],
+  },
+
+  viewBtnFiltro:{
     position: "absolute",
-    right: 60,
-    top: "50%",
-    transform: [{ translateY: -12.5 }],
+    height:'90%',
+    flex:1,
+    justifyContent:'center',
+    right:0,
   },
 
   btnFiltro: {
-    position: "absolute",
-    right: 10,
-    top: "50%",
-    transform: [{ translateY: -12.5 }],
+   // transform: [{ translateY: -12.5 }],
   },
 });
 

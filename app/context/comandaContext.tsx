@@ -10,6 +10,9 @@ interface ComandaItem {
   item_nome: string
   valor_unit: number
   quantidade: number
+  item_status: boolean,
+  hora_inclusao?: string
+  hora_exclusao?: string
 }
 
 interface Comanda {
@@ -29,6 +32,8 @@ interface ItemCarrinho {
   item_codigo: number
   quantidade: number
   valor_unit: number
+  item_status: boolean
+  hora_inclusao: string
 }
 
 interface Produto {
@@ -55,6 +60,7 @@ interface ComandaContextType {
   produtos: Produto[]
   usuarios: Usuario[] | null
   usuarioSelecionado: Usuario | null
+  selectedItems: String[] | null
   adicionarItens: (novoItem: ComandaItem) => void
   adicionarComanda: (novaComanda: Comanda) => void
   removerComanda: (numeroComanda: string) => void
@@ -72,6 +78,9 @@ interface ComandaContextType {
   carregaUsuarios: (cnpj:string) => void
   formataValor: (valor_total: number) => string
   mudaQuantidade: (id: string, tipo: 'soma' | 'subtrai' ) => void
+  toggleLongPressItens: (id: string) => void
+  limparSelecao: () => void
+  removerItens: (item: ComandaItem[]) => void
 }
 // fim da declaração dos tipos
 
@@ -89,6 +98,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const [comandaSelecionada, setComandaSelecionada] = useState<Comanda | null>(null);
   const [usuarioSelecionado, setusuarioSelecionado] = useState<Usuario | null>(null);
   const [itensCarrinho, setItensCarrinho] = useState<ItemCarrinho[]>([]);
+  const [selectedItems, setSelectedItems] = useState<string[]>([])
 
 // ============= Geradores =====================
 
@@ -152,10 +162,24 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         comanda_uuid: String(item.comanda_uuid || ""),
         valor_unit: Number(item.valor_unit || 0),
         quantidade: Number(item.quantidade || 0),
+        item_status: item.item_status,
+        hora_inclusao: item.hora_inclusao
       })));
     } catch (error) {
       console.error('Erro ao buscar dados:', error)
     }
+  }
+
+  const toggleLongPressItens = async (item_uuid:string) => {
+    setSelectedItems(prevSelected =>
+      prevSelected.includes(item_uuid)
+        ? prevSelected.filter(item => item !== item_uuid)
+        : [...prevSelected, item_uuid]
+    )
+  }
+
+  const limparSelecao = () => {
+    setSelectedItems([])
   }
 
   // essa função adiciona itens à comanda (ela adiciona primeiro no banco, depois pega a resposta do banco e adiciona no array)
@@ -166,13 +190,39 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         novoItem.comanda_uuid,
         novoItem.item_nome,
         novoItem.valor_unit,
-        novoItem.quantidade
+        novoItem.quantidade,
+        novoItem.item_status,
+        novoItem.hora_inclusao
       )
       if (response) {
         setItensComanda(prevItens => [...prevItens, novoItem])
       }
     } catch (error) {
       console.error('Erro ao adicionar itens:', error)
+    }
+  }
+
+  const removerItens = async (itens: ComandaItem[]) => {
+    try {
+      for (const item of itens) {
+        const response = await helper.putItemComanda(
+          item.item_status,
+          item.comanda_uuid,
+          item.item_uuid
+        );
+  
+        if (response) {
+          setItensComanda(prevItens => 
+            prevItens.map(prevItem => 
+              prevItem.item_uuid === item.item_uuid 
+                ? { ...prevItem, item_status: item.item_status } 
+                : prevItem
+            )
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao remover itens:", error);
     }
   }
 
@@ -268,6 +318,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+
 //============= Fim Comanda =====================
 
 //============= Produtos =====================
@@ -326,6 +377,7 @@ const carregaUsuarios = async (cnpj: string) => {
         comandaSelecionada,
         usuarios,
         usuarioSelecionado,
+        selectedItems,
         adicionarItensCarrinho,
         removerItemCarrinho,
         limpaCarrinho, 
@@ -342,7 +394,10 @@ const carregaUsuarios = async (cnpj: string) => {
         carregaUsuarios,
         setusuarioSelecionado,
         formataValor,
-        mudaQuantidade
+        mudaQuantidade,
+        toggleLongPressItens,
+        limparSelecao,
+        removerItens
       }}>
       {children}
     </ComandaContext.Provider>

@@ -18,7 +18,6 @@ export function BottomBarConferirItens() {
       comandaSelecionada;
       }, [])
 
-      console.log('comandaSelecionada', comandaSelecionada)
   const screenHeight = Dimensions.get('window').height
   const [isExpanded, setIsExpanded] = useState(false)
   const heightAnim = useState(new Animated.Value(60))[0]
@@ -43,11 +42,13 @@ export function BottomBarConferirItens() {
     showSuccessMessage();
     itensCarrinho.map( (item) => {
       adicionarItens({
-        item_uuid: item.item_uuid,
+        item_uuid: item.item_uuid || '',
         comanda_uuid: comandaSelecionada?.comanda_uuid ?? "",
         item_nome: item.item_nome,
         valor_unit: item.valor_unit,
-        quantidade: (item.quantidade == 0 ? 1 : item.quantidade)
+        quantidade: (item.quantidade == 0 ? 1 : item.quantidade),
+        item_status: true,
+        hora_inclusao: item.hora_inclusao
       })
     })
     setTimeout(() => {
@@ -91,7 +92,7 @@ export function BottomBarConferirItens() {
           {itensCarrinho.map(item => (
             <ItemConferenciaAdd
              key={item.item_uuid}
-             id={item.item_uuid}
+             id={item.item_uuid || ''}
              item_nome={item.item_nome}
              quantidade={item.quantidade} 
              onRemove={removerItemCarrinho}
