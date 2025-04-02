@@ -20,6 +20,7 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
+    console.log("comandas atualizadas:", comandas);
     if (comandas.length > 0) {
       setVisibleComandas(comandas.slice(0, PAGE_SIZE));
       setPage(1);
@@ -52,9 +53,8 @@ export default function HomeScreen() {
           nome_comanda: item.nome_comanda,
           numero_comanda: item.numero_comanda,
           hora_abertura: item.hora_abertura,
-          valor_total: item.valor_total,
+          valor_total: 0,
           status_comanda: item.status_comanda,
-          usuario_responsavel: item.usuario_responsavel,
           usuario_responsavel_id: item.usuario_responsavel_id,
         });
         router.push({ pathname: '/comandaDetalhe' });
@@ -63,7 +63,7 @@ export default function HomeScreen() {
       <Comanda
         numero_comanda={item.numero_comanda}
         nome_comanda={item.nome_comanda}
-        valor_total={item.valor_total}
+        valor_total={0}
         hora_abertura={item.hora_abertura}
         status_comanda={item.status_comanda}
       />

@@ -88,8 +88,8 @@ export default class Helper {
     }
   }
 
-  async postItemComanda(item_uuid, comanda_uuid, item_nome, valor_unit, quantidade, item_status, hora_inclusao) {
-    const data = {item_uuid, comanda_uuid, item_nome, valor_unit, quantidade, item_status, hora_inclusao}
+  async postItemComanda(item_uuid, comanda_uuid, item_id, quantidade, valor_unit, valor_total, hora_inclusao, item_nome) {
+    const data = {item_uuid, comanda_uuid, item_id, quantidade, valor_unit, valor_total, hora_inclusao, item_nome}
     try {
       console.log('Enviando para API:', data)
       const response = await axios.post('http://192.168.0.113:4000/itens', data, {
@@ -112,6 +112,20 @@ export default class Helper {
       }
 
       return (await axios.put('http://192.168.0.113:4000/itens', data, {
+      })).data
+    } catch(e){
+      console.log(e)
+    }
+  }
+
+  async deleteItemComanda(comanda_uuid, item_uuid ){
+
+    try{
+      const data = {
+        comanda_uuid: comanda_uuid,
+        item_uuid: item_uuid,
+      }
+      return (await axios.delete('http://192.168.0.113:4000/itens', data, {
       })).data
     } catch(e){
       console.log(e)

@@ -42,7 +42,8 @@ export function BottomBarConferirItens() {
     showSuccessMessage();
     itensCarrinho.map( (item) => {
       adicionarItens({
-        item_uuid: item.item_uuid || '',
+        item_uuid: item.item_uuid || 0,
+        item_id: item.item_id,
         comanda_uuid: comandaSelecionada?.comanda_uuid ?? "",
         item_nome: item.item_nome,
         valor_unit: item.valor_unit,
@@ -92,7 +93,7 @@ export function BottomBarConferirItens() {
           {itensCarrinho.map(item => (
             <ItemConferenciaAdd
              key={item.item_uuid}
-             id={item.item_uuid || ''}
+             id={item.item_uuid || 0}
              item_nome={item.item_nome}
              quantidade={item.quantidade} 
              onRemove={removerItemCarrinho}

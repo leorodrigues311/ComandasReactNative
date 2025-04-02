@@ -31,6 +31,7 @@ export default function Login() {
   };
 
   useEffect(() => {
+    console.log(usuarios)
     if (Array.isArray(usuarios) && usuarios.length === 0 && pesquisarUsuarios) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       alert('Loja não encontrada ou usuários não cadastrados')

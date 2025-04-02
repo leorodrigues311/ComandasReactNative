@@ -8,7 +8,7 @@ router.use(express.json());
 
 router.get('/', async (req, res, next) => {
   try {
-    const result = await pool.query('SELECT * FROM comandas');
+    const result = await pool.query('SELECT * FROM vendapdvcomanda');
     res.json(result.rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -19,11 +19,11 @@ router.post('/', async (req, res) => {
   try {
     const {nome_comanda, comanda_uuid, hora_abertura, status_comanda, numero_comanda, valor_total, usuario_responsavel, usuario_responsavel_id } = req.body
     const result = await pool.query(
-      `INSERT INTO comandas 
-      (nome_comanda, comanda_uuid, hora_abertura, status_comanda, numero_comanda, valor_total, usuario_responsavel, usuario_responsavel_id)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+      `INSERT INTO vendapdvcomanda 
+      (comandadetalhe, comandanumero, comandastatus, comandaaberturadata, comandaaberturafuncionarioid, comandadivisao)
+      VALUES ($1, $2, $3, $4, $5, $6) 
       RETURNING *`,
-      [nome_comanda, comanda_uuid, hora_abertura, status_comanda, numero_comanda, valor_total, usuario_responsavel, usuario_responsavel_id]
+      [nome_comanda, numero_comanda, status_comanda, hora_abertura, usuario_responsavel_id, 1 ]
     )
 
     io.emit('comanda-alterada', { action: 'POST', data: result.rows[0] })

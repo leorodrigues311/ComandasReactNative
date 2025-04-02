@@ -39,6 +39,7 @@ export default function produtoAdicionarComanda() {
     } else if (buttonType === "AdicionarAoCarrinho") {
       adicionarItensCarrinho({
         item_nome: tituloItem,
+        item_id: produto_codigo,
         item_codigo: codItem,
         quantidade: Number(itemQtd),
         valor_unit: produto_valor,

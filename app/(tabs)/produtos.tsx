@@ -21,6 +21,7 @@ export default function Produto() {
   }, [])
 
   useEffect(() => {
+    console.log('produtos:', produtos)
     if (produtos.length > 0) {
       setProdutosVisiveis(produtos.slice(0, PAGE_SIZE));
       setPage(1);

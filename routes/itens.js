@@ -8,7 +8,7 @@ router.use(express.json())
 
 router.get('/', async (req, res, next) => {
   try {
-    const result = await pool.query('SELECT * FROM itens_comanda where item_status = true');
+    const result = await pool.query('SELECT * FROM vendapdvcomandaitens');
     res.json(result.rows);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -17,13 +17,13 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res) => {
   try {
-    const {item_uuid, comanda_uuid, item_nome, valor_unit, quantidade, item_status, hora_inclusao} = req.body;
+    const {item_uuid, comanda_uuid, item_id, quantidade, valor_unit, valor_total, hora_inclusao, item_nome} = req.body;
     const result = await pool.query(
-      `INSERT INTO itens_comanda 
-      (item_uuid, comanda_uuid, item_nome, valor_unit, quantidade, item_status, hora_inclusao)
-      VALUES ($1, $2, $3, $4, $5, $6, $7) 
+      `INSERT INTO vendapdvcomandaitens 
+      (itenscomandaid, itenscomandacomandaid, itenscomandaprodutoid, itenscomandaqtd, itenscomandavalorproduto, itenscomandavalortotal, itenscomandaprodutogradeid, itenscomandadatainclusao, itenscomandaprodutodescricao)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
       RETURNING *`,
-      [item_uuid, comanda_uuid, item_nome, valor_unit, quantidade, item_status, hora_inclusao]
+      [item_uuid, comanda_uuid, item_id, quantidade, valor_unit, valor_total, 0, hora_inclusao, item_nome]
     );
 
     io.emit('comanda-alterada', { action: 'POST', data: result.rows[0] });
@@ -44,6 +44,23 @@ router.put('/', async (req, res, next) => {
     [ item_status, item_uuid, comanda_uuid ]
   )
   io.emit('comanda-alterada', { action: 'PUT', data: result.rows[0] });
+  res.json(result.rows[0])
+} 
+catch (error) {
+  res.status(500).json({ error: error.message});
+  res.body
+}
+})
+
+router.delete('/', async (req, res, next) => {
+  try {
+  const { comanda_uuid, item_uuid } = req.body
+  const result = await pool.query(
+    `DELETE FROM vendapdvcomandaitens where itenscomandaid = $1 and itenscomandacomandaid = $2
+    RETURNING *`,
+    [ item_uuid, comanda_uuid ]
+  )
+  io.emit('comanda-alterada', { action: 'DELETE', data: result.rows[0] });
   res.json(result.rows[0])
 } 
 catch (error) {

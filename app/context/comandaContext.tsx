@@ -5,13 +5,26 @@ const helper = new Helper()
 
 // aqui delcaramos os tipos de cada parâmetro
 interface ComandaItem {
-  item_uuid: string
+  item_uuid: number
+  item_id: number
   comanda_uuid: string
   item_nome: string
   valor_unit: number
   quantidade: number
-  item_status: boolean,
+  item_status?: boolean,
   hora_inclusao?: string
+  hora_exclusao?: string
+}
+
+interface ComandaItem2 {
+  itenscomandaid: number
+  itenscomandacomandaid: string
+  itenscomandaprodutoid: number
+  itenscomandaprodutodescricao: string
+  itenscomandavalorproduto: number
+  itenscomandaqtd: number
+  item_status?: boolean,
+  itenscomandadatainclusao?: string
   hora_exclusao?: string
 }
 
@@ -20,14 +33,29 @@ interface Comanda {
   nome_comanda: string
   numero_comanda: string
   hora_abertura: string
-  valor_total: number
+  valor_total?: number | 0
   status_comanda: string
-  usuario_responsavel: string
+  usuario_responsavel?: string | ''
   usuario_responsavel_id: number
 }
 
+interface Comanda2 {
+  comandaid: number
+  comandanumero: number
+  comandadatacriacao: string
+  comandastatus: string
+  comandaaberturadata: string
+  comandaaberturafuncionarioid: number
+  comandafechamentodata: string
+  comandafechamentofuncionarioid: number
+  comandafechamentocaixaid: number
+  comandadetalhe: string
+  comandadivisao: number
+}
+
 interface ItemCarrinho {
-  item_uuid?: string
+  item_uuid?: number
+  item_id: number
   item_nome: string
   item_codigo: number
   quantidade: number
@@ -44,12 +72,28 @@ interface Produto {
   imagem?: string
 }
 
+interface Produto2{
+  produtodescricao: string
+  produtocodigobarra: string
+  produtovalorvenda: number
+  produtoqtdestoque: number
+  produtocodigo: number
+  produtoimagem?: string
+}
+
 interface Usuario {
   id: number
-  cnpj_loja: string
+  cnpj_loja?: string
   usuario_nome: string
   usuario_grupo_acesso: string
   usuario_senha: string
+}
+
+interface Usuario2 {
+  funcionarioid: number
+  funcionariologin: string
+  funcionariogrupoacesso: string
+  funcionariosenha: string
 }
 
 interface ComandaContextType {
@@ -69,14 +113,14 @@ interface ComandaContextType {
   carregaProdutos: () => void
   limpaCarrinho: () => void
   adicionarItensCarrinho: (novoItemCarrinho: Omit<ItemCarrinho, 'id'>) => void
-  removerItemCarrinho: (id:string) => void
+  removerItemCarrinho: (id:number) => void
   setComandaSelecionada: (comandaSelecionada: Comanda | null) => void
   setusuarioSelecionado: (setusuarioSelecionado: Usuario | null) => void
   gerarIdComanda: () => string
   gerarData: (hora: string) => string
   carregaUsuarios: (cnpj:string) => void
   formataValor: (valor_total: number) => string
-  mudaQuantidade: (id: string, tipo: 'soma' | 'subtrai' ) => void
+  mudaQuantidade: (id: number, tipo: 'soma' | 'subtrai' ) => void
   toggleLongPressItens: (id: string) => void
   limparSelecao: () => void
   removerItens: (item: ComandaItem[]) => void
@@ -107,7 +151,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
   const gerarData = (hora: string): string => {
     const agora = new Date();
-    const dataAbertura = new Date(hora.split(' ')[0].split('/').reverse().join('-') + 'T' + hora.split(' ')[1]);
+    const dataAbertura = new Date((hora || "").split("-")[0].split('/').reverse().join('-') + 'T' + (hora || "").split("-")[1]);
 
     const dia = String(agora.getDate()).padStart(2, '0');
     const mes = String(agora.getMonth() + 1).padStart(2, '0');
@@ -124,7 +168,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
     // Retornar apenas a hora e os minutos
     if (mesmaData) {
-      return hora.split(' ')[1].slice(0, 5);
+      return (hora || "").split("-")[1].slice(0, 5);
     } 
     // utilize 'completo' para gerar a data para salvar no banco de dados
     else if (hora ==='completo') {
@@ -132,8 +176,8 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     }
     else{
       // Formatar sem os segundos
-      const [dataParte, horaParte] = hora.split(' ');
-      const horaSemSegundos = horaParte.slice(0, 5);
+      const [dataParte, horaParte] = (hora || "").split("-");
+      const horaSemSegundos = (horaParte || "").slice(0, 5);
       return `${dataParte} ${horaSemSegundos}`;
     }
   }
@@ -153,17 +197,21 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const carregaItens = async () => {
     try {
       const response = await helper.getItensComanda()
-      const data: ComandaItem[] = response
+      const data: ComandaItem2[] = response
       
-      setItensComanda(Object.values(data).map(item => ({
-        item_uuid: item.item_uuid || "",
-        item_nome: item.item_nome,
-        comanda_uuid: String(item.comanda_uuid || ""),
-        valor_unit: Number(item.valor_unit || 0),
-        quantidade: Number(item.quantidade || 0),
-        item_status: item.item_status,
-        hora_inclusao: item.hora_inclusao
-      })));
+
+      const itens = data.map(item => ({
+        item_uuid: item.itenscomandaid || 0,
+        item_nome: item.itenscomandaprodutodescricao,
+        item_id: item.itenscomandaprodutoid || 0,
+        comanda_uuid: String(item.itenscomandacomandaid || ""),
+        valor_unit: Number(item.itenscomandavalorproduto || 0),
+        quantidade: Number(item.itenscomandaqtd || 0),
+        hora_inclusao: item.itenscomandadatainclusao
+      }))
+
+      setItensComanda(itens)
+
     } catch (error) {
       console.error('Erro ao buscar dados:', error)
     }
@@ -187,11 +235,12 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       const response = await helper.postItemComanda(
         novoItem.item_uuid,
         novoItem.comanda_uuid,
-        novoItem.item_nome,
-        novoItem.valor_unit,
+        novoItem.item_id,
         novoItem.quantidade,
-        novoItem.item_status,
-        novoItem.hora_inclusao
+        novoItem.valor_unit,
+        (novoItem.valor_unit * novoItem.quantidade),
+        novoItem.hora_inclusao,
+        novoItem.item_nome
       )
       if (response) {
         setItensComanda(prevItens => [...prevItens, novoItem])
@@ -204,20 +253,13 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const removerItens = async (itens: ComandaItem[]) => {
     try {
       for (const item of itens) {
-        const response = await helper.putItemComanda(
-          false,
+        const response = await helper.deleteItemComanda(
           item.comanda_uuid,
           item.item_uuid
         );
   
         if (response) {
-          setItensComanda(prevItens => 
-            prevItens.map(prevItem => 
-              prevItem.item_uuid === item.item_uuid 
-                ? { ...prevItem, item_status: item.item_status } 
-                : prevItem
-            )
-          );
+          carregaItens()
         }
       }
     } catch (error) {
@@ -226,18 +268,17 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   }
 
   // aqui adicionamos itens ao carrinho, antes de adicionar à comanda
-  const adicionarItensCarrinho = (novoItemCarrinho: Omit<ItemCarrinho, 'id'>) => {
-    const itemCarrinhoComId = { ...novoItemCarrinho, item_uuid: gerarId() }
-    setItensCarrinho((prevItems) => [...prevItems, itemCarrinhoComId]);
+  const adicionarItensCarrinho = (novoItemCarrinho: ItemCarrinho) => {
+    setItensCarrinho((prevItems) => [...prevItems, novoItemCarrinho]);
   }
 
   // essa função remove os itens do carrinho
-  const removerItemCarrinho = (id: string) => {
+  const removerItemCarrinho = (id: number) => {
     setItensCarrinho(prevItems => prevItems.filter(item => item.item_uuid !== id));
   }
 
   // essa função remove os itens do carrinho
-  const mudaQuantidade = (id: string, tipo: 'soma' | 'subtrai') => {
+  const mudaQuantidade = (id: number, tipo: 'soma' | 'subtrai') => {
     setItensCarrinho(prevItems =>
       prevItems.map(item =>
         item.item_uuid === id
@@ -294,23 +335,25 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   // aqui trazemos as comandas do banco de dados
   const carregaComandas = async () => {
     try {
-      const response = await helper.getComandas()
-      const data: Comanda[] = response
-      
-      setComandas(Object.values(data).map(item => ({
-        comanda_uuid: item.comanda_uuid || "",
-        nome_comanda: item.nome_comanda || "",
-        numero_comanda: String(item.numero_comanda || ""),
-        hora_abertura: item.hora_abertura || "",
-        valor_total: Number(item.valor_total || 0),
-        status_comanda: item.status_comanda || "",
-        usuario_responsavel: item.usuario_responsavel || "",
-        usuario_responsavel_id: item.usuario_responsavel_id || 0
-      })));
+      const response = await helper.getComandas();
+      const data: Comanda2[] = response;
+
+      const novasComandas = data.map((item) => ({
+        comanda_uuid: String(item.comandaid || ""),
+        nome_comanda: item.comandadetalhe || "",
+        numero_comanda: String(item.comandanumero || ""),
+        hora_abertura: String(item.comandaaberturadata || ""),
+        status_comanda: String(item.comandastatus || ""),
+        usuario_responsavel_id: item.comandaaberturafuncionarioid || 0,
+      }));
+  
+      setComandas(novasComandas);
+  
     } catch (error) {
-      console.error('Erro ao buscar dados:', error)
+      console.error("Erro ao buscar dados:", error);
     }
-  }
+  };
+  
 
 
 //============= Fim Comanda =====================
@@ -321,15 +364,17 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const carregaProdutos = async () => {
     try {
       const response = await helper.getProdutos()
-      const data: Produto[] = response
+      const data: Produto2[] = response
       
-      setProdutos(Object.values(data).map(item => ({
-        nome_produto: item.nome_produto || "",
-        codigo_produto: Number(item.codigo_produto) || 0,
-        estoque_produto: Number(item.estoque_produto) || 0,
-        valor_venda: Number(item.valor_venda) || 0,
-        imagem: item.imagem || "",
-      })));
+     const produtos = data.map(item => ({
+        nome_produto: item.produtodescricao || "",
+        codigo_produto: Number(item.produtocodigo) || 0,
+        estoque_produto: Number(item.produtoqtdestoque) || 0,
+        valor_venda: Number(item.produtovalorvenda) || 0,
+        imagem: item.produtoimagem || "",
+      }))
+
+      setProdutos(produtos)
     } catch (error) {
       console.error('Erro ao buscar dados:', error)
     }
@@ -339,18 +384,19 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
 //============= Usuarios =====================
 
-const carregaUsuarios = async (cnpj: string) => {
+const carregaUsuarios = async (/*cnpj: string*/) => {
   try {
-    const response = await helper.getUsuarios(cnpj)
-    const data: Usuario[] = response
+    const response = await helper.getUsuarios(/*cnpj*/)
+    const data: Usuario2[] = response
     
-    setUsuarios(Object.values(data).map(item => ({
-      id: item.id || 0,
-      cnpj_loja: item.cnpj_loja || "",
-      usuario_nome: item.usuario_nome || "",
-      usuario_grupo_acesso: item.usuario_grupo_acesso || "",
-      usuario_senha: item.usuario_senha || "",
-    })));
+    const usuarios =  data.map(item => ({
+      id: item.funcionarioid || 0,
+      usuario_nome: item.funcionariologin || "",
+      usuario_grupo_acesso: item.funcionariogrupoacesso|| "",
+      usuario_senha: item.funcionariosenha|| "",
+    }))
+
+    setUsuarios(usuarios)
 
   } catch (error) {
     console.error('Erro ao buscar dados:', error)

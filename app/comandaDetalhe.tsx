@@ -87,7 +87,7 @@ export default function ComandaDetalhe () {
       <ScrollView>
         <View style={styles.itensComanda}>
           {itensComanda
-            .filter(item => item.comanda_uuid.toString() === comandaSelecionada?.comanda_uuid && item.item_status === true)
+            .filter(item => item.comanda_uuid.toString() === comandaSelecionada?.comanda_uuid)
             .map((item) => (
               <Pressable
                 key={item.item_uuid}
@@ -120,7 +120,7 @@ export default function ComandaDetalhe () {
             onPress={() => setTaxaGarcom(!taxaGarcom)}
           >
             <View style={[styles.checkBtnTaxaServico, { backgroundColor: taxaGarcom ? '#04c78a' : 'transparent' }]}  />
-            <Text style={{ color: '#fff' }}>Taxa do Garçom - R$ 10,50</Text>
+            <Text style={{ color: '#fff' }}>Taxa de serviço - R$ 10,50</Text>
           </Pressable>
 
           <Pressable 

@@ -5,11 +5,11 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
 // Aqui nós instanciamos uma interface para definir o tipo de cada variavel
 interface ComandaProps {
-  nome_comanda: string;
-  numero_comanda: string;
-  hora_abertura: string;
-  valor_total: number;
-  status_comanda: string;
+  nome_comanda: string | '';
+  numero_comanda: string | '';
+  hora_abertura: string | '';
+  valor_total: number | 0;
+  status_comanda: string | '';
 }
 
 export function Comanda({nome_comanda, numero_comanda, valor_total, hora_abertura, status_comanda}: ComandaProps){
