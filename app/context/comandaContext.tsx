@@ -5,8 +5,8 @@ const helper = new Helper()
 
 // aqui delcaramos os tipos de cada parâmetro
 interface ComandaItem {
-  item_uuid: number
-  item_id: number
+  item_uuid?: string
+  item_id: string
   comanda_uuid: string
   item_nome: string
   valor_unit: number
@@ -54,8 +54,8 @@ interface Comanda2 {
 }
 
 interface ItemCarrinho {
-  item_uuid?: number
-  item_id: number
+  item_uuid?: string
+  item_id: string
   item_nome: string
   item_codigo: number
   quantidade: number
@@ -66,6 +66,7 @@ interface ItemCarrinho {
 
 interface Produto {
   nome_produto: string
+  id_produto: number
   codigo_produto: number
   estoque_produto: number
   valor_venda: number
@@ -74,6 +75,7 @@ interface Produto {
 
 interface Produto2{
   produtodescricao: string
+  produtoid: number
   produtocodigobarra: string
   produtovalorvenda: number
   produtoqtdestoque: number
@@ -104,7 +106,7 @@ interface ComandaContextType {
   produtos: Produto[]
   usuarios: Usuario[] | null
   usuarioSelecionado: Usuario | null
-  selectedItems: String[] | null
+  selectedItems: string[] | null
   adicionarItens: (novoItem: ComandaItem) => void
   adicionarComanda: (novaComanda: Comanda) => void
   removerComanda: (numeroComanda: string) => void
@@ -113,14 +115,14 @@ interface ComandaContextType {
   carregaProdutos: () => void
   limpaCarrinho: () => void
   adicionarItensCarrinho: (novoItemCarrinho: Omit<ItemCarrinho, 'id'>) => void
-  removerItemCarrinho: (id:number) => void
+  removerItemCarrinho: (id:string) => void
   setComandaSelecionada: (comandaSelecionada: Comanda | null) => void
   setusuarioSelecionado: (setusuarioSelecionado: Usuario | null) => void
   gerarIdComanda: () => string
   gerarData: (hora: string) => string
   carregaUsuarios: (cnpj:string) => void
   formataValor: (valor_total: number) => string
-  mudaQuantidade: (id: number, tipo: 'soma' | 'subtrai' ) => void
+  mudaQuantidade: (id: string, tipo: 'soma' | 'subtrai' ) => void
   toggleLongPressItens: (id: string) => void
   limparSelecao: () => void
   removerItens: (item: ComandaItem[]) => void
@@ -201,9 +203,8 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       
 
       const itens = data.map(item => ({
-        item_uuid: item.itenscomandaid || 0,
+        item_id: String(item.itenscomandaid || ""),
         item_nome: item.itenscomandaprodutodescricao,
-        item_id: item.itenscomandaprodutoid || 0,
         comanda_uuid: String(item.itenscomandacomandaid || ""),
         valor_unit: Number(item.itenscomandavalorproduto || 0),
         quantidade: Number(item.itenscomandaqtd || 0),
@@ -235,7 +236,6 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       const response = await helper.postItemComanda(
         novoItem.item_uuid,
         novoItem.comanda_uuid,
-        novoItem.item_id,
         novoItem.quantidade,
         novoItem.valor_unit,
         (novoItem.valor_unit * novoItem.quantidade),
@@ -268,17 +268,20 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   }
 
   // aqui adicionamos itens ao carrinho, antes de adicionar à comanda
-  const adicionarItensCarrinho = (novoItemCarrinho: ItemCarrinho) => {
-    setItensCarrinho((prevItems) => [...prevItems, novoItemCarrinho]);
+  const adicionarItensCarrinho = (novoItemCarrinho: Omit<ItemCarrinho, 'id'>) => {
+    const itemCarrinhoComId = { ...novoItemCarrinho, item_uuid: gerarId() }
+    setItensCarrinho((prevItems) => [...prevItems, itemCarrinhoComId]);
   }
 
+
+
   // essa função remove os itens do carrinho
-  const removerItemCarrinho = (id: number) => {
+  const removerItemCarrinho = (id: string) => {
     setItensCarrinho(prevItems => prevItems.filter(item => item.item_uuid !== id));
   }
 
   // essa função remove os itens do carrinho
-  const mudaQuantidade = (id: number, tipo: 'soma' | 'subtrai') => {
+  const mudaQuantidade = (id: string, tipo: 'soma' | 'subtrai') => {
     setItensCarrinho(prevItems =>
       prevItems.map(item =>
         item.item_uuid === id
@@ -360,7 +363,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
 //============= Produtos =====================
 
-  // aqui trazemos as comandas do banco de dados
+  // aqui trazemos os produtos do banco de dados
   const carregaProdutos = async () => {
     try {
       const response = await helper.getProdutos()
@@ -368,6 +371,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       
      const produtos = data.map(item => ({
         nome_produto: item.produtodescricao || "",
+        id_produto: item.produtoid,
         codigo_produto: Number(item.produtocodigo) || 0,
         estoque_produto: Number(item.produtoqtdestoque) || 0,
         valor_venda: Number(item.produtovalorvenda) || 0,

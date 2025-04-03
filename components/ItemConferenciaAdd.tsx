@@ -4,12 +4,12 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Haptics from 'expo-haptics';
 
 interface ItemConferenciaAddProps {
-  id: number;
+  id: string;
   item_nome: string;
   quantidade: number;
-  onRemove: (id: number) => void;
-  onIncrement: (id: number, tipo: 'soma' | 'subtrai') => void;
-  onDecrement: (id: number, tipo: 'soma' | 'subtrai') => void;
+  onRemove: (id: string) => void;
+  onIncrement: (id: string, tipo: 'soma' | 'subtrai') => void;
+  onDecrement: (id: string, tipo: 'soma' | 'subtrai') => void;
 }
 
 export function ItemConferenciaAdd({

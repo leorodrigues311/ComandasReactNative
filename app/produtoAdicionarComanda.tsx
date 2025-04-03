@@ -13,11 +13,12 @@ export default function produtoAdicionarComanda() {
 
   const router = useRouter();
 
-  const {produtos, comandaSelecionada, carregaProdutos, adicionarItensCarrinho, setComandaSelecionada,gerarData } = useComanda()
+  const {produtos, comandaSelecionada, itensCarrinho, carregaProdutos, adicionarItensCarrinho, setComandaSelecionada,gerarData } = useComanda()
 
   useEffect(() => {
     carregaProdutos();
-  }, [])
+    console.log('itensCarrinh')
+  }, [produtos])
   
   const [itemQtd, setItemQtd] = useState<string>('')
   const [tituloItem, setTituloItem] = useState<string>('')
@@ -28,20 +29,20 @@ export default function produtoAdicionarComanda() {
     setDialogQuantidadeProdutoVisible(false)
   }
 
-  const handleItemSelect = (produto_codigo: number, produto_nome: string, produto_valor: number,  buttonType?: string) => {
+  const handleItemSelect = (id_produto: number, produto_nome: string, produto_valor: number,  buttonType?: string) => {
 
     if (buttonType === "selecionarQuantidade") {
       setItemQtd(''); // inicia o input vazio
       setDialogQuantidadeProdutoVisible(true)
       setTituloItem(produto_nome)
-      setCodItem(produto_codigo)
+      setCodItem(id_produto)
 
     } else if (buttonType === "AdicionarAoCarrinho") {
       adicionarItensCarrinho({
+        item_id: String(id_produto||''),
         item_nome: tituloItem,
-        item_id: produto_codigo,
         item_codigo: codItem,
-        quantidade: Number(itemQtd),
+        quantidade: Number((itemQtd === '' ? 1 : itemQtd)),
         valor_unit: produto_valor,
         item_status: true,
         hora_inclusao: gerarData('completo')

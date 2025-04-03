@@ -91,15 +91,15 @@ export default function ComandaDetalhe () {
             .map((item) => (
               <Pressable
                 key={item.item_uuid}
-                onLongPress={() => {comandaSelecionada?.status_comanda === '1' ? handleLongPress(item.item_uuid) : ''}}
-                onPress={() => {comandaSelecionada?.status_comanda === '1' ? handlePress(item.item_uuid) : ''}}
+                onLongPress={() => {comandaSelecionada?.status_comanda === '1' ? handleLongPress(item.item_uuid ? item.item_uuid : '') : ''}}
+                onPress={() => {comandaSelecionada?.status_comanda === '1' ? handleLongPress(item.item_uuid ? item.item_uuid : '') : ''}}
               >
                 <ItemComanda
                   nomeItem={item.item_nome}
                   valorUnit={formataValor(item.valor_unit)}
                   valorTotal={formataValor(item.valor_unit * item.quantidade)}
                   quantidade={item.quantidade}
-                  style={selectedItems?.includes(item.item_uuid) ? styles.selectedItem : {}}
+                  style={selectedItems?.includes(item.item_uuid || '') ? styles.selectedItem : {}}
                 />
               </Pressable>
             ))}

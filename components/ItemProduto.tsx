@@ -20,7 +20,7 @@ export function ItemProduto({ nomeItem, estoque, valorTotal, imagem, style }: it
 
           <View style={styles.viewNumero}>
               <Image 
-                  source={{uri: imagem}} 
+                  source={imagem ? {uri: imagem} : {uri: './placeholder.png'}} 
                   style={styles.imagemNumero} 
               />
           </View>

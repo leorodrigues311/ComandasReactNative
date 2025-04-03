@@ -14,9 +14,9 @@ export function BottomBarConferirItens() {
   
   const {itensCarrinho, comandaSelecionada, removerItemCarrinho, adicionarItens, limpaCarrinho, mudaQuantidade } = useComanda()
 
-     useEffect(() => {
-      comandaSelecionada;
-      }, [])
+  useEffect(() => {
+    comandaSelecionada;
+  }, [comandaSelecionada])
 
   const screenHeight = Dimensions.get('window').height
   const [isExpanded, setIsExpanded] = useState(false)
@@ -42,9 +42,9 @@ export function BottomBarConferirItens() {
     showSuccessMessage();
     itensCarrinho.map( (item) => {
       adicionarItens({
-        item_uuid: item.item_uuid || 0,
+        item_uuid: item.item_uuid || '',
         item_id: item.item_id,
-        comanda_uuid: comandaSelecionada?.comanda_uuid ?? "",
+        comanda_uuid: comandaSelecionada?.comanda_uuid ?? '',
         item_nome: item.item_nome,
         valor_unit: item.valor_unit,
         quantidade: (item.quantidade == 0 ? 1 : item.quantidade),
@@ -68,6 +68,7 @@ export function BottomBarConferirItens() {
     }).start();
 
     setIsExpanded(!isExpanded);
+    console.log('expanded')
   };
 
   const showSuccessMessage = () => {
@@ -92,8 +93,8 @@ export function BottomBarConferirItens() {
         <View style={styles.viewExtra}>
           {itensCarrinho.map(item => (
             <ItemConferenciaAdd
-             key={item.item_uuid}
-             id={item.item_uuid || 0}
+             key={item.item_id}
+             id={item.item_id || ''}
              item_nome={item.item_nome}
              quantidade={item.quantidade} 
              onRemove={removerItemCarrinho}
