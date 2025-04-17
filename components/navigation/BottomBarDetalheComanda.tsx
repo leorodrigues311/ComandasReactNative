@@ -21,7 +21,7 @@ export function BottomBarDetalheComanda({ selectedItemsLength, limparSelecao }: 
 
   const router = useRouter()
 
-  const {selectedItems, itensComanda, removerItens, carregaItens} = useComanda();
+  const {selectedItems, itensComanda,comandaSelecionada, removerItens, carregaItens} = useComanda();
 
 
   // Aqui foi criado um estado para o conteudo dos 'dialog', pois temos vários botões, então cada um usa o 'dialog' com um conteudo diferente
@@ -95,6 +95,8 @@ export function BottomBarDetalheComanda({ selectedItemsLength, limparSelecao }: 
       const itensParaRemover = itensComanda.filter(item =>
         selectedItems?.includes(item.item_uuid??'')
       );
+
+      console.log(itensParaRemover)
     
       removerItens(itensParaRemover);
 

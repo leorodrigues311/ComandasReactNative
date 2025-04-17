@@ -119,17 +119,18 @@ export default class Helper {
     }
   }
 
-  async deleteItemComanda(comanda_uuid, item_uuid ){
-
-    try{
+  async deleteItemComanda(comanda_uuid, item_uuid) {
+    try {
       const data = {
-        comanda_uuid: comanda_uuid,
-        item_uuid: item_uuid,
-      }
-      return (await axios.delete('http://192.168.0.113:4000/itens', data, {
-      })).data
-    } catch(e){
-      console.log(e)
+        comanda_uuid,
+        item_uuid,
+      };
+  
+      return (await axios.delete('http://192.168.0.113:4000/itens', {
+        data,
+      })).data;
+    } catch (e) {
+      console.log(e);
     }
   }
 
