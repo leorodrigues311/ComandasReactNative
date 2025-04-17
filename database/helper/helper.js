@@ -43,17 +43,16 @@ export default class Helper {
     }
   }
 
-  async putComanda(id) {
+  async putComanda(comanda_uuid) {
+    const data = {comanda_uuid}
     try{
-      const data = {
-        gerenciado: true,
-        quantidade: quantity
-      }
-
-      return (await axios.put(`${this.BASE_URL}/comanda/${id}`, data, {
-      })).data
-    } catch(e){
-      console.log(e)
+      const response = await axios.put('http://192.168.0.113:4000/comandas', data, {
+        headers: { 'Content-Type': 'application/json' }
+      })
+      return response.data;
+    } catch (e) {
+      console.error('Erro ao postar comanda:', e.response?.data || e.message);
+      throw e
     }
   }
 
@@ -61,7 +60,6 @@ export default class Helper {
 
     const data = {nome_comanda, comanda_uuid, numero_comanda, hora_abertura, status_comanda, valor_total,  usuario_responsavel, usuario_responsavel_id }
     try {
-      console.log('Enviando para API:', data)
       const response = await axios.post('http://192.168.0.113:4000/comandas', data, {
         headers: { 'Content-Type': 'application/json' }
       })

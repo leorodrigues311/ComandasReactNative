@@ -17,7 +17,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Pagamento() {
   const router = useRouter();
-  const { selectedItems, itensComanda, removerItens, carregaItens } = useComanda();
+  const { selectedItems, itensComanda, comandaSelecionada, removerItens, carregaItens, finalizaComanda } = useComanda();
 
   const [dialogActionVisible, setDialogPagamentoVisible] = useState(false);
   const [formaSelecionada, setFormaSelecionada] = useState('');
@@ -78,7 +78,8 @@ export default function Pagamento() {
     });
   };
 
-  const finalizaComanda = () => {
+  const handleFinalizaComanda = () => {
+    finalizaComanda(comandaSelecionada?.comanda_uuid ?? '')
     setDialogPagamentoVisible(false);
     exibirAnimacaoPagamento();
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
@@ -127,7 +128,7 @@ export default function Pagamento() {
             Deseja pagar com {formaSelecionada}?
           </Dialog.Description>
           <Dialog.Button onPress={handleCancel} label="Não" />
-          <Dialog.Button onPress={finalizaComanda} label="Sim" />
+          <Dialog.Button onPress={handleFinalizaComanda} label="Sim" />
         </Dialog.Container>
 
         {showCheck && (

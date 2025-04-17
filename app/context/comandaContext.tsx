@@ -131,6 +131,7 @@ interface ComandaContextType {
   toggleLongPressItens: (id: string) => void
   limparSelecao: () => void
   removerItens: (item: ComandaItem[]) => void
+  finalizaComanda: (comanda_uuid: string) => void
 }
 // fim da declaração dos tipos
 
@@ -364,6 +365,16 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       console.error("Erro ao buscar dados:", error);
     }
   };
+
+  const finalizaComanda = async (comanda_uuid: string) => {
+
+    try{
+      const response = await helper.putComanda(comanda_uuid);
+    }
+    catch (error) {
+      console.error("Erro ao buscar dados:", error);
+    }
+  }
   
 
 
@@ -448,7 +459,8 @@ const carregaUsuarios = async (/*cnpj: string*/) => {
         mudaQuantidade,
         toggleLongPressItens,
         limparSelecao,
-        removerItens
+        removerItens,
+        finalizaComanda
       }}>
       {children}
     </ComandaContext.Provider>
