@@ -8,6 +8,7 @@ interface ComandaItem {
   item_uuid?: string
   item_id: string
   comanda_uuid: string
+  comanda_id: number
   item_nome: string
   valor_unit: number
   quantidade: number
@@ -18,7 +19,9 @@ interface ComandaItem {
 
 interface ComandaItem2 {
   itenscomandaid: number
-  itenscomandacomandaid: string
+  itemuuid: string
+  comandauuid: string
+  itenscomandacomandaid: number
   itenscomandaprodutoid: number
   itenscomandaprodutodescricao: string
   itenscomandavalorproduto: number
@@ -30,6 +33,7 @@ interface ComandaItem2 {
 
 interface Comanda {
   comanda_uuid: string
+  comanda_id: number
   nome_comanda: string
   numero_comanda: string
   hora_abertura: string
@@ -41,6 +45,7 @@ interface Comanda {
 
 interface Comanda2 {
   comandaid: number
+  comandauuid: string
   comandanumero: number
   comandadatacriacao: string
   comandastatus: string
@@ -172,9 +177,8 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     if (mesmaData) {
       return (hora || "").split("-")[1].slice(0, 5);
     } 
-    // utilize 'completo' para gerar a data para salvar no banco de dados
-    else if (hora ==='completo') {
-      return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
+    else if (hora === 'completo') {
+      return agora.toISOString(); // ex: "2025-04-17T14:37:22.000Z"
     }
     else{
       // Formatar sem os segundos
@@ -203,9 +207,11 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       
 
       const itens = data.map(item => ({
-        item_id: String(item.itenscomandaid || ""),
+        item_uuid: String(item.itemuuid || ""),
+        item_id: String(item.itenscomandaid || ''),
         item_nome: item.itenscomandaprodutodescricao,
-        comanda_uuid: String(item.itenscomandacomandaid || ""),
+        comanda_uuid: String(item.comandauuid || ""),
+        comanda_id: item.itenscomandacomandaid,
         valor_unit: Number(item.itenscomandavalorproduto || 0),
         quantidade: Number(item.itenscomandaqtd || 0),
         hora_inclusao: item.itenscomandadatainclusao
@@ -236,6 +242,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       const response = await helper.postItemComanda(
         novoItem.item_uuid,
         novoItem.comanda_uuid,
+        novoItem.comanda_id,
         novoItem.quantidade,
         novoItem.valor_unit,
         (novoItem.valor_unit * novoItem.quantidade),
@@ -342,7 +349,8 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       const data: Comanda2[] = response;
 
       const novasComandas = data.map((item) => ({
-        comanda_uuid: String(item.comandaid || ""),
+        comanda_uuid: String(item.comandauuid || ""),
+        comanda_id: item.comandaid,
         nome_comanda: item.comandadetalhe || "",
         numero_comanda: String(item.comandanumero || ""),
         hora_abertura: String(item.comandaaberturadata || ""),

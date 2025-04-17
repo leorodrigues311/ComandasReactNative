@@ -20,7 +20,6 @@ export default function HomeScreen() {
   }, []);
 
   useEffect(() => {
-    console.log("comandas atualizadas:", comandas);
     if (comandas.length > 0) {
       setVisibleComandas(comandas.slice(0, PAGE_SIZE));
       setPage(1);
@@ -50,6 +49,7 @@ export default function HomeScreen() {
       onPress={() => {
         setComandaSelecionada({
           comanda_uuid: item.comanda_uuid,
+          comanda_id: item.comanda_id,
           nome_comanda: item.nome_comanda,
           numero_comanda: item.numero_comanda,
           hora_abertura: item.hora_abertura,
@@ -99,6 +99,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop:30
   },
   emptyText: {
     fontSize: 18,

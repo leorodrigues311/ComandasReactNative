@@ -93,7 +93,7 @@ export function BottomBarDetalheComanda({ selectedItemsLength, limparSelecao }: 
   const handleConfirm = () => {
     try{
       const itensParaRemover = itensComanda.filter(item =>
-        selectedItems?.includes(item.item_uuid)
+        selectedItems?.includes(item.item_uuid??'')
       );
     
       removerItens(itensParaRemover);

@@ -17,13 +17,13 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res) => {
   try {
-    const {comanda_uuid, item_uuid, quantidade, valor_unit, valor_total, hora_inclusao, item_nome} = req.body;
+    const {comanda_id, comanda_uuid, item_uuid, quantidade, valor_unit, valor_total, hora_inclusao, item_nome} = req.body;
     const result = await pool.query(
       `INSERT INTO vendapdvcomandaitens 
-      (itenscomandacomandaid, itenscomandaprodutoid, itenscomandaqtd, itenscomandavalorproduto, itenscomandavalortotal, itenscomandaprodutogradeid, itenscomandadatainclusao, itenscomandaprodutodescricao)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+      (itenscomandacomandaid, itemuuid, itenscomandaqtd, itenscomandavalorproduto, itenscomandavalortotal, itenscomandaprodutogradeid, itenscomandadatainclusao, itenscomandaprodutodescricao, comandauuid)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
       RETURNING *`,
-      [comanda_uuid, item_uuid, quantidade, valor_unit, valor_total, 0, hora_inclusao, item_nome]
+      [comanda_id, item_uuid, quantidade, valor_unit, valor_total, 0, hora_inclusao, item_nome, comanda_uuid]
     );
 
     io.emit('comanda-alterada', { action: 'POST', data: result.rows[0] });
@@ -55,8 +55,9 @@ catch (error) {
 router.delete('/', async (req, res, next) => {
   try {
   const { comanda_uuid, item_uuid } = req.body
+  console.log(req.body)
   const result = await pool.query(
-    `DELETE FROM vendapdvcomandaitens where itenscomandaid = $1 and itenscomandacomandaid = $2
+    `DELETE FROM vendapdvcomandaitens where itemuuid = $1 and comandauuid = $2
     RETURNING *`,
     [ item_uuid, comanda_uuid ]
   )

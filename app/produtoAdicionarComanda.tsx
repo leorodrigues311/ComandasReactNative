@@ -17,8 +17,8 @@ export default function produtoAdicionarComanda() {
 
   useEffect(() => {
     carregaProdutos();
-    console.log('itensCarrinh')
-  }, [produtos])
+    console.log('teste')
+  }, [])
   
   const [itemQtd, setItemQtd] = useState<string>('')
   const [tituloItem, setTituloItem] = useState<string>('')

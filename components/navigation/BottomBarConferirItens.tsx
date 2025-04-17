@@ -45,6 +45,7 @@ export function BottomBarConferirItens() {
         item_uuid: item.item_uuid || '',
         item_id: item.item_id,
         comanda_uuid: comandaSelecionada?.comanda_uuid ?? '',
+        comanda_id:comandaSelecionada?.comanda_id ?? 0,
         item_nome: item.item_nome,
         valor_unit: item.valor_unit,
         quantidade: (item.quantidade == 0 ? 1 : item.quantidade),
@@ -68,7 +69,6 @@ export function BottomBarConferirItens() {
     }).start();
 
     setIsExpanded(!isExpanded);
-    console.log('expanded')
   };
 
   const showSuccessMessage = () => {
@@ -93,8 +93,8 @@ export function BottomBarConferirItens() {
         <View style={styles.viewExtra}>
           {itensCarrinho.map(item => (
             <ItemConferenciaAdd
-             key={item.item_id}
-             id={item.item_id || ''}
+             key={item.item_uuid}
+             id={item.item_uuid || ''}
              item_nome={item.item_nome}
              quantidade={item.quantidade} 
              onRemove={removerItemCarrinho}
