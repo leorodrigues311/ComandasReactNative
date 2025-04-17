@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import * as Haptics from 'expo-haptics'
 import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
+import dayjs from 'dayjs'
 
 export default function ComandaDetalhe () {
 
@@ -76,7 +77,7 @@ export default function ComandaDetalhe () {
           
           <Text style={[styles.viewInfoHora,
             {color: comandaSelecionada?.status_comanda === '4' ? 'gray' : 'white' }]}>
-            Abertura: {comandaSelecionada?.hora_abertura || ''}
+            Abertura: {comandaSelecionada?.hora_abertura ? dayjs(comandaSelecionada.hora_abertura).format('DD/MM/YYYY HH:mm') : ''}
           </Text>
           <Text style={[styles.viewInfoHora,
             {color: comandaSelecionada?.status_comanda === '4' ? 'gray' : 'white' }]}>

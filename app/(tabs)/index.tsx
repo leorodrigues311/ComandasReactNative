@@ -5,6 +5,7 @@ import { TopBar } from '@/components/navigation/TopBar';
 import { ButtonFlutuante } from '@/components/ButtonFlutuante';
 import { useRouter } from "expo-router";
 import { useComanda } from '@/app/context/comandaContext';
+import dayjs from 'dayjs'
 
 const PAGE_SIZE = 30;
 
@@ -60,13 +61,17 @@ export default function HomeScreen() {
         router.push({ pathname: '/comandaDetalhe' });
       }}
     >
-      <Comanda
-        numero_comanda={item.numero_comanda}
-        nome_comanda={item.nome_comanda}
-        valor_total={0}
-        hora_abertura={item.hora_abertura}
-        status_comanda={item.status_comanda}
-      />
+    <Comanda
+      numero_comanda={item.numero_comanda}
+      nome_comanda={item.nome_comanda}
+      valor_total={0}
+      hora_abertura={
+        dayjs(item.hora_abertura).isSame(dayjs(), 'day')
+          ? dayjs(item.hora_abertura).format('HH:mm')
+          : dayjs(item.hora_abertura).format('DD/MM/YYYY HH:mm')
+      }
+      status_comanda={item.status_comanda}
+    />
     </Pressable>
   );
 
