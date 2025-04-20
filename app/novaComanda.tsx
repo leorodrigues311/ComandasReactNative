@@ -133,22 +133,18 @@ export default function novaComanda (){
                     value={inputNumeroComanda}
                     onChangeText={(text) => {
                       const numericText = text.replace(/[^0-9]/g, '')
-                      if (numericText.length <= 2) {
+                      if (numericText.length <= 4) {
                         setInputNumeroComanda(numericText)
                       }
                     }}
                     placeholder="Número"
                     keyboardType='numeric'
-                    maxLength={2}
+                    maxLength={4}
                   />
 
                   <View style={styles.buttonsContainer}>
                     <Pressable onPress={() => handleButtonPress('cancela')}>
                       <Ionicons name="arrow-back-outline" size={40} color="white" ></Ionicons>
-                    </Pressable>
-
-                    <Pressable onPress={() => handleButtonPress('autoPreenche')}>
-                      <Ionicons name="sync-outline" size={40} color="white" ></Ionicons>
                     </Pressable>
 
                     <Pressable onPress={() => handleButtonPress('confirmaNumero')}>

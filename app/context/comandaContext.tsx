@@ -33,7 +33,7 @@ interface ComandaItem2 {
 
 interface Comanda {
   comanda_uuid: string
-  comanda_id: number
+  comanda_id?: number
   nome_comanda: string
   numero_comanda: string
   hora_abertura: string
