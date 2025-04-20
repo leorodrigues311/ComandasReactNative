@@ -112,6 +112,15 @@ interface ComandaContextType {
   usuarios: Usuario[] | null
   usuarioSelecionado: Usuario | null
   selectedItems: string[] | null
+  selectedOption: string | null
+  taxValue: string | ''
+  taxState: boolean
+  tipoTaxa: boolean
+  ip: string | ''
+  porta: string | ''
+  host: string | ''
+  database: string | ''
+
   adicionarItens: (novoItem: ComandaItem) => void
   adicionarComanda: (novaComanda: Comanda) => void
   removerComanda: (numeroComanda: string) => void
@@ -132,6 +141,14 @@ interface ComandaContextType {
   limparSelecao: () => void
   removerItens: (item: ComandaItem[]) => void
   finalizaComanda: (comanda_uuid: string) => void
+  setSelectedOption: React.Dispatch<React.SetStateAction<'local' | 'cloud'>>
+  setTaxValue: (valor:string) => void
+  setTaxState: (tipo:boolean) => void
+  setTipoTaxa: (tipo:boolean) => void
+  setIp: (ip:string) => void
+  setPorta: (porta:string) => void
+  setHost: (host:string) => void
+  setDatabase: (database:string) => void
 }
 // fim da declaração dos tipos
 
@@ -150,6 +167,15 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const [usuarioSelecionado, setusuarioSelecionado] = useState<Usuario | null>(null);
   const [itensCarrinho, setItensCarrinho] = useState<ItemCarrinho[]>([]);
   const [selectedItems, setSelectedItems] = useState<string[]>([])
+
+  const [selectedOption, setSelectedOption] = useState<'local' | 'cloud'>('local')
+  const [taxValue, setTaxValue] = useState('')
+  const [taxState, setTaxState] = useState(false)
+  const [tipoTaxa, setTipoTaxa] = useState(false)
+  const [ip, setIp] = useState('')
+  const [porta, setPorta] = useState('')
+  const [host, setHost] = useState('')
+  const [database, setDatabase] = useState('')
 
 // ============= Geradores =====================
 
@@ -428,6 +454,12 @@ const carregaUsuarios = async (/*cnpj: string*/) => {
 
 //============= Fim Usuarios =====================
 
+//============= Ajustes =====================
+
+
+
+//============= Fim Ajustes =====================
+
 
   // aqui precisamos passar as funções que queremos usar em outros documentos
   return (
@@ -441,6 +473,14 @@ const carregaUsuarios = async (/*cnpj: string*/) => {
         usuarios,
         usuarioSelecionado,
         selectedItems,
+        selectedOption,
+        taxValue,
+        taxState,
+        tipoTaxa,
+        ip,
+        porta,
+        host,
+        database,
         adicionarItensCarrinho,
         removerItemCarrinho,
         limpaCarrinho, 
@@ -460,7 +500,15 @@ const carregaUsuarios = async (/*cnpj: string*/) => {
         toggleLongPressItens,
         limparSelecao,
         removerItens,
-        finalizaComanda
+        finalizaComanda,
+        setSelectedOption,
+        setTaxValue,
+        setTaxState,
+        setTipoTaxa,
+        setIp,
+        setPorta,
+        setHost,
+        setDatabase,
       }}>
       {children}
     </ComandaContext.Provider>

@@ -1,31 +1,30 @@
-import { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Pressable, Switch, TextInput, Modal } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import * as Haptics from 'expo-haptics';
-import { Keyboard } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { useState } from 'react'
+import { StyleSheet, View, Text, TouchableOpacity, Pressable, Switch, TextInput, Modal } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import * as Haptics from 'expo-haptics'
+import { Keyboard } from 'react-native'
+import Ionicons from '@expo/vector-icons/Ionicons'
+import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 
-export default function TabTwoScreen() {
-  const [selectedOption, setSelectedOption] = useState<'local' | 'cloud'>('local');
-  const [expandedSection, setExpandedSection] = useState<'none' | 'conexao' | 'taxa'>('none');
-  const [taxValue, setTaxValue] = useState('');
-  const [isFixed, setIsFixed] = useState(false);
-  const [modalConexao, setModalConexao] = useState(false);
-  const [input1, setInput1] = useState('');
-  const [input2, setInput2] = useState('');
-  const [input3, setInput3] = useState('');
-  const [input4, setInput4] = useState('');
+export default function Ajustes() {
+
+  const {selectedOption, taxValue, taxState, tipoTaxa, ip, porta, host, database, setSelectedOption, setTaxValue, setTaxState, setTipoTaxa, setIp, setPorta, setHost, setDatabase } = useComanda()
+
+  const [modalConexao, setModalConexao] = useState(false)
+  const [configConexao, setConfigConexao] = useState(false)
+  const [expandedSection, setExpandedSection] = useState<'none' | 'conexao' | 'taxa'>('none')
 
   const toggleSection = (section: 'conexao' | 'taxa') => {
-    setExpandedSection((prev) => (prev === section ? 'none' : section));
-  };
+    setExpandedSection((prev) => (prev === section ? 'none' : section))
+  }
 
 
 
   const handleSwitch = (option: 'local' | 'cloud') => {
-    setSelectedOption(option);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid);
-  };
+    setSelectedOption(option)
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
+    option === 'local' ? setConfigConexao(false) : setConfigConexao(true)
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -54,8 +53,8 @@ export default function TabTwoScreen() {
               trackColor={{ false: '#4F4F4F', true: '#00CED1' }}
             />
           </View>
-          <TouchableOpacity style={styles.option} onPress = {() => setModalConexao(true)}>
-            <Text style={styles.optionText}>Configurar conexão</Text>
+          <TouchableOpacity disabled={configConexao} style={styles.option} onPress = {() => setModalConexao(true)}>
+            <Text style={[styles.optionText, configConexao && { color: '#808080' }]}>Configurar conexão</Text>
           </TouchableOpacity>
           <Modal
             visible={modalConexao}
@@ -75,36 +74,36 @@ export default function TabTwoScreen() {
                   placeholder="IP"
                   placeholderTextColor="#808080"
                   style={styles.modalInput}
-                  value={input1}
-                  onChangeText={setInput1}
+                  value={ip}
+                  onChangeText={setIp}
                 />
                 <TextInput
                   placeholder="Porta"
                   placeholderTextColor="#808080"
                   style={styles.modalInput}
-                  value={input2}
-                  onChangeText={setInput2}
+                  value={porta}
+                  onChangeText={setPorta}
                 />
                 <TextInput
                   placeholder="Host"
                   placeholderTextColor="#808080"
                   style={styles.modalInput}
-                  value={input3}
-                  onChangeText={setInput3}
+                  value={host}
+                  onChangeText={setHost}
                 />
                 <TextInput
-                  placeholder="Database"
+                  placeholder="database"
                   placeholderTextColor="#808080"
                   style={styles.modalInput}
-                  value={input4}
-                  onChangeText={setInput4}
+                  value={database}
+                  onChangeText={setDatabase}
                 />
 
                 <TouchableOpacity
                   style={styles.saveButton}
                   onPress={() => {
                     // Aqui você pode salvar os dados ou fazer algo com eles
-                    setModalConexao(false);
+                    setModalConexao(false)
                   }}
                 >
                   <Text style={styles.saveButtonText}>Salvar</Text>
@@ -123,30 +122,42 @@ export default function TabTwoScreen() {
       {expandedSection === 'taxa' && (
       <View style={styles.optionsContainer}>
         <View style={styles.option}>
-          <Text style={styles.optionText}>Valor da taxa ({isFixed ? 'R$' : '%'})</Text>
+          <Text style={styles.optionText}>Valor da taxa ({tipoTaxa ? 'R$' : '%'})</Text>
           <TextInput
             style={styles.input}
             keyboardType="numeric"
             returnKeyType="done" // mostra "Concluído" no iOS ou ícone de check/enter no Android
             onSubmitEditing={() => {
-              Keyboard.dismiss(); // Fecha o teclado ao pressionar
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light); // opcional
+              Keyboard.dismiss() // Fecha o teclado ao pressionar
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light) // opcional
             }}
             blurOnSubmit={true} // garante que o teclado feche após submit
             value={taxValue}
             onChangeText={setTaxValue}
-            placeholder={isFixed ? 'Ex: 5,00' : 'Ex: 10'}
+            placeholder={tipoTaxa ? 'Ex: 5,00' : 'Ex: 10'}
             placeholderTextColor="#808080"
           />
         </View>
         <View style={styles.option}>
           <Text style={styles.optionText}>Usar valor fixo (R$)</Text>
           <Switch
-            value={isFixed}
+            value={tipoTaxa}
             onValueChange={(value) => {
-              setIsFixed(value);
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              setTipoTaxa(value)
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
               setTaxValue('')
+            }}
+            thumbColor="#ffffff"
+            trackColor={{ false: '#4F4F4F', true: '#00CED1' }}
+          />
+        </View>
+        <View style={styles.option}>
+          <Text style={styles.optionText}>Taxa sempre marcada</Text>
+          <Switch
+            value={taxState}
+            onValueChange={(value) => {
+              setTaxState(value)
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
             }}
             thumbColor="#ffffff"
             trackColor={{ false: '#4F4F4F', true: '#00CED1' }}
@@ -155,7 +166,7 @@ export default function TabTwoScreen() {
       </View>
     )}
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -245,4 +256,4 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   
-});
+})
