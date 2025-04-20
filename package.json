@@ -1,6 +1,6 @@
 {
   "name": "comandas",
-  "main": "expo-router/entry",
+  "main": "index.js",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
@@ -11,7 +11,7 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint",
-    "server": "node index.js"
+    "server": "node main.js"
   },
   "jest": {
     "preset": "jest-expo"
@@ -44,6 +44,7 @@
     "react-dom": "18.3.1",
     "react-native": "0.76.2",
     "react-native-dialog": "^9.3.0",
+    "react-native-dotenv": "^3.4.11",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-masked-text": "^1.13.0",
     "react-native-popup-menu": "^0.16.1",

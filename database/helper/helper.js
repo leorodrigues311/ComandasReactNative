@@ -27,7 +27,7 @@ export default class Helper {
 
   async getComandas() {
     try{
-      return (await axios.get(`http://192.168.0.113:4000/comandas`, {
+      return (await axios.get(`http://10.0.0.101:4000/comandas`, {
       })).data
     } catch(e){
       console.log(e)
@@ -46,7 +46,7 @@ export default class Helper {
   async putComanda(comanda_uuid) {
     const data = {comanda_uuid}
     try{
-      const response = await axios.put('http://192.168.0.113:4000/comandas', data, {
+      const response = await axios.put('http://10.0.0.101:4000/comandas', data, {
         headers: { 'Content-Type': 'application/json' }
       })
       return response.data;
@@ -60,7 +60,7 @@ export default class Helper {
 
     const data = {nome_comanda, comanda_uuid, numero_comanda, hora_abertura, status_comanda, valor_total,  usuario_responsavel, usuario_responsavel_id }
     try {
-      const response = await axios.post('http://192.168.0.113:4000/comandas', data, {
+      const response = await axios.post('http://10.0.0.101:4000/comandas', data, {
         headers: { 'Content-Type': 'application/json' }
       })
   
@@ -79,7 +79,7 @@ export default class Helper {
 
   async getItensComanda() {
     try{
-      return (await axios.get(`http://192.168.0.113:4000/itens`, {
+      return (await axios.get(`http://10.0.0.101:4000/itens`, {
       })).data
     } catch(e){
       console.log(e)
@@ -91,7 +91,7 @@ export default class Helper {
 
     try {
       console.log('Enviando para API:', data)
-      const response = await axios.post('http://192.168.0.113:4000/itens', data, {
+      const response = await axios.post('http://10.0.0.101:4000/itens', data, {
         headers: { 'Content-Type': 'application/json' }
       })
   
@@ -110,7 +110,7 @@ export default class Helper {
         item_uuid: item_uuid,
       }
 
-      return (await axios.put('http://192.168.0.113:4000/itens', data, {
+      return (await axios.put('http://10.0.0.101:4000/itens', data, {
       })).data
     } catch(e){
       console.log(e)
@@ -124,7 +124,7 @@ export default class Helper {
         item_uuid,
       };
   
-      return (await axios.delete('http://192.168.0.113:4000/itens', {
+      return (await axios.delete('http://10.0.0.101:4000/itens', {
         data,
       })).data;
     } catch (e) {
@@ -138,7 +138,7 @@ export default class Helper {
 
 async getProdutos() {
     try{
-      return (await axios.get(`http://192.168.0.113:4000/produtos`, {
+      return (await axios.get(`http://10.0.0.101:4000/produtos`, {
       })).data
     } catch(e){
       console.log(e)
@@ -184,7 +184,7 @@ async getProdutos() {
 
 async getUsuarios(cnpj) {
   try{
-    return (await axios.get(`http://192.168.0.113:4000/usuarios?cnpj=${cnpj}`, {
+    return (await axios.get(`http://10.0.0.101:4000/usuarios?cnpj=${cnpj}`, {
     })).data
   } catch(e){
     console.log(e)

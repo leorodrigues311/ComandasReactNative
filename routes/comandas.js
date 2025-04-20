@@ -1,7 +1,7 @@
 import Helper from '../database/helper/helper.js'
 import express from 'express'
 import {client, pool} from '../database/db.js'
-import { io } from '../index.js'
+import { io } from '../main.js'
 const helper = new Helper();
 const router = express.Router();
 router.use(express.json());
