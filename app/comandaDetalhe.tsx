@@ -13,10 +13,8 @@ export default function ComandaDetalhe () {
 
 
   const router = useRouter()
-  const { itensComanda, selectedItems, comandaSelecionada, carregaItens, formataValor, toggleLongPressItens, limparSelecao} = useComanda()
-
+  const { itensComanda, selectedItems, comandaSelecionada, taxValue, taxState, carregaItens, formataValor, toggleLongPressItens, limparSelecao, setTaxState} = useComanda()
   const [comandaFinalizada, setComandaFinalizada] = useState(false)
-  const [taxaGarcom, setTaxaGarcom] = useState(false)
 
   useEffect(() => {
     comandaSelecionada;
@@ -118,10 +116,10 @@ export default function ComandaDetalhe () {
         <View style={styles.viewBtnPagar}>
           <Pressable 
             style={styles.btnTaxaServico} 
-            onPress={() => setTaxaGarcom(!taxaGarcom)}
+            onPress={() => setTaxState(!taxState)}
           >
-            <View style={[styles.checkBtnTaxaServico, { backgroundColor: taxaGarcom ? '#04c78a' : 'transparent' }]}  />
-            <Text style={{ color: '#fff' }}>Taxa de serviço - R$ 10,50</Text>
+            <View style={[styles.checkBtnTaxaServico, { backgroundColor: taxState ? '#04c78a' : 'transparent' }]}  />
+            <Text style={{ color: '#fff' }}>Taxa de serviço - R$ {taxValue}</Text>
           </Pressable>
 
           <Pressable 

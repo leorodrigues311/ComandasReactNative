@@ -126,17 +126,27 @@ export default function Ajustes() {
           <TextInput
             style={styles.input}
             keyboardType="numeric"
-            returnKeyType="done" // mostra "Concluído" no iOS ou ícone de check/enter no Android
+            returnKeyType="done"
             onSubmitEditing={() => {
-              Keyboard.dismiss() // Fecha o teclado ao pressionar
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light) // opcional
+              Keyboard.dismiss();
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
-            blurOnSubmit={true} // garante que o teclado feche após submit
+            blurOnSubmit={true}
             value={taxValue}
-            onChangeText={setTaxValue}
+            onChangeText={(text) => {
+              const onlyNumbers = text.replace(/\D/g, '');
+              const number = parseFloat(onlyNumbers) / 100;
+              const formatted = number.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              });
+              setTaxValue(formatted);
+            }}
+            maxLength={6} // limite ajustado por segurança
             placeholder={tipoTaxa ? 'Ex: 5,00' : 'Ex: 10'}
             placeholderTextColor="#808080"
           />
+
         </View>
         <View style={styles.option}>
           <Text style={styles.optionText}>Usar valor fixo (R$)</Text>
