@@ -114,6 +114,8 @@ export default function Login() {
           style={{
             transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]  // Diminui o tamanho do switch
           }}
+          thumbColor="#ffffff"
+          trackColor={{ false: '#4F4F4F', true: '#00CED1' }}
         />
         <Text style={styles.textoMantenhaConectado}>Mantenha-me conectado</Text>
       </View>
