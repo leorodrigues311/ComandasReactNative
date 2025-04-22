@@ -1,7 +1,6 @@
-// src/utils/AppConfig.ts
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const CONFIG_KEY = 'APP_CONFIG'
+const CONFIG_KEY = 'comandaConfig'
 
 export type AppConfig = {
   BASE_URL: string
@@ -16,7 +15,13 @@ export const saveConfig = async (config: AppConfig) => {
   await AsyncStorage.setItem(CONFIG_KEY, JSON.stringify(config))
 }
 
-export const loadConfig = async (): Promise<AppConfig | null> => {
-  const json = await AsyncStorage.getItem(CONFIG_KEY)
-  return json ? JSON.parse(json) : null
+export async function loadConfig() {
+  try {
+    const jsonValue = await AsyncStorage.getItem(CONFIG_KEY)
+    console.log("Raw config lido:", jsonValue)
+    return jsonValue != null ? JSON.parse(jsonValue) : null
+  } catch (e) {
+    console.error("Erro ao carregar do AsyncStorage:", e)
+    return null
+  }
 }

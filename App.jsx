@@ -6,19 +6,26 @@ import { ComandaProvider } from '@/app/context/comandaContext'
 
 export default function App() {
   const [loaded, setLoaded] = useState(false)
+  console.log("Entrou no app")
 
   useEffect(() => {
     async function init() {
-      const config = await loadConfig()
-      if (config) {
-        globalThis.appConfig = config
+      try {
+        const config = await loadConfig()
+        if (config) {
+          globalThis.appConfig = config
+        }
+        console.log("global", globalThis.appConfig)
+      } catch (error) {
+        console.error("Erro ao carregar config:", error)
+      } finally {
+        setLoaded(true)
       }
-      console.log("global", globalThis.appConfig)
-      setLoaded(true)
     }
-
+  
     init()
   }, [])
+  
 
   if (!loaded) return <Text>Carregando config...</Text>
 

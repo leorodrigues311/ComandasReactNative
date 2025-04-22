@@ -1,5 +1,6 @@
 import Constants from "expo-constants";
 import axios from "axios";
+import { loadConfig } from '../../src/utils/appConfig'
 
 interface Comanda {
   nome_comanda: string;
@@ -22,12 +23,15 @@ interface ItemComanda {
   hora_inclusao: string;
   item_nome: string;
 }
-
+const config = loadConfig()
 export default class Helper {
   BASE_URL: string;
 
+ 
+
   constructor() {
-    this.BASE_URL = Constants.expoConfig?.extra?.BASE_URL || "";
+    this.BASE_URL = config.BASE_URL
+    //`http://${globalThis.appConfig?.BASE_URL || "192.168.0.113:4000"}`;
   }
 
   currentDate(seconds = 0): Date {

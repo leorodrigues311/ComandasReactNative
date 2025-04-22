@@ -157,8 +157,6 @@ interface ComandaContextType {
 
 // aqui instanciamos o context (função que permite usar as funções em outros docs)
 const ComandaContext = createContext<ComandaContextType | undefined>(undefined)
-const STORAGE_KEY = '@comandaConfig'
-
 
 export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
@@ -472,12 +470,14 @@ const carregaUsuarios = async (cnpj: string) => {
 //============= Fim Ajustes =====================
 
 
+const STORAGE_KEY = 'comandaConfig'
+
 
 
 useEffect(() => {
   const loadSettings = async () => {
     try {
-      const json = await AsyncStorage.getItem('appSettings');
+      const json = await AsyncStorage.getItem(STORAGE_KEY);
       if (json) {
         const settings = JSON.parse(json);
         setSelectedOption(settings.selectedOption || 'local')
