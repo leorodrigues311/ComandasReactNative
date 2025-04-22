@@ -5,6 +5,7 @@ import * as Haptics from 'expo-haptics'
 import { Keyboard } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Ajustes() {
 
@@ -71,41 +72,51 @@ export default function Ajustes() {
                 </TouchableOpacity>
 
                 <TextInput
-                  placeholder="IP"
+                  placeholder="IP (Ex: 192.168.0.113:4000)"
                   placeholderTextColor="#808080"
                   style={styles.modalInput}
                   value={ip}
                   onChangeText={setIp}
                 />
                 <TextInput
-                  placeholder="Porta"
+                  placeholder="Porta (Ex: 5432)"
                   placeholderTextColor="#808080"
                   style={styles.modalInput}
                   value={porta}
                   onChangeText={setPorta}
                 />
                 <TextInput
-                  placeholder="Host"
+                  placeholder="Host (Ex: localhost)"
                   placeholderTextColor="#808080"
                   style={styles.modalInput}
                   value={host}
                   onChangeText={setHost}
                 />
                 <TextInput
-                  placeholder="database"
+                  placeholder="Database (Ex: inova)"
                   placeholderTextColor="#808080"
                   style={styles.modalInput}
                   value={database}
                   onChangeText={setDatabase}
                 />
 
-                <TouchableOpacity
-                  style={styles.saveButton}
-                  onPress={() => {
-                    // Aqui você pode salvar os dados ou fazer algo com eles
-                    setModalConexao(false)
-                  }}
-                >
+                  <TouchableOpacity
+                    style={styles.saveButton}
+                    onPress={async () => {
+                      try {
+                        const settings = {
+                          ip,
+                          porta,
+                          host,
+                          database,
+                        };
+                        await AsyncStorage.setItem('appSettings', JSON.stringify(settings));
+                        setModalConexao(false);
+                      } catch (e) {
+                        console.error('Erro ao salvar configurações:', e);
+                      }
+                    }}
+                  >
                   <Text style={styles.saveButtonText}>Salvar</Text>
                 </TouchableOpacity>
               </View>

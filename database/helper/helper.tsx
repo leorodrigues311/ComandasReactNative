@@ -39,6 +39,7 @@ export default class Helper {
 
   // ** comandas **
   async getComandas() {
+    console.log("baseURL", this.BASE_URL)
     try {
       return (await axios.get(`${this.BASE_URL}/comandas`)).data;
     } catch (e) {

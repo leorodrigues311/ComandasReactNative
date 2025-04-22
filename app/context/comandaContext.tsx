@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import uuid from 'react-native-uuid';
 import Helper from '@/database/helper/helper'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const helper = new Helper()
 
 // aqui delcaramos os tipos de cada parâmetro
@@ -156,6 +157,7 @@ interface ComandaContextType {
 
 // aqui instanciamos o context (função que permite usar as funções em outros docs)
 const ComandaContext = createContext<ComandaContextType | undefined>(undefined)
+const STORAGE_KEY = '@comandaConfig'
 
 
 export const ComandaProvider = ({ children }: { children: ReactNode }) => {
@@ -398,6 +400,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       console.error("Erro ao buscar dados:", error);
       setMensagemErro(true)
     }
+    console.log(ip, porta, host, database)
   };
 
   const finalizaComanda = async (comanda_uuid: string) => {
@@ -469,15 +472,58 @@ const carregaUsuarios = async (cnpj: string) => {
 //============= Fim Ajustes =====================
 
 
+
+
+useEffect(() => {
+  const loadSettings = async () => {
+    try {
+      const json = await AsyncStorage.getItem('appSettings');
+      if (json) {
+        const settings = JSON.parse(json);
+        setSelectedOption(settings.selectedOption || 'local')
+        setTaxValue(settings.taxValue || '')
+        setTaxState(settings.taxState || false)
+        setTipoTaxa(settings.tipoTaxa || false)
+        setIp(settings.ip || '')
+        setPorta(settings.porta || '')
+        setHost(settings.host || '')
+        setDatabase(settings.database || '')
+      }
+    } catch (e) {
+      console.error('Erro ao carregar configurações:', e);
+    }
+  };
+
+  loadSettings();
+}, []);
+
+useEffect(() => {
+  const saveConfig = async () => {
+    const config = {
+      selectedOption,
+      taxValue,
+      taxState,
+      tipoTaxa,
+      ip,
+      porta,
+      host,
+      database
+    }
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(config))
+  }
+  saveConfig()
+}, [selectedOption, taxValue, taxState, tipoTaxa, ip, porta, host, database])
+
+
   // aqui precisamos passar as funções que queremos usar em outros documentos
   return (
     <ComandaContext.Provider
       value={{
         itensComanda,
         comandas,
+        comandaSelecionada,
         itensCarrinho,
         produtos,
-        comandaSelecionada,
         usuarios,
         usuarioSelecionado,
         selectedItems,
@@ -490,20 +536,21 @@ const carregaUsuarios = async (cnpj: string) => {
         host,
         database,
         mensagemErro,
-        adicionarItensCarrinho,
-        removerItemCarrinho,
-        limpaCarrinho, 
+
         adicionarItens,
         adicionarComanda,
         removerComanda,
         carregaComandas,
         carregaItens,
         carregaProdutos,
+        limpaCarrinho,
+        adicionarItensCarrinho,
+        removerItemCarrinho,
         setComandaSelecionada,
+        setusuarioSelecionado,
         gerarIdComanda,
         gerarData,
         carregaUsuarios,
-        setusuarioSelecionado,
         formataValor,
         mudaQuantidade,
         toggleLongPressItens,
@@ -517,11 +564,12 @@ const carregaUsuarios = async (cnpj: string) => {
         setIp,
         setPorta,
         setHost,
-        setDatabase,
-      }}>
+        setDatabase
+      }}
+    >
       {children}
     </ComandaContext.Provider>
-  )
+  );
 }
 
 export const useComanda = () => {
