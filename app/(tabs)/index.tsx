@@ -10,7 +10,7 @@ import dayjs from 'dayjs'
 const PAGE_SIZE = 30;
 
 export default function HomeScreen() {
-  const { comandas, carregaComandas, setComandaSelecionada } = useComanda();
+  const { comandas, mensagemErro, carregaComandas, setComandaSelecionada } = useComanda();
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
   const [visibleComandas, setVisibleComandas] = useState<any[]>([]);
@@ -18,7 +18,8 @@ export default function HomeScreen() {
 
   useEffect(() => {
     carregaComandas();
-  }, []);
+    mensagemErro
+  }, [mensagemErro]);
 
   useEffect(() => {
     if (comandas.length > 0) {
@@ -87,7 +88,7 @@ export default function HomeScreen() {
         onEndReachedThreshold={0.2}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>Nenhuma comanda aberta</Text>
+            <Text style={styles.emptyText}>{mensagemErro ? 'Erro ao buscar comandas, verifique a conexão com o servidor!' : 'Nenhuma comanda aberta'}</Text>
           </View>
         }
       />
@@ -104,10 +105,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop:30
+    marginTop:15
   },
   emptyText: {
-    fontSize: 18,
+    fontSize: 20,
     color: 'gray',
+    margin:15
   },
 });

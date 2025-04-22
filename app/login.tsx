@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Modal, FlatList, 
-  ScrollView, Animated, Dimensions, Switch, ActivityIndicator  } from 'react-native';
+  ScrollView, Animated, Dimensions, Switch, ActivityIndicator,  
+  Pressable, SafeAreaView} from 'react-native';
 import { useRouter } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { TextInputMask } from "react-native-masked-text";
@@ -91,7 +92,7 @@ export default function Login() {
   }
 
   return (
-    <View style={styles.viewPrincipal}>
+    <SafeAreaView style={styles.viewPrincipal}>
       <View style={styles.logoInova}>
         <Image 
           source={require('../assets/images/inova_comandas.png')}
@@ -202,7 +203,7 @@ export default function Login() {
           </Animated.View>
         </View>
       </Modal>
-    </View>
+    </SafeAreaView>
   )
 }
 
@@ -214,8 +215,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#1C1C1C',
     padding: 20,
   },
+  btnConfig:{
+    right:0,
+    top:0,
+    margin:30,
+    marginTop:50,
+    alignContent:'flex-start',
+    position:'absolute'
+  },
   inputCnpj: {
-    width: '100%',
+    width: '90%',
     height: 50,
     backgroundColor: '#696868',
     borderRadius: 50,
@@ -235,7 +244,7 @@ const styles = StyleSheet.create({
     fontSize:17
   },
   button: {
-    width: '100%',
+    width: '90%',
     height: 50,
     backgroundColor: '#007bff',
     justifyContent: 'center',
@@ -257,11 +266,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   logoInova: {
-    width: '55%',
-    height: '55%',
+    width: '50%',
+    height: '50%',
     position: 'absolute',
     top: '5%',
-    left: '30%',
+    left: '50%',
+    transform: [{ translateX: -0.5 * width * 0.5 }], // width * 0.5 * 50%
     resizeMode: 'contain',
   },
   imagemLogo: {
@@ -382,7 +392,7 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     justifyContent:'space-between',
     alignSelf:'flex-start',
-    marginLeft:10,
+    marginLeft:30,
     marginBottom:25
   },
 });

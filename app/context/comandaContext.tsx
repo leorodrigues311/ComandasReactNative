@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import uuid from 'react-native-uuid';
-import Helper from '@/database/helper/helper.js'
+import Helper from '@/database/helper/helper'
 const helper = new Helper()
 
 // aqui delcaramos os tipos de cada parâmetro
@@ -120,6 +120,7 @@ interface ComandaContextType {
   porta: string | ''
   host: string | ''
   database: string | ''
+  mensagemErro: boolean
 
   adicionarItens: (novoItem: ComandaItem) => void
   adicionarComanda: (novaComanda: Comanda) => void
@@ -149,6 +150,7 @@ interface ComandaContextType {
   setPorta: (porta:string) => void
   setHost: (host:string) => void
   setDatabase: (database:string) => void
+  
 }
 // fim da declaração dos tipos
 
@@ -167,6 +169,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const [usuarioSelecionado, setusuarioSelecionado] = useState<Usuario | null>(null);
   const [itensCarrinho, setItensCarrinho] = useState<ItemCarrinho[]>([]);
   const [selectedItems, setSelectedItems] = useState<string[]>([])
+  const [mensagemErro, setMensagemErro] = useState(false)
 
   const [selectedOption, setSelectedOption] = useState<'local' | 'cloud'>('local')
   const [taxValue, setTaxValue] = useState('')
@@ -266,30 +269,31 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   // essa função adiciona itens à comanda (ela adiciona primeiro no banco, depois pega a resposta do banco e adiciona no array)
   const adicionarItens = async (novoItem: ComandaItem) => {
     try {
-      const response = await helper.postItemComanda(
-        novoItem.item_uuid,
-        novoItem.comanda_uuid,
-        novoItem.comanda_id,
-        novoItem.quantidade,
-        novoItem.valor_unit,
-        (novoItem.valor_unit * novoItem.quantidade),
-        novoItem.hora_inclusao,
-        novoItem.item_nome
-      )
+      const response = await helper.postItemComanda({
+        item_uuid: String(novoItem.item_uuid),
+        comanda_uuid: novoItem.comanda_uuid,
+        comanda_id: novoItem.comanda_id,
+        quantidade: novoItem.quantidade,
+        valor_unit: novoItem.valor_unit,
+        valor_total: novoItem.valor_unit * novoItem.quantidade,
+        hora_inclusao: String(novoItem.hora_inclusao),
+        item_nome: novoItem.item_nome,
+      });
+  
       if (response) {
-        setItensComanda(prevItens => [...prevItens, novoItem])
+        setItensComanda(prevItens => [...prevItens, novoItem]);
       }
     } catch (error) {
-      console.error('Erro ao adicionar itens:', error)
+      console.error('Erro ao adicionar itens:', error);
     }
-  }
+  };
 
   const removerItens = async (itens: ComandaItem[]) => {
     try {
       for (const item of itens) {
         const response = await helper.deleteItemComanda(
           item.comanda_uuid,
-          item.item_uuid
+          String(item.item_uuid)
         );
   
         if (response) {
@@ -346,23 +350,25 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   // essa função adiciona uma comanda nova (ela adiciona primeiro no banco, depois usa a resposta pra adicionar ao array local)
   const adicionarComanda = async (novaComanda: Comanda) => {
     try {
-      const response = await helper.postComanda(
-        novaComanda.nome_comanda,
-        novaComanda.comanda_uuid,
-        novaComanda.numero_comanda,
-        novaComanda.hora_abertura,
-        novaComanda.status_comanda,
-        novaComanda.valor_total,
-        novaComanda.usuario_responsavel,
-        novaComanda.usuario_responsavel_id
-      )
+      const response = await helper.postComanda({
+        nome_comanda: novaComanda.nome_comanda,
+        comanda_uuid: novaComanda.comanda_uuid,
+        numero_comanda: Number(novaComanda.numero_comanda),
+        hora_abertura: novaComanda.hora_abertura,
+        status_comanda: novaComanda.status_comanda,
+        valor_total: Number(novaComanda.valor_total),
+        usuario_responsavel: String(novaComanda.usuario_responsavel),
+        usuario_responsavel_id: novaComanda.usuario_responsavel_id,
+      });
+  
       if (response) {
-        setComandas(prevComandas => [...prevComandas, response])
+        setComandas(prevComandas => [...prevComandas, response]);
       }
     } catch (error) {
-      console.error('Erro ao adicionar comanda:', error)
+      console.error('Erro ao adicionar comanda:', error);
     }
-  }
+  };
+  
   
   // aqui removemos uma comanda do array local (modificar)
   const removerComanda = (numero_comanda: string) => {
@@ -386,9 +392,11 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       }));
   
       setComandas(novasComandas);
+      setMensagemErro(true)
   
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
+      setMensagemErro(true)
     }
   };
 
@@ -433,9 +441,9 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
 //============= Usuarios =====================
 
-const carregaUsuarios = async (/*cnpj: string*/) => {
+const carregaUsuarios = async (cnpj: string) => {
   try {
-    const response = await helper.getUsuarios(/*cnpj*/)
+    const response = await helper.getUsuarios(cnpj)
     const data: Usuario2[] = response
     
     const usuarios =  data.map(item => ({
@@ -481,6 +489,7 @@ const carregaUsuarios = async (/*cnpj: string*/) => {
         porta,
         host,
         database,
+        mensagemErro,
         adicionarItensCarrinho,
         removerItemCarrinho,
         limpaCarrinho, 
