@@ -22,13 +22,9 @@ interface ItemComanda {
   hora_inclusao: string;
   item_nome: string;
 }
-const config = loadConfig()
-console.log('config', config)
 
 export default class Helper {
   BASE_URL: string;
-
- 
 
   constructor() {
     this.BASE_URL = `http://${globalThis.appConfig?.BASE_URL }`;
