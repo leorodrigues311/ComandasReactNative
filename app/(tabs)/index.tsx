@@ -55,7 +55,7 @@ export default function HomeScreen() {
           nome_comanda: item.nome_comanda,
           numero_comanda: item.numero_comanda,
           hora_abertura: item.hora_abertura,
-          valor_total: 0,
+          valor_total: item.valor_total,
           status_comanda: item.status_comanda,
           usuario_responsavel_id: item.usuario_responsavel_id,
         });
@@ -65,7 +65,7 @@ export default function HomeScreen() {
     <Comanda
       numero_comanda={item.numero_comanda}
       nome_comanda={item.nome_comanda}
-      valor_total={0}
+      valor_total={item.valor_total}
       hora_abertura={
         dayjs(item.hora_abertura).isSame(dayjs(), 'day')
           ? dayjs(item.hora_abertura).format('HH:mm')

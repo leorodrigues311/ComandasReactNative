@@ -49,6 +49,7 @@ interface Comanda2 {
   comandauuid: string
   comandanumero: number
   comandadatacriacao: string
+  comandavalortotal: number
   comandastatus: string
   comandaaberturadata: string
   comandaaberturafuncionarioid: number
@@ -219,10 +220,11 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const formataValor: (valor_total: number) => string = (valor_total) => {
-    return valor_total.toLocaleString('pt-BR', {
+    return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL',
-    });
+      minimumFractionDigits: 2,
+    }).format(valor_total);
   };
 // ============= Fim Geradores =====================
 
@@ -385,6 +387,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         comanda_uuid: String(item.comandauuid || ""),
         comanda_id: item.comandaid,
         nome_comanda: item.comandadetalhe || "",
+        valor_total: item.comandavalortotal || 0,
         numero_comanda: String(item.comandanumero || ""),
         hora_abertura: String(item.comandaaberturadata || ""),
         status_comanda: String(item.comandastatus || ""),
