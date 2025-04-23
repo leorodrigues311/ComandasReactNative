@@ -26,17 +26,13 @@ const config = loadConfig()
 console.log('config', config)
 
 export default class Helper {
-  BASE_URL: string = '';
+  BASE_URL: string;
+
+ 
 
   constructor() {
-    // Vazio, inicialização separada
-  }
-
-  async init() {
-    const config = await loadConfig();
-    this.BASE_URL = `http://${config?.ip || "192.168.0.113:4000"}`;
-    console.log("Config carregado no Helper:", config);
-    return this;
+    this.BASE_URL = `http://${globalThis.appConfig?.BASE_URL }`;
+    console.log("BASE_URL definida no Helper:", this.BASE_URL);
   }
 
   currentDate(seconds = 0): Date {
