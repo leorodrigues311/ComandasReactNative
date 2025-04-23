@@ -398,7 +398,6 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       console.error("Erro ao buscar dados:", error);
       setMensagemErro(true)
     }
-    console.log(ip, porta, host, database)
   };
 
   const finalizaComanda = async (comanda_uuid: string) => {

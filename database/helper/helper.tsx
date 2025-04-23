@@ -27,10 +27,9 @@ export default class Helper {
   BASE_URL: string;
 
   constructor() {
-    this.BASE_URL = `http://${globalThis.appConfig?.BASE_URL }`;
+    this.BASE_URL = `http://${globalThis.appConfig?.BASE_URL || "192.168.0.113:4000"}`;
     console.log("BASE_URL definida no Helper:", this.BASE_URL);
   }
-
   currentDate(seconds = 0): Date {
     let currentDate = new Date();
     return new Date(
@@ -40,7 +39,6 @@ export default class Helper {
 
   // ** comandas **
   async getComandas() {
-    console.log("baseURL", this.BASE_URL)
     try {
       return (await axios.get(`${this.BASE_URL}/comandas`)).data;
     } catch (e) {

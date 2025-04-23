@@ -14,7 +14,6 @@ export function App() {
           const config = await loadConfig()
           if (config) {
             globalThis.appConfig = config
-            console.log('entrou no if do loadConfig')
           }
         } catch (error) {
           console.error("Erro ao carregar config:", error)

@@ -19,6 +19,9 @@ export default function ComandaDetalhe () {
   useEffect(() => {
     comandaSelecionada;
     carregaItens();
+    setTimeout(() => {
+  }, 5000);
+
   }, [itensComanda, comandaSelecionada])
 
   const handleLongPress = (item_uuid: string) => {

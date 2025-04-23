@@ -77,13 +77,16 @@ export default function Ajustes() {
                   style={styles.modalInput}
                   value={ip}
                   onChangeText={setIp}
+                  autoCapitalize="none"
                 />
+
                 <TextInput
                   placeholder="Porta (Ex: 5432)"
                   placeholderTextColor="#808080"
                   style={styles.modalInput}
                   value={porta}
                   onChangeText={setPorta}
+                  autoCapitalize="none"
                 />
                 <TextInput
                   placeholder="Host (Ex: localhost)"
@@ -91,6 +94,7 @@ export default function Ajustes() {
                   style={styles.modalInput}
                   value={host}
                   onChangeText={setHost}
+                  autoCapitalize="none"
                 />
                 <TextInput
                   placeholder="Database (Ex: inova)"
@@ -98,6 +102,7 @@ export default function Ajustes() {
                   style={styles.modalInput}
                   value={database}
                   onChangeText={setDatabase}
+                  autoCapitalize="none"
                 />
 
                   <TouchableOpacity
