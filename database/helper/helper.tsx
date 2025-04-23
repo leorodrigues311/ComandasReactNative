@@ -1,7 +1,6 @@
 import Constants from "expo-constants";
 import axios from "axios";
-import { loadConfig } from '../../src/utils/appConfig'
-
+import { loadConfig } from '../../src/utils/AppConfig'
 interface Comanda {
   nome_comanda: string;
   comanda_uuid: string;
@@ -24,14 +23,20 @@ interface ItemComanda {
   item_nome: string;
 }
 const config = loadConfig()
-export default class Helper {
-  BASE_URL: string;
+console.log('config', config)
 
- 
+export default class Helper {
+  BASE_URL: string = '';
 
   constructor() {
-    this.BASE_URL = config.BASE_URL
-    //`http://${globalThis.appConfig?.BASE_URL || "192.168.0.113:4000"}`;
+    // Vazio, inicialização separada
+  }
+
+  async init() {
+    const config = await loadConfig();
+    this.BASE_URL = `http://${config?.ip || "192.168.0.113:4000"}`;
+    console.log("Config carregado no Helper:", config);
+    return this;
   }
 
   currentDate(seconds = 0): Date {

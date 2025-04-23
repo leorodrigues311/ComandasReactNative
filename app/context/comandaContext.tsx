@@ -2,7 +2,7 @@ import React, { createContext, useState, useContext, useEffect, ReactNode } from
 import uuid from 'react-native-uuid';
 import Helper from '@/database/helper/helper'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const helper = new Helper()
+const helper = await new Helper().init();
 
 // aqui delcaramos os tipos de cada parâmetro
 interface ComandaItem {
