@@ -49,7 +49,7 @@ interface Comanda2 {
   comandauuid: string
   comandanumero: number
   comandadatacriacao: string
-  comandavalortotal: number
+  valor_total_comanda: number
   comandastatus: string
   comandaaberturadata: string
   comandaaberturafuncionarioid: number
@@ -398,7 +398,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         comanda_uuid: String(item.comandauuid || ""),
         comanda_id: item.comandaid,
         nome_comanda: item.comandadetalhe || "",
-        valor_total: item.comandavalortotal || 0,
+        valor_total: item.valor_total_comanda || 0,
         numero_comanda: String(item.comandanumero || ""),
         hora_abertura: String(item.comandaaberturadata || ""),
         status_comanda: String(item.comandastatus || ""),
@@ -406,7 +406,6 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       }));
   
       setComandas(novasComandas);
-      setMensagemErro(true)
   
     } catch (error) {
       console.error("Erro ao buscar dados:", error);

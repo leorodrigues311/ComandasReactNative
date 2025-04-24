@@ -16,13 +16,14 @@ export default function produtoAdicionarComanda() {
   const {produtos, comandaSelecionada, itensCarrinho, carregaProdutos, adicionarItensCarrinho, setComandaSelecionada,gerarData } = useComanda()
 
   useEffect(() => {
+    console.log("produtos", produtos)
     carregaProdutos();
-    console.log('teste')
   }, [])
   
   const [itemQtd, setItemQtd] = useState<string>('')
   const [tituloItem, setTituloItem] = useState<string>('')
   const [codItem, setCodItem] = useState<number>(0)
+  const [valorItem, setValorItem] = useState<number>(0)
   const [dialogQuantidadeProduto, setDialogQuantidadeProdutoVisible] = useState(false)
 
   const handleCancel = () => {
@@ -32,10 +33,11 @@ export default function produtoAdicionarComanda() {
   const handleItemSelect = (id_produto: number, produto_nome: string, produto_valor: number,  buttonType?: string) => {
 
     if (buttonType === "selecionarQuantidade") {
-      setItemQtd(''); // inicia o input vazio
-      setDialogQuantidadeProdutoVisible(true)
-      setTituloItem(produto_nome)
-      setCodItem(id_produto)
+      setItemQtd('');
+      setDialogQuantidadeProdutoVisible(true);
+      setTituloItem(produto_nome);
+      setCodItem(id_produto);
+      setValorItem(produto_valor);
 
     } else if (buttonType === "AdicionarAoCarrinho") {
       adicionarItensCarrinho({
@@ -66,7 +68,7 @@ export default function produtoAdicionarComanda() {
             keyboardType="numeric"
           />
           <Dialog.Button onPress={handleCancel} label="Cancelar" />
-          <Dialog.Button onPress={() => handleItemSelect(codItem, tituloItem, 0, 'AdicionarAoCarrinho')}
+          <Dialog.Button onPress={() => handleItemSelect(codItem, tituloItem, valorItem, 'AdicionarAoCarrinho')}
             label="Adicionar" />
         </Dialog.Container>
 

@@ -28,7 +28,6 @@ export default class Helper {
 
   constructor() {
     this.BASE_URL = `http://${globalThis.appConfig?.BASE_URL || "192.168.0.113:4000"}`;
-    console.log("BASE_URL definida no Helper:", this.BASE_URL);
   }
   currentDate(seconds = 0): Date {
     let currentDate = new Date();
@@ -93,7 +92,6 @@ export default class Helper {
 
   async postItemComanda(data: ItemComanda) {
     try {
-      console.log('Enviando para API:', data);
       const response = await axios.post(`${this.BASE_URL}/itens`, data, {
         headers: { 'Content-Type': 'application/json' }
       });

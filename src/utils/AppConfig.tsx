@@ -18,7 +18,6 @@ export const saveConfig = async (config: AppConfig) => {
 export async function loadConfig() {
   try {
     const jsonValue = await AsyncStorage.getItem(CONFIG_KEY)
-    console.log("Raw config lido:", jsonValue)
     return jsonValue != null ? JSON.parse(jsonValue) : null
   } catch (e) {
     console.error("Erro ao carregar do AsyncStorage:", e)
