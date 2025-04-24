@@ -105,6 +105,11 @@ interface Usuario2 {
   funcionariosenha: string
 }
 
+interface Pagamento {
+  formapagamentoid: number
+  formapagamentodescricao: string
+}
+
 interface ComandaContextType {
   itensComanda: ComandaItem[]
   comandas: Comanda[]
@@ -112,6 +117,7 @@ interface ComandaContextType {
   itensCarrinho: ItemCarrinho[]
   produtos: Produto[]
   usuarios: Usuario[] | null
+  formasPagamento: Pagamento[]
   usuarioSelecionado: Usuario | null
   selectedItems: string[] | null
   selectedOption: string | null
@@ -130,6 +136,7 @@ interface ComandaContextType {
   carregaComandas: () => void
   carregaItens: () => void
   carregaProdutos: () => void
+  carregaFormaPagamento: () => void
   limpaCarrinho: () => void
   adicionarItensCarrinho: (novoItemCarrinho: Omit<ItemCarrinho, 'id'>) => void
   removerItemCarrinho: (id:string) => void
@@ -165,6 +172,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const [comandas, setComandas] = useState<Comanda[]>([])
   const [produtos, setProdutos] = useState<Produto[]>([])
   const [usuarios, setUsuarios] = useState<Usuario[]>([])
+  const [formasPagamento, setFormasPagamento] = useState<Pagamento[]>([])
   const [itensComanda, setItensComanda] = useState<ComandaItem[]>([])
   const [comandaSelecionada, setComandaSelecionada] = useState<Comanda | null>(null);
   const [usuarioSelecionado, setusuarioSelecionado] = useState<Usuario | null>(null);
@@ -471,6 +479,27 @@ const carregaUsuarios = async (cnpj: string) => {
 
 //============= Fim Ajustes =====================
 
+//============= Pagamento =====================
+
+const carregaFormaPagamento = async () => {
+  try{
+    const response = await helper.getPagamentos()
+    const data: Pagamento[] = response
+
+    const pagamentos =  data.map(item => ({   
+      formapagamentoid: item.formapagamentoid || 0,
+      formapagamentodescricao: item.formapagamentodescricao
+     }))
+
+    setFormasPagamento(pagamentos)
+
+  } catch{
+
+  }
+}
+
+//============= Fim Pagamento =====================
+
 
 const STORAGE_KEY = 'comandaConfig'
 
@@ -538,6 +567,7 @@ useEffect(() => {
         host,
         database,
         mensagemErro,
+        formasPagamento,
 
         adicionarItens,
         adicionarComanda,
@@ -566,7 +596,8 @@ useEffect(() => {
         setIp,
         setPorta,
         setHost,
-        setDatabase
+        setDatabase,
+        carregaFormaPagamento
       }}
     >
       {children}

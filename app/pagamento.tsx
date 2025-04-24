@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -15,9 +15,14 @@ import * as Haptics from 'expo-haptics';
 import { useComanda } from '@/app/context/comandaContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+interface Pagamento {
+  formapagamentoid: number
+  formapagamentodescricao: string
+}
+
 export default function Pagamento() {
   const router = useRouter();
-  const { selectedItems, itensComanda, comandaSelecionada, removerItens, carregaItens, finalizaComanda } = useComanda();
+  const { selectedItems, itensComanda, comandaSelecionada, formasPagamento, carregaFormaPagamento, removerItens, carregaItens, finalizaComanda } = useComanda();
 
   const [dialogActionVisible, setDialogPagamentoVisible] = useState(false);
   const [formaSelecionada, setFormaSelecionada] = useState('');
@@ -26,13 +31,11 @@ export default function Pagamento() {
   const scaleAnim = useState(new Animated.Value(0))[0];
   const opacityAnim = useState(new Animated.Value(0))[0];
 
-  const formasPagamento = [
-    'Dinheiro',
-    'Cartão de Crédito',
-    'Cartão de Débito',
-    'Pix',
-    'Vale Refeição',
-  ];
+  useEffect(() => {
+    carregaFormaPagamento()
+    formasPagamento
+    console.log("formasPagamento", formasPagamento)
+  }, [formasPagamento])
 
   const handleSelecionarForma = (forma: string) => {
     setFormaSelecionada(forma);
@@ -85,11 +88,11 @@ export default function Pagamento() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   };
 
-  const renderItem = ({ item }: { item: string }) => (
+  const renderItem = ({ item }: { item: Pagamento }) => (
     <Pressable
       onPress={() => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
-        handleSelecionarForma(item);
+        handleSelecionarForma(item.formapagamentodescricao);
         setDialogPagamentoVisible(true);
       }}
       style={({ pressed }) => [
@@ -97,7 +100,7 @@ export default function Pagamento() {
         pressed && styles.botaoPressionado,
       ]}
     >
-      <Text style={styles.textoBotao}>{item}</Text>
+      <Text style={styles.textoBotao}>{item.formapagamentodescricao}</Text>
     </Pressable>
   );
 
@@ -113,13 +116,13 @@ export default function Pagamento() {
         </View>
 
         <View style={styles.viewBtnFormaPagamento}>
-          <FlatList
-            data={formasPagamento}
-            keyExtractor={(item, index) => `${item}_${index}`}
-            renderItem={renderItem}
-            contentContainerStyle={styles.lista}
-            numColumns={3}
-          />
+        <FlatList
+          data={formasPagamento}
+          keyExtractor={(item, index) => `${item.formapagamentoid}_${index}`}
+          renderItem={renderItem}
+          contentContainerStyle={styles.lista}
+          numColumns={3}
+        />
         </View>
 
         <Dialog.Container visible={dialogActionVisible}>
