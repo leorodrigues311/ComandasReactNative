@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,8 @@ import {
   FlatList,
   Animated,
   Easing,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
 import Dialog from 'react-native-dialog';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -16,26 +18,48 @@ import { useComanda } from '@/app/context/comandaContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface Pagamento {
-  formapagamentoid: number
-  formapagamentodescricao: string
+  formapagamentoid: number;
+  formapagamentodescricao: string;
 }
 
 export default function Pagamento() {
   const router = useRouter();
-  const { selectedItems, itensComanda, comandaSelecionada, formasPagamento, carregaFormaPagamento, removerItens, carregaItens, finalizaComanda } = useComanda();
+  const {
+    selectedItems,
+    itensComanda,
+    comandaSelecionada,
+    formasPagamento,
+    comandaFinalizada,
+    carregaFormaPagamento,
+    removerItens,
+    carregaItens,
+    finalizaComanda,
+    setComandaFinalizada
+  } = useComanda();
 
   const [dialogActionVisible, setDialogPagamentoVisible] = useState(false);
   const [formaSelecionada, setFormaSelecionada] = useState('');
   const [showCheck, setShowCheck] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const scaleAnim = useState(new Animated.Value(0))[0];
   const opacityAnim = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
-    carregaFormaPagamento()
-    formasPagamento
-    console.log("formasPagamento", formasPagamento)
-  }, [formasPagamento])
+    carregaFormaPagamento();
+  }, []);
+
+  useEffect(() => {
+    if (isLoading && comandaFinalizada) {
+      clearTimeout(timeoutRef.current!);
+      timeoutRef.current = null;
+      setIsLoading(false);
+      exibirAnimacaoPagamento();
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      setComandaFinalizada(false)
+    }
+  }, [comandaFinalizada]);
 
   const handleSelecionarForma = (forma: string) => {
     setFormaSelecionada(forma);
@@ -45,9 +69,19 @@ export default function Pagamento() {
     setDialogPagamentoVisible(false);
   };
 
+  const handleFinalizaComanda = () => {
+    setDialogPagamentoVisible(false);
+    setIsLoading(true);
+    finalizaComanda(comandaSelecionada?.comanda_uuid ?? '');
+
+    timeoutRef.current = setTimeout(() => {
+      setIsLoading(false);
+      Alert.alert('Timeout', 'Tempo esgotado para finalizar a comanda.');
+    }, 10000);
+  };
+
   const exibirAnimacaoPagamento = () => {
     setShowCheck(true);
-
     Animated.parallel([
       Animated.timing(scaleAnim, {
         toValue: 1,
@@ -75,17 +109,10 @@ export default function Pagamento() {
           }),
         ]).start(() => {
           setShowCheck(false);
-          router.push('/(tabs)')
+          router.push('/(tabs)');
         });
       }, 2000);
     });
-  };
-
-  const handleFinalizaComanda = () => {
-    finalizaComanda(comandaSelecionada?.comanda_uuid ?? '')
-    setDialogPagamentoVisible(false);
-    exibirAnimacaoPagamento();
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   };
 
   const renderItem = ({ item }: { item: Pagamento }) => (
@@ -107,22 +134,23 @@ export default function Pagamento() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.viewPrincipal}>
-        <Pressable style={styles.btnVoltar} onPress={() => {router.back()}}>
-            <Ionicons name="arrow-back-outline" size={30} color="white" />
+        <Pressable style={styles.btnVoltar} onPress={() => router.back()}>
+          <Ionicons name="arrow-back-outline" size={30} color="white" />
         </Pressable>
+
         <View style={styles.viewValor}>
           <Text style={styles.viewTotalAPagar}>Total a Pagar</Text>
           <Text style={styles.viewValorTotal}>R$ 136,28</Text>
         </View>
 
         <View style={styles.viewBtnFormaPagamento}>
-        <FlatList
-          data={formasPagamento}
-          keyExtractor={(item, index) => `${item.formapagamentoid}_${index}`}
-          renderItem={renderItem}
-          contentContainerStyle={styles.lista}
-          numColumns={3}
-        />
+          <FlatList
+            data={formasPagamento}
+            keyExtractor={(item, index) => `${item.formapagamentoid}_${index}`}
+            renderItem={renderItem}
+            contentContainerStyle={styles.lista}
+            numColumns={3}
+          />
         </View>
 
         <Dialog.Container visible={dialogActionVisible}>
@@ -133,6 +161,12 @@ export default function Pagamento() {
           <Dialog.Button onPress={handleCancel} label="Não" />
           <Dialog.Button onPress={handleFinalizaComanda} label="Sim" />
         </Dialog.Container>
+
+        {isLoading && (
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color="white" />
+          </View>
+        )}
 
         {showCheck && (
           <Animated.View
@@ -157,32 +191,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#121212',
   },
-
   viewValor: {
     alignItems: 'center',
     marginTop: 30,
   },
-
   viewTotalAPagar: {
     color: 'white',
     fontSize: 22,
   },
-
   viewValorTotal: {
     color: '#06d691',
     fontSize: 36,
     fontWeight: '500',
   },
-
   viewBtnFormaPagamento: {
     marginTop: 60,
     alignItems: 'center',
   },
-
   lista: {
     paddingBottom: 20,
   },
-
   botao: {
     width: 100,
     height: 100,
@@ -192,19 +220,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
   textoBotao: {
     color: 'white',
     fontSize: 14,
     fontWeight: 'bold',
     textAlign: 'center',
   },
-
   botaoPressionado: {
     backgroundColor: '#2e2e2e',
     transform: [{ scale: 0.97 }],
   },
-
   animatedCheck: {
     position: 'absolute',
     top: '50%',
@@ -219,8 +244,15 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
   },
-  btnVoltar:{
-    padding:20,
-    position:'absolute'
-  }
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 20,
+  },
+  btnVoltar: {
+    padding: 20,
+    position: 'absolute',
+  },
 });

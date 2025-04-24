@@ -129,6 +129,7 @@ interface ComandaContextType {
   host: string | ''
   database: string | ''
   mensagemErro: boolean
+  comandaFinalizada: boolean
 
   adicionarItens: (novoItem: ComandaItem) => void
   adicionarComanda: (novaComanda: Comanda) => void
@@ -159,6 +160,7 @@ interface ComandaContextType {
   setPorta: (porta:string) => void
   setHost: (host:string) => void
   setDatabase: (database:string) => void
+  setComandaFinalizada: (tipo:boolean) => void
   
 }
 // fim da declaração dos tipos
@@ -179,6 +181,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const [itensCarrinho, setItensCarrinho] = useState<ItemCarrinho[]>([]);
   const [selectedItems, setSelectedItems] = useState<string[]>([])
   const [mensagemErro, setMensagemErro] = useState(false)
+  const [comandaFinalizada, setComandaFinalizada] = useState(false)
 
   const [selectedOption, setSelectedOption] = useState<'local' | 'cloud'>('local')
   const [taxValue, setTaxValue] = useState('')
@@ -415,6 +418,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
 
     try{
       const response = await helper.putComanda(comanda_uuid);
+      response.comandastatus == 2 ? setComandaFinalizada(true) : console.log('Erro ao fechar comanda')
     }
     catch (error) {
       console.error("Erro ao buscar dados:", error);
@@ -568,6 +572,7 @@ useEffect(() => {
         database,
         mensagemErro,
         formasPagamento,
+        comandaFinalizada,
 
         adicionarItens,
         adicionarComanda,
@@ -597,7 +602,8 @@ useEffect(() => {
         setPorta,
         setHost,
         setDatabase,
-        carregaFormaPagamento
+        carregaFormaPagamento,
+        setComandaFinalizada
       }}
     >
       {children}

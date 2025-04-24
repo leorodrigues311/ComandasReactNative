@@ -215,7 +215,6 @@ export default class Helper {
 
   async getPagamentos(){
     try {
-      console.log('entrou no get pagamentos')
       return (await axios.get(`${this.BASE_URL}/pagamentos/`)).data;
     } catch (e) {
       console.log(e);

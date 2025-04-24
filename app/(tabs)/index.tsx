@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, SafeAreaView, FlatList, View, RefreshControl } from 'react-native';
+import { Pressable, StyleSheet, Text, SafeAreaView, FlatList, View, RefreshControl, ActivityIndicator } from 'react-native';
 import { Comanda } from '@/components/Comanda';
 import { TopBar } from '@/components/navigation/TopBar';
 import { ButtonFlutuante } from '@/components/ButtonFlutuante';
@@ -13,13 +13,18 @@ export default function HomeScreen() {
   const { comandas, mensagemErro, carregaComandas, setComandaSelecionada } = useComanda();
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [visibleComandas, setVisibleComandas] = useState<any[]>([]);
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    carregaComandas();
-    mensagemErro
-  }, [mensagemErro]);
+    const carregar = async () => {
+      setLoading(true);
+      await carregaComandas();
+      setLoading(false);
+    };
+    carregar();
+  }, []);
 
   useEffect(() => {
     if (comandas.length > 0) {
@@ -62,36 +67,42 @@ export default function HomeScreen() {
         router.push({ pathname: '/comandaDetalhe' });
       }}
     >
-    <Comanda
-      numero_comanda={item.numero_comanda}
-      nome_comanda={item.nome_comanda}
-      valor_total={item.valor_total}
-      hora_abertura={
-        dayjs(item.hora_abertura).isSame(dayjs(), 'day')
-          ? dayjs(item.hora_abertura).format('HH:mm')
-          : dayjs(item.hora_abertura).format('DD/MM/YYYY HH:mm')
-      }
-      status_comanda={item.status_comanda}
-    />
+      <Comanda
+        numero_comanda={item.numero_comanda}
+        nome_comanda={item.nome_comanda}
+        valor_total={item.valor_total}
+        hora_abertura={
+          dayjs(item.hora_abertura).isSame(dayjs(), 'day')
+            ? dayjs(item.hora_abertura).format('HH:mm')
+            : dayjs(item.hora_abertura).format('DD/MM/YYYY HH:mm')
+        }
+        status_comanda={item.status_comanda}
+      />
     </Pressable>
   );
 
   return (
     <SafeAreaView style={styles.container}>
       <TopBar />
-      <FlatList
-        data={visibleComandas.sort((a, b) => parseInt(a.numero_comanda || "0") - parseInt(b.numero_comanda || "0"))}
-        keyExtractor={(item, index) => `${item.comanda_uuid}_${index}`}
-        renderItem={renderItem}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
-        onEndReached={loadMore}
-        onEndReachedThreshold={0.2}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>{mensagemErro ? 'Erro ao buscar comandas, verifique a conexão com o servidor!' : 'Nenhuma comanda aberta'}</Text>
-          </View>
-        }
-      />
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="white" />
+        </View>
+      ) : (
+        <FlatList
+          data={visibleComandas.sort((a, b) => parseInt(a.numero_comanda || "0") - parseInt(b.numero_comanda || "0"))}
+          keyExtractor={(item, index) => `${item.comanda_uuid}_${index}`}
+          renderItem={renderItem}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.2}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>{mensagemErro ? 'Erro ao buscar comandas, verifique a conexão com o servidor!' : 'Nenhuma comanda aberta'}</Text>
+            </View>
+          }
+        />
+      )}
       <ButtonFlutuante />
     </SafeAreaView>
   );
@@ -105,11 +116,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop:15
+    marginTop: 15,
   },
   emptyText: {
     fontSize: 20,
     color: 'gray',
-    margin:15
+    margin: 15,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
