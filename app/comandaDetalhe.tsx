@@ -13,12 +13,13 @@ export default function ComandaDetalhe () {
 
 
   const router = useRouter()
-  const { itensComanda, selectedItems, comandaSelecionada, taxValue, taxState, carregaItens, formataValor, toggleLongPressItens, limparSelecao, setTaxState} = useComanda()
+  const { itensComanda, selectedItems, comandaSelecionada, taxValue, taxState, carregaItens, carregaComandas, formataValor, toggleLongPressItens, limparSelecao, setTaxState} = useComanda()
   const [comandaFinalizada, setComandaFinalizada] = useState(false)
   
   useEffect(() => {
     comandaSelecionada;
     carregaItens();
+    carregaComandas();
   }, [comandaSelecionada])
 
   const handleLongPress = (item_uuid: string) => {
