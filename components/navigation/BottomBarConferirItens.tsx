@@ -12,7 +12,7 @@ export function BottomBarConferirItens() {
 
   const router = useRouter();
   
-  const {itensCarrinho, comandaSelecionada, removerItemCarrinho, adicionarItens, limpaCarrinho, mudaQuantidade } = useComanda()
+  const {itensCarrinho, comandaSelecionada, removerItemCarrinho, adicionarItens, limpaCarrinho, mudaQuantidade, carregaComandas } = useComanda()
 
   useEffect(() => {
     comandaSelecionada;
@@ -53,10 +53,12 @@ export function BottomBarConferirItens() {
         hora_inclusao: item.hora_inclusao
       })
     })
+    carregaComandas()
     setTimeout(() => {
       router.back();
     }, 1500);
     limpaCarrinho()
+ 
   };
 
   const handleToggle = () => {
