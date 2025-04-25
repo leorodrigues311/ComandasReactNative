@@ -1,15 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  FlatList,
-  Animated,
-  Easing,
-  ActivityIndicator,
-  Alert,
-} from 'react-native';
+import { View, Text, StyleSheet, Pressable, FlatList, Animated, Easing, ActivityIndicator, Alert } from 'react-native';
 import Dialog from 'react-native-dialog';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
@@ -30,11 +20,16 @@ export default function Pagamento() {
     comandaSelecionada,
     formasPagamento,
     comandaFinalizada,
+    taxValue,
+    taxState,
+    tipoTaxa,
     carregaFormaPagamento,
     removerItens,
     carregaItens,
     finalizaComanda,
-    setComandaFinalizada
+    setComandaFinalizada,
+    formataValor,
+    formataTaxa
   } = useComanda();
 
   const [dialogActionVisible, setDialogPagamentoVisible] = useState(false);
@@ -139,8 +134,19 @@ export default function Pagamento() {
         </Pressable>
 
         <View style={styles.viewValor}>
+
+          <Text style={styles.viewValorComanda}>Consumo: {formataValor(comandaSelecionada?.valor_total||0)}</Text>
+          <Text style={styles.viewValorTaxa}>Taxa de serviço: { taxState?
+          formataTaxa(comandaSelecionada?.valor_total||0, taxValue, tipoTaxa, false)
+          :
+          "0"
+          }</Text>
           <Text style={styles.viewTotalAPagar}>Total a Pagar</Text>
-          <Text style={styles.viewValorTotal}>R$ 136,28</Text>
+          <Text style={styles.viewValorTotal}>{ taxState ? 
+          formataTaxa(comandaSelecionada?.valor_total||0, taxValue, tipoTaxa, true)
+          :
+          formataValor(comandaSelecionada?.valor_total||0)
+          }</Text>
         </View>
 
         <View style={styles.viewBtnFormaPagamento}>
@@ -198,11 +204,22 @@ const styles = StyleSheet.create({
   viewTotalAPagar: {
     color: 'white',
     fontSize: 22,
+    marginTop:15
   },
   viewValorTotal: {
     color: '#06d691',
     fontSize: 36,
     fontWeight: '500',
+  },
+  viewValorComanda:{
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '300',
+  },
+  viewValorTaxa:{
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '300',
   },
   viewBtnFormaPagamento: {
     marginTop: 60,

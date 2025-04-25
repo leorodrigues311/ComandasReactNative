@@ -161,7 +161,8 @@ interface ComandaContextType {
   setHost: (host:string) => void
   setDatabase: (database:string) => void
   setComandaFinalizada: (tipo:boolean) => void
-  
+  formataTaxa: (valor_total: number, valor_taxa: number | string, tipoTaxa: boolean, isTotal: boolean) => string
+ 
 }
 // fim da declaração dos tipos
 
@@ -500,6 +501,32 @@ const carregaFormaPagamento = async () => {
 
   }
 }
+const formataTaxa = (valor_total: number | string, valor_taxa: number | string, tipoTaxa: boolean, isTotal: boolean) => {
+  let taxa = typeof valor_taxa === 'string'
+    ? Number(valor_taxa.replace(',', '.'))
+    : valor_taxa
+
+  valor_total = typeof valor_total === 'string'
+    ? Number(valor_total)
+    : valor_total
+
+  if (isNaN(taxa)) taxa = 0
+  if (isNaN(valor_total)) valor_total = 0
+
+  const valor = tipoTaxa === false
+    ? (taxa / 100) * valor_total
+    : taxa
+
+  const totalComTaxa = valor_total + valor
+
+  console.log("valor total mais valor:", totalComTaxa)
+  console.log("valor total :", valor_total)
+  console.log("valor:", valor)
+
+  return formataValor(isTotal ? totalComTaxa : valor)
+}
+
+
 
 //============= Fim Pagamento =====================
 
@@ -572,7 +599,7 @@ useEffect(() => {
         mensagemErro,
         formasPagamento,
         comandaFinalizada,
-
+ 
         adicionarItens,
         adicionarComanda,
         removerComanda,
@@ -602,7 +629,8 @@ useEffect(() => {
         setHost,
         setDatabase,
         carregaFormaPagamento,
-        setComandaFinalizada
+        setComandaFinalizada,
+        formataTaxa,
       }}
     >
       {children}

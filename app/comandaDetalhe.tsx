@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, Pressable, ScrollView, Animated } from 'react-native'
+import { StyleSheet, Text, View, Pressable, ScrollView, Animated, ActivityIndicator } from 'react-native'
 import { ItemComanda } from '@/components/ItemComanda'
 import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda'
 import { BottomBarDetalheComanda } from '@/components/navigation/BottomBarDetalheComanda'
@@ -11,15 +11,22 @@ import dayjs from 'dayjs'
 
 export default function ComandaDetalhe () {
 
-
   const router = useRouter()
-  const { itensComanda, selectedItems, comandaSelecionada, taxValue, taxState, carregaItens, carregaComandas, formataValor, toggleLongPressItens, limparSelecao, setTaxState} = useComanda()
+  const { itensComanda, selectedItems, comandaSelecionada, taxValue, taxState, tipoTaxa, carregaItens, carregaComandas, formataValor, toggleLongPressItens, limparSelecao, setTaxState, formataTaxa} = useComanda()
   const [comandaFinalizada, setComandaFinalizada] = useState(false)
-  
+  const [loading, setLoading] = useState(false)
+
   useEffect(() => {
-    comandaSelecionada;
-    carregaItens();
-    carregaComandas();
+    const carregarDados = async () => {
+      setLoading(true)
+      await carregaItens()
+      await carregaComandas()
+      setLoading(false)
+    }
+
+    if (comandaSelecionada) {
+      carregarDados()
+    }
   }, [comandaSelecionada])
 
   const handleLongPress = (item_uuid: string) => {
@@ -49,6 +56,14 @@ export default function ComandaDetalhe () {
       setComandaFinalizada(false)
     }
   }, [comandaSelecionada?.status_comanda])
+
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.viewPrincipal, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color="white" />
+      </SafeAreaView>
+    )
+  }
 
   return (
     <SafeAreaView style={styles.viewPrincipal}>
@@ -109,7 +124,12 @@ export default function ComandaDetalhe () {
       {(!isBottomBarVisible) && 
         <View style={styles.viewValorTotal}>
           <Text style={styles.textValorTotal}>Valor Total:</Text>
-          <Text style={styles.textValorTotalNumero}>{formataValor(comandaSelecionada?.valor_total === undefined ? 0 : comandaSelecionada?.valor_total)}</Text>
+          <Text style={styles.textValorTotalNumero}>{
+            comandaSelecionada?.status_comanda === '4' && taxState ?
+            formataTaxa(comandaSelecionada?.valor_total||0, taxValue, tipoTaxa, true)
+            :
+            formataValor(comandaSelecionada?.valor_total||0)
+          }</Text>
         </View>
       }
 
@@ -120,7 +140,12 @@ export default function ComandaDetalhe () {
             onPress={() => setTaxState(!taxState)}
           >
             <View style={[styles.checkBtnTaxaServico, { backgroundColor: taxState ? '#04c78a' : 'transparent' }]}  />
-            <Text style={{ color: '#fff' }}>Taxa de serviço - R$ {taxValue}</Text>
+            <Text style={{ color: '#fff' }}>
+              {tipoTaxa === false 
+              ?
+             `Taxa de serviço (${taxValue}%) - ${formataTaxa(comandaSelecionada?.valor_total||0, taxValue, tipoTaxa, false)} ` 
+             :
+              `Taxa de serviço - R$ ${taxValue}`}</Text>
           </Pressable>
 
           <Pressable 
