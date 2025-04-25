@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback  } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
 import { StyleSheet, Text, View, Pressable, ScrollView, Animated, ActivityIndicator } from 'react-native'
 import { ItemComanda } from '@/components/ItemComanda'
 import { TopBarDetalheComanda } from '@/components/navigation/TopBarDetalheComanda'
@@ -12,6 +13,7 @@ import dayjs from 'dayjs'
 export default function ComandaDetalhe () {
 
   const router = useRouter()
+  const { refresh } = useLocalSearchParams()
   const { itensComanda, selectedItems, comandaSelecionada, taxValue, taxState, tipoTaxa, carregaItens, carregaComandas, formataValor, toggleLongPressItens, limparSelecao, setTaxState, formataTaxa} = useComanda()
   const [comandaFinalizada, setComandaFinalizada] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -23,11 +25,11 @@ export default function ComandaDetalhe () {
       await carregaComandas()
       setLoading(false)
     }
-
+  
     if (comandaSelecionada) {
       carregarDados()
     }
-  }, [comandaSelecionada])
+  }, [refresh])
 
   const handleLongPress = (item_uuid: string) => {
     if (selectedItems?.length === 0) {

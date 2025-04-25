@@ -55,7 +55,7 @@ export function BottomBarConferirItens() {
     })
     carregaComandas()
     setTimeout(() => {
-      router.back();
+      router.replace(`/comandaDetalhe?refresh=${Date.now()}`)
     }, 1500);
     limpaCarrinho()
  
