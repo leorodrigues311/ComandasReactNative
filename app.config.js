@@ -1,7 +1,7 @@
 export default {
   expo: {
-    name: "Inova Comandas",
-    slug: "Inova Comandas",
+    name: "inova_comandas",
+    slug: "inova_comandas",
     version: "1.0.0",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
@@ -32,6 +32,14 @@ export default {
     ],
     experiments: {
       typedRoutes: true
+    },
+    extra:{
+      eas: {
+        "projectId": "a89c32d4-5ad5-4ee9-83a1-df0b9d152d52"
+      }
+    },
+    android: {
+      "package": "com.inovacomandas.inovasistemas"
     }
   }
 }
