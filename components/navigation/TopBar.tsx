@@ -9,13 +9,11 @@ export function TopBar() {
   const [inputVisivel, setInputVisivel] = useState(true);
   const animacaoInput = useState(new Animated.Value(0))[0];
 
-  const { usuarios, usuarioSelecionado, carregaUsuarios, setusuarioSelecionado } = useComanda();
+  const { usuarios, usuarioSelecionado, filtroStatus, tipoOrdem, ordem, inputProcurar, setInputProcurar, setFiltroStatus, setOrdem, carregaUsuarios, setTipoOrdem, setusuarioSelecionado } = useComanda();
 
   const router = useRouter();
 
   const [modalVisivel, setModalVisivel] = useState(false);
-  const [filtroStatus, setFiltroStatus] = useState<string>('todas');
-  const [ordem, setOrdem] = useState<string>('data');
 
   const alternarPesquisa = () => {
     Animated.timing(animacaoInput, {
@@ -71,6 +69,8 @@ export function TopBar() {
               style={styles.inputPesquisar}
               placeholder="Procurar..."
               placeholderTextColor="gray"
+              value ={inputProcurar}
+              onChangeText={setInputProcurar}
             />
             <Pressable style={styles.viewBtnPesquisar}>
               <Ionicons style={styles.btnPesquisar} name="search-outline" size={20} color="white" />
@@ -99,13 +99,13 @@ export function TopBar() {
               data={['Todas', 'Aberta', 'Fechada']}
               onSelect={(selectedItem) => {
                 if (selectedItem === 'Todas') setFiltroStatus('todas');
-                if (selectedItem === 'Aberta') setFiltroStatus('aberta');
-                if (selectedItem === 'Fechada') setFiltroStatus('fechada');
+                if (selectedItem === 'Aberta') setFiltroStatus('1');
+                if (selectedItem === 'Fechada') setFiltroStatus('2');
               }}
-              defaultValue={'Todas'}
+              defaultValue={filtroStatus}
               renderButton={(selectedItem) => (
                 <View style={styles.selectButton}>
-                  <Text style={styles.selectButtonText}>{selectedItem || 'Todas'}</Text>
+                  <Text style={styles.selectButtonText}>{selectedItem || 'Status'}</Text>
                 </View>
               )}
               renderItem={(item, index, isSelected) => (
@@ -124,10 +124,10 @@ export function TopBar() {
                 if (selectedItem === 'Número') setOrdem('numero');
                 if (selectedItem === 'Status') setOrdem('status');
               }}
-              defaultValue={'Data'}
+              defaultValue={ordem}
               renderButton={(selectedItem) => (
                 <View style={styles.selectButton}>
-                  <Text style={styles.selectButtonText}>{selectedItem || 'Data'}</Text>
+                  <Text style={styles.selectButtonText}>{selectedItem || 'Tipo'}</Text>
                 </View>
               )}
               renderItem={(item, index, isSelected) => (
@@ -142,14 +142,14 @@ export function TopBar() {
             <SelectDropdown
               data={['Crescente', 'Decrescente']}
               onSelect={(selectedItem) => {
-                if (selectedItem === 'Crescente') setOrdem('crescente');
-                if (selectedItem === 'Decrescente') setOrdem('decrescente');
+                if (selectedItem === 'Crescente') setTipoOrdem('crescente');
+                if (selectedItem === 'Decrescente') setTipoOrdem('decrescente');
     
               }}
-              defaultValue={'Decrescente'}
+              defaultValue={tipoOrdem}
               renderButton={(selectedItem) => (
                 <View style={styles.selectButton}>
-                  <Text style={styles.selectButtonText}>{selectedItem || 'Data'}</Text>
+                  <Text style={styles.selectButtonText}>{selectedItem || 'Ordem'}</Text>
                 </View>
               )}
               renderItem={(item, index, isSelected) => (
@@ -163,7 +163,7 @@ export function TopBar() {
               <TouchableOpacity style={styles.modalButton} onPress={aplicarFiltro}>
                 <Text style={styles.modalButtonText}>Aplicar</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisivel(false)}>
+              <TouchableOpacity style={styles.modalButtonCancelar} onPress={() => setModalVisivel(false)}>
                 <Text style={styles.modalButtonText}>Cancelar</Text>
               </TouchableOpacity>
             </View>
@@ -294,6 +294,13 @@ const styles = StyleSheet.create({
   modalButton: {
     padding: 10,
     backgroundColor: "#007bff",
+    borderRadius: 5,
+    width: "48%",
+    alignItems: "center",
+  },
+  modalButtonCancelar:{
+    padding: 10,
+    backgroundColor: "gray",
     borderRadius: 5,
     width: "48%",
     alignItems: "center",

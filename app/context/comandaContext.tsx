@@ -130,6 +130,10 @@ interface ComandaContextType {
   database: string | ''
   mensagemErro: boolean
   comandaFinalizada: boolean
+  filtroStatus: string
+  ordem: string
+  tipoOrdem: string
+  inputProcurar: string
 
   adicionarItens: (novoItem: ComandaItem) => void
   adicionarComanda: (novaComanda: Comanda) => void
@@ -163,7 +167,10 @@ interface ComandaContextType {
   setComandaFinalizada: (tipo:boolean) => void
   formataTaxa: (valor_total: number, valor_taxa: number | string, tipoTaxa: boolean, isTotal: boolean) => string
   checaNumeroComanda: (numeroComanda: string) => Promise<string | boolean | undefined>;
- 
+  setFiltroStatus: (status: string) => void
+  setOrdem: (ordem: string) => void
+  setTipoOrdem: (tipo: string) => void
+  setInputProcurar: (valor: string) => void
 }
 // fim da declaração dos tipos
 
@@ -193,6 +200,11 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const [porta, setPorta] = useState('')
   const [host, setHost] = useState('')
   const [database, setDatabase] = useState('')
+
+  const [filtroStatus, setFiltroStatus] = useState<string>('todas');
+  const [ordem, setOrdem] = useState<string>('numero');
+  const [tipoOrdem, setTipoOrdem] = useState<string>('Decrescente');
+  const [inputProcurar, setInputProcurar] = useState<string>('');
 
 // ============= Geradores =====================
 
@@ -561,6 +573,12 @@ const formataTaxa = (valor_total: number | string, valor_taxa: number | string, 
 
 //============= Fim Pagamento =====================
 
+//============= Filtro =====================
+
+
+
+//============= Fim Filtro =====================
+
 
 const STORAGE_KEY = 'comandaConfig'
 
@@ -630,6 +648,10 @@ useEffect(() => {
         mensagemErro,
         formasPagamento,
         comandaFinalizada,
+        ordem,
+        filtroStatus,
+        tipoOrdem,
+        inputProcurar,
  
         adicionarItens,
         adicionarComanda,
@@ -662,7 +684,11 @@ useEffect(() => {
         carregaFormaPagamento,
         setComandaFinalizada,
         formataTaxa,
-        checaNumeroComanda
+        checaNumeroComanda,
+        setFiltroStatus,
+        setOrdem,
+        setTipoOrdem,
+        setInputProcurar
       }}
     >
       {children}

@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Pressable, StyleSheet, Text, SafeAreaView, FlatList, View, RefreshControl, ActivityIndicator } from 'react-native';
 import { Comanda } from '@/components/Comanda';
 import { TopBar } from '@/components/navigation/TopBar';
 import { ButtonFlutuante } from '@/components/ButtonFlutuante';
 import { useRouter } from "expo-router";
 import { useComanda } from '@/app/context/comandaContext';
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
 
 const PAGE_SIZE = 30;
 
 export default function HomeScreen() {
-  const { comandas, mensagemErro, carregaComandas, setComandaSelecionada } = useComanda();
+  const { comandas, mensagemErro, ordem, filtroStatus, tipoOrdem, inputProcurar, setInputProcurar, carregaComandas, setComandaSelecionada } = useComanda();
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [visibleComandas, setVisibleComandas] = useState<any[]>([]);
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -28,8 +27,7 @@ export default function HomeScreen() {
 
   useEffect(() => {
     if (comandas.length > 0) {
-      setVisibleComandas(comandas.slice(0, PAGE_SIZE));
-      setPage(1);
+      setPage(1); // Resetar para primeira página ao receber novas comandas
     }
   }, [comandas]);
 
@@ -41,15 +39,53 @@ export default function HomeScreen() {
 
   const loadMore = () => {
     const nextPage = page + 1;
-    const start = (nextPage - 1) * PAGE_SIZE;
-    const end = start + PAGE_SIZE;
-    const nextData = comandas.slice(start, end);
+    const totalItems = nextPage * PAGE_SIZE;
 
-    if (nextData.length > 0) {
-      setVisibleComandas([...visibleComandas, ...nextData]);
+    if (totalItems <= comandasFiltradas.length) {
       setPage(nextPage);
     }
   };
+
+  const comandasFiltradas = useMemo(() => {
+    let listaFiltrada = [...comandas];
+  
+    // Filtro de status
+    if (filtroStatus !== 'todas') {
+      listaFiltrada = listaFiltrada.filter((comanda) => comanda.status_comanda === filtroStatus);
+    }
+  
+    // Filtro de pesquisa (inputProcurar)
+    if (inputProcurar.trim() !== '') {
+      const texto = inputProcurar.toLowerCase();
+      listaFiltrada = listaFiltrada.filter((comanda) =>
+        (comanda.nome_comanda?.toLowerCase().includes(texto) || comanda.numero_comanda?.toString().includes(texto))
+      );
+    }
+  
+    // Ordenação
+    listaFiltrada.sort((a, b) => {
+      let valorA: any;
+      let valorB: any;
+  
+      if (ordem === 'numero') {
+        valorA = parseInt(a.numero_comanda || "0");
+        valorB = parseInt(b.numero_comanda || "0");
+      } else if (ordem === 'status') {
+        valorA = a.status_comanda || '';
+        valorB = b.status_comanda || '';
+      } else { // padrão: hora_abertura
+        valorA = new Date(a.hora_abertura).getTime();
+        valorB = new Date(b.hora_abertura).getTime();
+      }
+  
+      if (valorA < valorB) return tipoOrdem === 'crescente' ? -1 : 1;
+      if (valorA > valorB) return tipoOrdem === 'crescente' ? 1 : -1;
+      return 0;
+    });
+  
+    return listaFiltrada;
+  }, [comandas, ordem, filtroStatus, tipoOrdem, inputProcurar]);
+  
 
   const renderItem = ({ item }: any) => (
     <Pressable
@@ -90,7 +126,7 @@ export default function HomeScreen() {
         </View>
       ) : (
         <FlatList
-          data={visibleComandas.sort((a, b) => parseInt(a.numero_comanda || "0") - parseInt(b.numero_comanda || "0"))}
+          data={comandasFiltradas.slice(0, page * PAGE_SIZE)}
           keyExtractor={(item, index) => `${item.comanda_uuid}_${index}`}
           renderItem={renderItem}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />}
