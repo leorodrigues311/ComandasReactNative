@@ -134,7 +134,13 @@ export default function HomeScreen() {
           onEndReachedThreshold={0.2}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>{mensagemErro ? 'Erro ao buscar comandas, verifique a conexão com o servidor!' : 'Nenhuma comanda aberta'}</Text>
+              {mensagemErro ? (
+                <Text style={styles.emptyText}>Erro ao buscar comandas, verifique a conexão com o servidor!</Text>
+              ) : inputProcurar.trim() !== '' ? (
+                <Text style={styles.emptyText}>Nenhuma comanda encontrada para sua busca.</Text>
+              ) : (
+                <Text style={styles.emptyText}>Nenhuma comanda aberta.</Text>
+              )}
             </View>
           }
         />
