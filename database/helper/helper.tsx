@@ -45,9 +45,9 @@ export default class Helper {
     }
   }
 
-  async getComanda(id: string) {
+  async getComandasAbertas() {
     try {
-      return (await axios.get(`${this.BASE_URL}/comanda/${id}`)).data;
+      return (await axios.get(`${this.BASE_URL}/comandas/comandasAbertas`)).data;
     } catch (e) {
       console.log(e);
     }

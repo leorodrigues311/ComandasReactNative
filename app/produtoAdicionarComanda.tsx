@@ -16,7 +16,6 @@ export default function produtoAdicionarComanda() {
   const {produtos, comandaSelecionada, itensCarrinho, carregaProdutos, adicionarItensCarrinho, setComandaSelecionada,gerarData } = useComanda()
 
   useEffect(() => {
-    console.log("produtos", produtos)
     carregaProdutos();
   }, [])
   

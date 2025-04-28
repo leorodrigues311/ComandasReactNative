@@ -8,20 +8,30 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { TextInputMask } from "react-native-masked-text";
 import { useComanda } from '@/app/context/comandaContext';
 import * as Haptics from 'expo-haptics'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { width } = Dimensions.get('window');
 
 export default function Login() {
 
-  const {usuarios, usuarioSelecionado, carregaUsuarios, setusuarioSelecionado} = useComanda();
-  const [cnpj, setCnpj] = useState('');
-  const [password, setPassword] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
+  const {usuarios, usuarioSelecionado, carregaUsuarios, setusuarioSelecionado, ip, porta, host, database, setIp, setPorta, setHost, setDatabase } = useComanda()
+  const [cnpj, setCnpj] = useState('')
+  const [password, setPassword] = useState('')
+  const [modalVisible, setModalVisible] = useState(false)
+  const [modalConexao, setModalConexao] = useState(false)
+  const [modalSenhaConfig, setModalSenhaConfig] = useState(false);
+  const [senhaDigitadaConfig, setSenhaDigitadaConfig] = useState('');
   const [loadignBtnEntrar, setLoadignBtnEntrar] = useState(false)
-  const [pesquisarUsuarios, setPesquisarUsuarios] = useState(false);
-  const scrollX = useRef(new Animated.Value(0)).current;
-  const scrollViewRef = useRef<ScrollView>(null);
-  const router = useRouter();
+  const [pesquisarUsuarios, setPesquisarUsuarios] = useState(false)
+  const scrollX = useRef(new Animated.Value(0)).current
+  const scrollViewRef = useRef<ScrollView>(null)
+  const router = useRouter()
+
+  const hoje = new Date()
+  const dia = hoje.getDate()
+  const mes = hoje.getMonth() + 1
+  const ano = hoje.getFullYear()
+  var senhaModalConfig = dia + mes + ano;
 
 
   const handleLogin = async ()  => {
@@ -54,6 +64,11 @@ export default function Login() {
       alert('Senha incorreta')
       setLoadignBtnEntrar(false)
     }
+  }
+
+  const toggleModalConfig = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Rigid)
+    setModalSenhaConfig(true);
   }
 
   const [mantenhaLogado, setMantenhaLogado] = useState(false);
@@ -92,6 +107,129 @@ export default function Login() {
 
   return (
     <SafeAreaView style={styles.viewPrincipal}>
+      <View style={styles.viewBtnConfig}>
+        <TouchableOpacity onPress = {() => toggleModalConfig()} style={styles.btnConfig}>
+          <Ionicons name='cog-outline' size={30} color={'white'}></Ionicons>
+        </TouchableOpacity>
+      </View>
+    
+      <Modal
+        visible={modalSenhaConfig}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setModalSenhaConfig(false)}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalConfigContainer}>
+
+            {/* Botão de fechar */}
+            <TouchableOpacity style={styles.closeButton} onPress={() => setModalSenhaConfig(false)}>
+              <Ionicons name="close-outline" size={30} color="white" />
+            </TouchableOpacity>
+
+            <Text style={{color:'white', fontSize:18, marginBottom:20}}>Digite a senha de configuração:</Text>
+
+            <TextInput
+              placeholder="Senha"
+              placeholderTextColor="#808080"
+              secureTextEntry
+              style={styles.modalInput}
+              keyboardType="numeric"
+              value={senhaDigitadaConfig}
+              onChangeText={setSenhaDigitadaConfig}
+            />
+
+            <TouchableOpacity
+              style={styles.saveButton}
+              onPress={() => {
+                if (senhaDigitadaConfig == senhaModalConfig.toString()) {
+                  setModalSenhaConfig(false);
+                  setModalConexao(true);
+                  setSenhaDigitadaConfig('');
+                } else {
+                  alert('Senha incorreta');
+                  setSenhaDigitadaConfig('');
+                }
+              }}
+            >
+              <Text style={styles.saveButtonText}>Entrar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+            visible={modalConexao}
+            animationType="slide"
+            transparent
+            onRequestClose={() => setModalConexao(false)}
+          >
+            <View style={styles.modalBackground}>
+              <View style={styles.modalConfigContainer}>
+
+                {/* Botão de fechar */}
+                <TouchableOpacity style={styles.closeButton} onPress={() => setModalConexao(false)}>
+                  <Ionicons name="close-outline" size={30} color="white" />
+                </TouchableOpacity>
+
+                <TextInput
+                  placeholder="IP (Ex: 192.168.0.113:4000)"
+                  placeholderTextColor="#808080"
+                  style={styles.modalInput}
+                  value={ip}
+                  onChangeText={setIp}
+                  autoCapitalize="none"
+                />
+
+                <TextInput
+                  placeholder="Porta (Ex: 5432)"
+                  placeholderTextColor="#808080"
+                  style={styles.modalInput}
+                  value={porta}
+                  onChangeText={setPorta}
+                  autoCapitalize="none"
+                />
+                <TextInput
+                  placeholder="Host (Ex: localhost)"
+                  placeholderTextColor="#808080"
+                  style={styles.modalInput}
+                  value={host}
+                  onChangeText={setHost}
+                  autoCapitalize="none"
+                />
+                <TextInput
+                  placeholder="Database (Ex: inova)"
+                  placeholderTextColor="#808080"
+                  style={styles.modalInput}
+                  value={database}
+                  onChangeText={setDatabase}
+                  autoCapitalize="none"
+                />
+
+                  <TouchableOpacity
+                    style={styles.saveButton}
+                    onPress={async () => {
+                      try {
+                        const settings = {
+                          ip,
+                          porta,
+                          host,
+                          database,
+                        };
+                        await AsyncStorage.setItem('appSettings', JSON.stringify(settings));
+                        setModalConexao(false);
+                      } catch (e) {
+                        console.error('Erro ao salvar configurações:', e);
+                      }
+                    }}
+                  >
+                  <Text style={styles.saveButtonText}>Salvar</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+
+
       <View style={styles.logoInova}>
         <Image 
           source={require('../assets/images/inova_comandas.png')}
@@ -102,8 +240,10 @@ export default function Login() {
       <TextInputMask
         style={styles.inputCnpj}
         placeholder="CNPJ"
+        placeholderTextColor="#B0B0B0"
         type={"cnpj"}
         keyboardType="numeric"
+        returnKeyType="done"
         value={cnpj}
         onChangeText={setCnpj}
       />
@@ -147,7 +287,7 @@ export default function Login() {
               <View style={styles.modalPage}>
                 <Text style={styles.modalTitle}>Escolha um usuário</Text>
                 <TouchableOpacity style={styles.closeModalButton} onPress={() => setModalVisible(false)}>
-                  <Ionicons name="close-outline" size={30} color="white" />
+                  <Ionicons name="close-outline" size={40} color="white" />
                 </TouchableOpacity>
                 <FlatList
                   style={styles.flatList}
@@ -179,8 +319,9 @@ export default function Login() {
                   <TextInput
                     style={styles.inputPassword}
                     placeholder="Senha"
+                    placeholderTextColor="#B0B0B0"
                     keyboardType="visible-password"
-                    secureTextEntry={true}  // Isso torna o campo de texto uma senha
+                    secureTextEntry={true}
                     value={password}
                     onChangeText={setPassword}
                   />
@@ -214,13 +355,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#1C1C1C',
     padding: 20,
   },
+  viewBtnConfig:{
+    position: 'absolute',
+    right:0,
+    top:0,
+  },
   btnConfig:{
     right:0,
     top:0,
     margin:30,
     marginTop:50,
-    alignContent:'flex-start',
-    position:'absolute'
+    alignContent:'flex-end',
+    position:'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex:1
   },
   inputCnpj: {
     width: '90%',
@@ -393,5 +542,48 @@ const styles = StyleSheet.create({
     alignSelf:'flex-start',
     marginLeft:30,
     marginBottom:25
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.6)',
+  },
+  modalConfigContainer: {
+    backgroundColor: '#1C1C1C',
+    borderRadius: 10,
+    padding: 20,
+    width: '90%',
+  },
+  modalInput: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#4F4F4F',
+    paddingVertical: 8,
+    marginBottom: 15,
+    color: 'white',
+    fontSize: 16,
+  },
+  saveButton: {
+    backgroundColor: '#00CED1',
+    padding: 12,
+    borderRadius: 6,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  saveButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 1,
+    padding: 0,
+  },
+  closeButtonText: {
+    fontSize: 24,
+    color: '#fff',
   },
 });

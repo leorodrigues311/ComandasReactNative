@@ -162,6 +162,7 @@ interface ComandaContextType {
   setDatabase: (database:string) => void
   setComandaFinalizada: (tipo:boolean) => void
   formataTaxa: (valor_total: number, valor_taxa: number | string, tipoTaxa: boolean, isTotal: boolean) => string
+  checaNumeroComanda: (numeroComanda: string) => Promise<string | boolean | undefined>;
  
 }
 // fim da declaração dos tipos
@@ -424,6 +425,40 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       console.error("Erro ao buscar dados:", error);
     }
   }
+
+  const checaNumeroComanda = async (numeroComanda: string) => {
+    try {
+      console.log("numeroDigitado:", numeroComanda)
+      const response = await helper.getComandasAbertas();
+  
+      // Convertendo todos os valores para números
+      const result: number[] = response.map((item: Comanda2) => Number(item.comandanumero));
+      console.log("result:", result);
+  
+      if (numeroComanda === '') {
+        // Procurar o menor número disponível
+        let menorDisponivel = 1;
+        while (result.includes(menorDisponivel)) {
+          menorDisponivel++;
+        }
+        console.log("Menor número disponível:", menorDisponivel);
+        return String(menorDisponivel);
+      } else {
+        // Checar se já existe
+        const existe = result.includes(Number(numeroComanda));
+        if (existe) {
+          console.log(`O número ${numeroComanda} já está sendo usado.`);
+          return false; // ou lançar um erro, ou outro tratamento
+        } else {
+          console.log(`O número ${numeroComanda} está disponível.`);
+          return true;
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao buscar dados:", error);
+    }
+  }
+  
   
 
 
@@ -518,10 +553,6 @@ const formataTaxa = (valor_total: number | string, valor_taxa: number | string, 
     : taxa
 
   const totalComTaxa = valor_total + valor
-
-  console.log("valor total mais valor:", totalComTaxa)
-  console.log("valor total :", valor_total)
-  console.log("valor:", valor)
 
   return formataValor(isTotal ? totalComTaxa : valor)
 }
@@ -631,6 +662,7 @@ useEffect(() => {
         carregaFormaPagamento,
         setComandaFinalizada,
         formataTaxa,
+        checaNumeroComanda
       }}
     >
       {children}

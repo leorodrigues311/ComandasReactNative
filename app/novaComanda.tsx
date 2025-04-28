@@ -9,7 +9,7 @@ import { ComandaProvider, useComanda } from '@/app/context/comandaContext'
 export default function novaComanda (){
 
   const router = useRouter();
-  const { comandas, usuarioSelecionado, adicionarComanda, gerarIdComanda, gerarData, setComandaSelecionada } = useComanda()
+  const { comandas, usuarioSelecionado, adicionarComanda, gerarIdComanda, gerarData, setComandaSelecionada, checaNumeroComanda } = useComanda()
 
   // Estas instâncias servem para mudar o estado do modal do número da comanda, e para mudar o valor do input quando o usuario digita
   const [modalNumeroComandaVisivel, setModalNumeroComanda] = useState(false)
@@ -23,7 +23,6 @@ export default function novaComanda (){
   const [dialogVisible, setDialogVisible] = useState(false)
 
   useEffect(() => {
-    console.log("Estado de dialogVisible:", dialogVisible);
   }, [dialogVisible]);
 
   const [text, setText] = useState('');
@@ -41,14 +40,30 @@ export default function novaComanda (){
   }
 
   // aqui a função captura o clique do botão, e verifica se o botão retornou com os nomes correspondentes. E então executa a ação
-  const handleButtonPress = (buttonType: string) => {
+  const handleButtonPress = async (buttonType: string) => {
     if (buttonType === 'confirmaNumero') {
       setModalNumeroComanda(false);
-      setTimeout(() => {setModalNomeComanda(true)}, 600);
+
+      const isDisponible = await checaNumeroComanda(inputNumeroComanda)
+      if (isDisponible === false){
+        alert(`A comanda de numero ${inputNumeroComanda} já está sendo usada`)
+        setModalNumeroComanda(true);
+      }
+      else if (typeof isDisponible == 'string'){
+        setInputNumeroComanda(isDisponible)
+        setTimeout(() => {setModalNomeComanda(true)}, 600);
+      }
+      else if ( isDisponible === true){
+        setInputNumeroComanda(inputNumeroComanda)
+        setTimeout(() => {setModalNomeComanda(true)}, 600);
+      }
+      else if (typeof isDisponible == undefined){
+        alert("Não foi possível recuperar o último número")
+      }
+
     } 
 
     else if (buttonType === 'cancela') {
-      console.log('clicou no cancela')
       setModalNumeroComanda(false);
       setTimeout(() => {
       setDialogVisible(true)
@@ -139,6 +154,7 @@ export default function novaComanda (){
                     }}
                     placeholder="Número"
                     keyboardType='numeric'
+                    returnKeyType="done"
                     maxLength={4}
                   />
 
@@ -179,7 +195,8 @@ export default function novaComanda (){
                       }
                     }}
                     placeholder="Nome"
-                    maxLength={40}  // Limita o número de caracteres para 40
+                    returnKeyType="done"
+                    maxLength={40}
                     onBlur={() => {
                       if (inputNomeComanda.trim() === '') {
                         alert('Preencha o nome');

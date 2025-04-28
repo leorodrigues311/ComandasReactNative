@@ -13,7 +13,6 @@ import dayjs from 'dayjs'
 export default function ComandaDetalhe () {
 
   const router = useRouter()
-  const { refresh } = useLocalSearchParams()
   const { itensComanda, selectedItems, comandaSelecionada, taxValue, taxState, tipoTaxa, carregaItens, carregaComandas, formataValor, toggleLongPressItens, limparSelecao, setTaxState, formataTaxa} = useComanda()
   const [comandaFinalizada, setComandaFinalizada] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -29,7 +28,7 @@ export default function ComandaDetalhe () {
     if (comandaSelecionada) {
       carregarDados()
     }
-  }, [refresh])
+  }, [])
 
   const handleLongPress = (item_uuid: string) => {
     if (selectedItems?.length === 0) {
