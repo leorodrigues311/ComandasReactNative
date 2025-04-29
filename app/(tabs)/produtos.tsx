@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { StyleSheet, Text, View, Pressable, FlatList, RefreshControl, ActivityIndicator } from 'react-native';
 import { TopBarProdutos } from '@/components/navigation/TopBarProdutos';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -6,14 +6,15 @@ import { useRouter } from 'expo-router';
 import ItemProdutoCardapio from '@/components/ItemProdutoCardapio';
 import { useComanda } from '@/app/context/comandaContext';
 
+const PAGE_SIZE = 30;
+
 export default function Produto() {
-  const PAGE_SIZE = 30;
   const router = useRouter();
-  const { carregaProdutos, produtos } = useComanda();
-  const [produtosVisiveis, setProdutosVisiveis] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const { carregaProdutos, produtos, inputProcurar } = useComanda();
 
   useEffect(() => {
     const carregar = async () => {
@@ -26,8 +27,7 @@ export default function Produto() {
 
   useEffect(() => {
     if (produtos.length > 0) {
-      setProdutosVisiveis(produtos.slice(0, PAGE_SIZE));
-      setPage(1);
+      setPage(1); // resetar para a primeira página quando os produtos forem atualizados
     }
   }, [produtos]);
 
@@ -39,15 +39,27 @@ export default function Produto() {
 
   const loadMore = () => {
     const nextPage = page + 1;
-    const start = (nextPage - 1) * PAGE_SIZE;
-    const end = start + PAGE_SIZE;
-    const nextData = produtos.slice(start, end);
+    const totalItems = nextPage * PAGE_SIZE;
 
-    if (nextData.length > 0) {
-      setProdutosVisiveis([...produtosVisiveis, ...nextData]);
+    if (totalItems <= produtosFiltrados.length) {
       setPage(nextPage);
     }
   };
+
+  const produtosFiltrados = useMemo(() => {
+    let lista = [...produtos];
+
+    if (inputProcurar.trim() !== '') {
+      const texto = inputProcurar.toLowerCase();
+      lista = lista.filter(produto =>
+        produto.nome_produto?.toLowerCase().includes(texto)
+      );
+    }
+
+    return lista.sort((a, b) =>
+      parseInt(a.nome_produto || 'Produto sem nome') - parseInt(b.nome_produto || 'Produto sem nome')
+    );
+  }, [produtos, inputProcurar]);
 
   const renderItem = ({ item }: any) => (
     <Pressable>
@@ -69,7 +81,7 @@ export default function Produto() {
         </View>
       ) : (
         <FlatList
-          data={produtosVisiveis.sort((a, b) => parseInt(a.codigo_produto || "0") - parseInt(b.codigo_produto || "0"))}
+          data={produtosFiltrados.slice(0, page * PAGE_SIZE)}
           keyExtractor={(item, index) => `${item.codigo_produto}_${index}`}
           renderItem={renderItem}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
@@ -77,7 +89,11 @@ export default function Produto() {
           onEndReachedThreshold={0.2}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
-              <Text style={styles.emptyText}>Nenhum item para exibir</Text>
+              <Text style={styles.emptyText}>
+                {inputProcurar.trim() !== ''
+                  ? 'Nenhum produto encontrado.'
+                  : 'Nenhum item para exibir.'}
+              </Text>
             </View>
           }
         />
@@ -94,10 +110,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 20,
   },
   emptyText: {
     fontSize: 18,
     color: 'gray',
+    textAlign: 'center',
   },
   loadingContainer: {
     flex: 1,

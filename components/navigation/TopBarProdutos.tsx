@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Pressable } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-
+import { useComanda } from '@/app/context/comandaContext';
 
 
 export function TopBarProdutos(){
-    const [inputValue, setInputValue] = useState('');
+
+    const { inputProcurar, setInputProcurar } = useComanda();
     return (
         <View style={styles.viewPrincipal}>
             <View style={styles.inputContainer}>
@@ -14,8 +15,8 @@ export function TopBarProdutos(){
                 style={styles.inputPesquisar}
                 placeholder="Procurar..."
                 placeholderTextColor="gray"
-                value={inputValue}
-                onChangeText={setInputValue}
+                value={inputProcurar}
+                onChangeText={setInputProcurar}
                 />
                 <Pressable style={styles.viewBtnPesquisar}>
                  <Ionicons style={styles.btnPesquisar} name="search-outline" size={20} color="white" />

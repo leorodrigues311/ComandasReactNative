@@ -27,7 +27,8 @@ export default class Helper {
   BASE_URL: string;
 
   constructor() {
-    this.BASE_URL = `http://${globalThis.appConfig?.BASE_URL || "192.168.0.113:4000"}`;
+    this.BASE_URL = `http://${globalThis.appConfig?.ip|| ""}`;
+    console.log("globalThis:", globalThis.appConfig)
   }
   currentDate(seconds = 0): Date {
     let currentDate = new Date();

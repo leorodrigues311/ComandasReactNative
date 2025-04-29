@@ -2,7 +2,7 @@ export {};
 
 declare global {
   interface AppConfig {
-    BASE_URL: string;
+    ip: string;
   }
 
   interface Global {

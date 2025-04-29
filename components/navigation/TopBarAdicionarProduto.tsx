@@ -3,13 +3,14 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter } from 'expo-router'
 import * as Haptics from 'expo-haptics'
+import { useComanda } from '@/app/context/comandaContext';
 
 
 
 export function TopBarAdicionarProduto(){
 
     const router = useRouter()
-    const [inputValue, setInputValue] = useState('');
+    const { inputProcurar, setInputProcurar } = useComanda();
 
     return (
         <View style={styles.viewPrincipal}>
@@ -24,8 +25,8 @@ export function TopBarAdicionarProduto(){
                 style={styles.inputPesquisar}
                 placeholder="Procurar..."
                 placeholderTextColor="gray"
-                value={inputValue}
-                onChangeText={setInputValue}
+                value={inputProcurar}
+                onChangeText={setInputProcurar}
                 />
                 <Ionicons style={styles.btnPesquisar} name="search-outline" size={20} color="white" />
                 <Ionicons style={styles.btnFiltro} name="filter-outline" size={20} color="white" ></Ionicons>

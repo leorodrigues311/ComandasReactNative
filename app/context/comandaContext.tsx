@@ -407,6 +407,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await helper.getComandas();
       const data: Comanda2[] = response;
+      console.log('data:', data)
 
       const novasComandas = data.map((item) => ({
         comanda_uuid: String(item.comandauuid || ""),
