@@ -134,6 +134,7 @@ interface ComandaContextType {
   ordem: string
   tipoOrdem: string
   inputProcurar: string
+  caixa_id: string
 
   adicionarItens: (novoItem: ComandaItem) => void
   adicionarComanda: (novaComanda: Comanda) => void
@@ -172,6 +173,7 @@ interface ComandaContextType {
   setTipoOrdem: (tipo: string) => void
   setInputProcurar: (valor: string) => void
   recarregaComanda: (comanda_uuid: string) => void
+  setCaixaId: (caixa_id:string) => void
 }
 // fim da declaração dos tipos
 
@@ -201,6 +203,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const [porta, setPorta] = useState('')
   const [host, setHost] = useState('')
   const [database, setDatabase] = useState('')
+  const [caixa_id, setCaixaId] = useState('')
 
   const [filtroStatus, setFiltroStatus] = useState<string>('todas');
   const [ordem, setOrdem] = useState<string>('numero');
@@ -408,7 +411,6 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await helper.getComandas();
       const data: Comanda2[] = response;
-      console.log('data:', data)
 
       const novasComandas = data.map((item) => ({
         comanda_uuid: String(item.comandauuid || ""),
@@ -447,7 +449,6 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   
       // Convertendo todos os valores para números
       const result: number[] = response.map((item: Comanda2) => Number(item.comandanumero));
-      console.log("result:", result);
   
       if (numeroComanda === '') {
         // Procurar o menor número disponível
@@ -488,7 +489,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
         numero_comanda: String(item.comandanumero),
         hora_abertura: item.comandaaberturadata,
         valor_total: item.valor_total_comanda,
-        status_comanda: item.comandastatus,
+        status_comanda: String(item.comandastatus),
         usuario_responsavel_id: item.comandaaberturafuncionarioid,
       };
   
@@ -597,9 +598,26 @@ const formataTaxa = (valor_total: number | string, valor_taxa: number | string, 
   return formataValor(isTotal ? totalComTaxa : valor)
 }
 
-
-
 //============= Fim Pagamento =====================
+
+//============= Venda =====================
+
+const consultaCaixa = async (caixa_id: number) => {
+
+  try{
+    const response = await helper.getIdMovimentoCaixa(caixa_id)
+    const id = response.map( item => ({
+      caixa_id: item.caixamovid
+    }))
+    console.log('consultaCaixa:', response)
+
+  } catch(e){
+    console.log(e)
+  }
+
+}
+//============= Fim Venda =====================
+
 
 //============= Filtro =====================
 
@@ -680,6 +698,7 @@ useEffect(() => {
         filtroStatus,
         tipoOrdem,
         inputProcurar,
+        caixa_id,
  
         adicionarItens,
         adicionarComanda,
@@ -717,7 +736,8 @@ useEffect(() => {
         setOrdem,
         setTipoOrdem,
         setInputProcurar,
-        recarregaComanda
+        recarregaComanda,
+        setCaixaId
       }}
     >
       {children}

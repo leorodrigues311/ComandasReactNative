@@ -227,4 +227,28 @@ export default class Helper {
       console.log(e);
     }
   }
+
+  // ** Venda **
+
+  async getIdMovimentoCaixa(caixa_id: number){
+    try{
+      return (await axios.get(`${this.BASE_URL}/caixas?caixa_id=${caixa_id}`)).data;
+
+    } catch(e){
+
+    }
+  }
+
+  async postVenda(data_venda:string, valor_total: number, funcionario_id:number, taxa_servico:number){
+
+    const data = { data_venda, valor_total, funcionario_id, taxa_servico};
+    try{
+      return (await axios.put(`${this.BASE_URL}/vendas`, { data })).data;
+    } catch(e) {
+      console.error(e)
+    }
+  }
+
+
+  // ** Fim Venda **
 } 

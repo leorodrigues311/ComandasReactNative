@@ -9,13 +9,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Ajustes() {
 
-  const {selectedOption, taxValue, taxState, tipoTaxa, ip, porta, host, database, setSelectedOption, setTaxValue, setTaxState, setTipoTaxa, setIp, setPorta, setHost, setDatabase } = useComanda()
+  const {selectedOption, taxValue, taxState, tipoTaxa, ip, porta, host, database, caixa_id, setSelectedOption, setTaxValue, setTaxState, setTipoTaxa, setIp, setPorta, setHost, setDatabase, setCaixaId } = useComanda()
 
   const [modalConexao, setModalConexao] = useState(false)
   const [configConexao, setConfigConexao] = useState(false)
-  const [expandedSection, setExpandedSection] = useState<'none' | 'conexao' | 'taxa'>('none')
+  const [expandedSection, setExpandedSection] = useState<'none' | 'conexao' | 'taxa' | 'caixa'>('none')
 
-  const toggleSection = (section: 'conexao' | 'taxa') => {
+  const toggleSection = (section: 'conexao' | 'taxa'| 'caixa') => {
     setExpandedSection((prev) => (prev === section ? 'none' : section))
   }
 
@@ -55,7 +55,7 @@ export default function Ajustes() {
             />
           </View>
           <TouchableOpacity disabled={configConexao} style={styles.option} onPress = {() => setModalConexao(true)}>
-            <Text style={[styles.optionText, configConexao && { color: '#808080' }]}>Configurar conexão</Text>
+            <Text style={[styles.optionText, configConexao && { color: '#808080' }]}>   Configurar conexão</Text>
           </TouchableOpacity>
           <Modal
             visible={modalConexao}
@@ -105,22 +105,22 @@ export default function Ajustes() {
                   autoCapitalize="none"
                 />
 
-                  <TouchableOpacity
-                    style={styles.saveButton}
-                    onPress={async () => {
-                      try {
-                        const settings = {
-                          ip,
-                          porta,
-                          host,
-                          database,
-                        };
-                        await AsyncStorage.setItem('appSettings', JSON.stringify(settings));
-                        setModalConexao(false);
-                      } catch (e) {
-                        console.error('Erro ao salvar configurações:', e);
-                      }
-                    }}
+                <TouchableOpacity
+                  style={styles.saveButton}
+                  onPress={async () => {
+                    try {
+                      const settings = {
+                        ip,
+                        porta,
+                        host,
+                        database,
+                      };
+                      await AsyncStorage.setItem('appSettings', JSON.stringify(settings));
+                      setModalConexao(false);
+                    } catch (e) {
+                      console.error('Erro ao salvar configurações:', e);
+                    }
+                  }}
                   >
                   <Text style={styles.saveButtonText}>Salvar</Text>
                 </TouchableOpacity>
@@ -191,6 +191,36 @@ export default function Ajustes() {
         </View>
       </View>
     )}
+
+    <Pressable onPress={() => toggleSection('caixa')} style={styles.collapsibleButton}>
+      <Text style={styles.buttonText}>Caixa</Text>
+    </Pressable>
+
+    {expandedSection === 'caixa' && (
+      <View style={styles.optionsContainer}>
+        <View style={styles.option}>
+          <Text style={styles.optionText}>Id do caixa a utilizar</Text>
+          <TextInput
+            style={styles.input}
+            keyboardType="numeric"
+            returnKeyType="done"
+            onSubmitEditing={() => {
+              Keyboard.dismiss();
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            }}
+            value={caixa_id}
+            onChangeText={setCaixaId}
+            maxLength={4}
+            placeholder={'id do caixa'}
+            placeholderTextColor="#808080"
+          />
+        </View>
+      </View>
+    )}
+
+
+
+
     </SafeAreaView>
   )
 }
