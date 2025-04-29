@@ -54,6 +54,14 @@ export default class Helper {
     }
   }
 
+  async getComandaEspecifica(comanda_uuid: string){
+    try{
+      return (await axios.get(`${this.BASE_URL}/comandas/comandaEspecifica?comanda_uuid=${comanda_uuid}`)).data;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   async putComanda(comanda_uuid: string) {
     const data = { comanda_uuid };
     try {

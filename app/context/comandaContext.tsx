@@ -171,6 +171,7 @@ interface ComandaContextType {
   setOrdem: (ordem: string) => void
   setTipoOrdem: (tipo: string) => void
   setInputProcurar: (valor: string) => void
+  recarregaComanda: (comanda_uuid: string) => void
 }
 // fim da declaração dos tipos
 
@@ -471,6 +472,32 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
       console.error("Erro ao buscar dados:", error);
     }
   }
+
+  const recarregaComanda = async (comanda_uuid: string) => {
+    try {
+      const response = await helper.getComandaEspecifica(comanda_uuid);
+      const data: Comanda2[] = response;
+  
+      const item = data[0]
+      if (!item) return
+  
+      const comandaAtualizada: Comanda = {
+        comanda_uuid: item.comandauuid,
+        comanda_id: item.comandaid,
+        nome_comanda: item.comandadetalhe,
+        numero_comanda: String(item.comandanumero),
+        hora_abertura: item.comandaaberturadata,
+        valor_total: item.valor_total_comanda,
+        status_comanda: item.comandastatus,
+        usuario_responsavel_id: item.comandaaberturafuncionarioid,
+      };
+  
+      setComandaSelecionada(comandaAtualizada);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  
   
   
 
@@ -689,7 +716,8 @@ useEffect(() => {
         setFiltroStatus,
         setOrdem,
         setTipoOrdem,
-        setInputProcurar
+        setInputProcurar,
+        recarregaComanda
       }}
     >
       {children}

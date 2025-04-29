@@ -13,7 +13,7 @@ import dayjs from 'dayjs'
 export default function ComandaDetalhe () {
 
   const router = useRouter()
-  const { itensComanda, selectedItems, comandaSelecionada, taxValue, taxState, tipoTaxa, carregaItens, carregaComandas, formataValor, toggleLongPressItens, limparSelecao, setTaxState, formataTaxa} = useComanda()
+  const { itensComanda, selectedItems, comandaSelecionada, taxValue, taxState, tipoTaxa, carregaItens, carregaComandas, recarregaComanda,  formataValor, toggleLongPressItens, limparSelecao, setTaxState, formataTaxa} = useComanda()
   const [comandaFinalizada, setComandaFinalizada] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -21,8 +21,8 @@ export default function ComandaDetalhe () {
     const carregarDados = async () => {
       setLoading(true)
       await carregaItens()
-      await carregaComandas()
       setLoading(false)
+      recarregaComanda(comandaSelecionada?.comanda_uuid||'')
     }
   
     if (comandaSelecionada) {
