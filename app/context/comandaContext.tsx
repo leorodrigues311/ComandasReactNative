@@ -146,7 +146,7 @@ interface ComandaContextType {
   ordem: string
   tipoOrdem: string
   inputProcurar: string
-  caixa_id: number
+  caixa_id: string
 
   adicionarItens: (novoItem: ComandaItem) => void
   adicionarComanda: (novaComanda: Comanda) => void
@@ -185,8 +185,8 @@ interface ComandaContextType {
   setTipoOrdem: (tipo: string) => void
   setInputProcurar: (valor: string) => void
   recarregaComanda: (comanda_uuid: string) => void
-  setCaixaId: (caixa_id:number) => void
-  consultaCaixa: (caixa_id: number) => void
+  setCaixaId: (caixa_id:string) => void
+  consultaCaixa: (caixa_id: string) => void
   efetuarVenda: (nova_venda: Venda) => void
 }
 // fim da declaração dos tipos
@@ -217,7 +217,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const [porta, setPorta] = useState('')
   const [host, setHost] = useState('')
   const [database, setDatabase] = useState('')
-  const [caixa_id, setCaixaId] = useState(0)
+  const [caixa_id, setCaixaId] = useState('0')
 
   const [filtroStatus, setFiltroStatus] = useState<string>('todas');
   const [ordem, setOrdem] = useState<string>('numero');
@@ -620,10 +620,10 @@ const formataTaxa = (valor_total: number | string, valor_taxa: number | string, 
 
 //============= Venda =====================
 
-const consultaCaixa = async (caixa_id: number) => {
+const consultaCaixa = async (caixa_id: string) => {
 
   try{
-    const response = await helper.getIdMovimentoCaixa(caixa_id)
+    const response = await helper.getIdMovimentoCaixa(Number(caixa_id))
     const data: Caixa[] = response
     const id = data.map (item  => ({
       caixa_id: item.caixamovid
@@ -679,7 +679,7 @@ useEffect(() => {
         setPorta(settings.porta || '')
         setHost(settings.host || '')
         setDatabase(settings.database || '')
-        setCaixaId(settings.caixa_id || '')
+        setCaixaId(settings.caixa_id || '0')
       }
     } catch (e) {
       console.error('Erro ao carregar configurações:', e);

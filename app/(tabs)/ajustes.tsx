@@ -209,7 +209,7 @@ export default function Ajustes() {
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
             value={String(caixa_id)}
-            onChangeText={(text) => setCaixaId(Number(text))}
+            onChangeText={(text) => setCaixaId(text)}
             maxLength={4}
             placeholder={'id do caixa'}
             placeholderTextColor="#808080"
@@ -217,9 +217,6 @@ export default function Ajustes() {
         </View>
       </View>
     )}
-
-
-
 
     </SafeAreaView>
   )

@@ -41,6 +41,7 @@ export default function Pagamento() {
   const [showCheck, setShowCheck] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [caixaAberto, setCaixaAberto] = useState(false)
 
   const scaleAnim = useState(new Animated.Value(0))[0];
   const opacityAnim = useState(new Animated.Value(0))[0];
@@ -48,6 +49,8 @@ export default function Pagamento() {
   useEffect(() => {
     carregaFormaPagamento();
     consultaCaixa(caixa_id)
+    console.log('caixa id', typeof caixa_id)
+    caixa_id === '0' || caixa_id === '' ? alert("Nenhum caixa selecionado, favor acessar a aba de ajustes para selecionar o caixa.") : setCaixaAberto(true)
   }, []);
 
   useEffect(() => {
@@ -78,7 +81,6 @@ export default function Pagamento() {
       valor_total: comandaSelecionada?.valor_total||0,
       funcionario_id: comandaSelecionada?.usuario_responsavel_id||0,
       taxa_servico: Number(Number(formataTaxa(comandaSelecionada?.valor_total || 0, taxValue, tipoTaxa, false, true)).toFixed(2))
-      
     })
 
     finalizaComanda(comandaSelecionada?.comanda_uuid ?? '');
@@ -126,6 +128,7 @@ export default function Pagamento() {
 
   const renderItem = ({ item }: { item: Pagamento }) => (
     <Pressable
+      disabled={!caixaAberto}
       onPress={() => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
         handleSelecionarForma(item.formapagamentodescricao);
@@ -162,6 +165,13 @@ export default function Pagamento() {
           formataValor(comandaSelecionada?.valor_total||0)
           }</Text>
         </View>
+
+        {!caixaAberto && (
+        <View style={styles.viewAvisoCaixaFechado}>
+          <Text style={styles.avisoCaixaFechado}>Nenhum caixa selecionado</Text>
+          <Text style={styles.avisoCaixaFechado}>volte na aba de ajustes para configurar!</Text>
+        </View>
+        )}
 
         <View style={styles.viewBtnFormaPagamento}>
           <FlatList
@@ -285,5 +295,16 @@ const styles = StyleSheet.create({
   btnVoltar: {
     padding: 20,
     position: 'absolute',
+  },
+  avisoCaixaFechado:{
+    color:'white',
+    fontSize:16,
+    fontWeight:500
+  },
+  viewAvisoCaixaFechado:{
+    marginTop:30,
+    alignContent:'center',
+    alignItems:'center',
+    justifyContent:'center', 
   },
 });
