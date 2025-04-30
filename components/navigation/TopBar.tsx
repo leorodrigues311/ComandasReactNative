@@ -34,7 +34,6 @@ export function TopBar() {
   };
 
   const aplicarFiltro = () => {
-    console.log("Filtro aplicado", { filtroStatus, ordem });
     setModalVisivel(false);
   };
 

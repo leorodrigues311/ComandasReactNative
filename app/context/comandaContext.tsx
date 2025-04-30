@@ -110,6 +110,18 @@ interface Pagamento {
   formapagamentodescricao: string
 }
 
+interface Caixa {
+  caixamovid: number
+}
+
+interface Venda {
+
+  data_venda:string
+  valor_total: number
+  funcionario_id:number
+  taxa_servico:number
+}
+
 interface ComandaContextType {
   itensComanda: ComandaItem[]
   comandas: Comanda[]
@@ -134,7 +146,7 @@ interface ComandaContextType {
   ordem: string
   tipoOrdem: string
   inputProcurar: string
-  caixa_id: string
+  caixa_id: number
 
   adicionarItens: (novoItem: ComandaItem) => void
   adicionarComanda: (novaComanda: Comanda) => void
@@ -166,14 +178,16 @@ interface ComandaContextType {
   setHost: (host:string) => void
   setDatabase: (database:string) => void
   setComandaFinalizada: (tipo:boolean) => void
-  formataTaxa: (valor_total: number, valor_taxa: number | string, tipoTaxa: boolean, isTotal: boolean) => string
+  formataTaxa: (valor_total: number, valor_taxa: number | string, tipoTaxa: boolean, isTotal: boolean, isTaxOnly: boolean) => string | number
   checaNumeroComanda: (numeroComanda: string) => Promise<string | boolean | undefined>;
   setFiltroStatus: (status: string) => void
   setOrdem: (ordem: string) => void
   setTipoOrdem: (tipo: string) => void
   setInputProcurar: (valor: string) => void
   recarregaComanda: (comanda_uuid: string) => void
-  setCaixaId: (caixa_id:string) => void
+  setCaixaId: (caixa_id:number) => void
+  consultaCaixa: (caixa_id: number) => void
+  efetuarVenda: (nova_venda: Venda) => void
 }
 // fim da declaração dos tipos
 
@@ -203,7 +217,7 @@ export const ComandaProvider = ({ children }: { children: ReactNode }) => {
   const [porta, setPorta] = useState('')
   const [host, setHost] = useState('')
   const [database, setDatabase] = useState('')
-  const [caixa_id, setCaixaId] = useState('')
+  const [caixa_id, setCaixaId] = useState(0)
 
   const [filtroStatus, setFiltroStatus] = useState<string>('todas');
   const [ordem, setOrdem] = useState<string>('numero');
@@ -577,7 +591,7 @@ const carregaFormaPagamento = async () => {
 
   }
 }
-const formataTaxa = (valor_total: number | string, valor_taxa: number | string, tipoTaxa: boolean, isTotal: boolean) => {
+const formataTaxa = (valor_total: number | string, valor_taxa: number | string, tipoTaxa: boolean, isTotal: boolean, isTaxOnly: boolean) => {
   let taxa = typeof valor_taxa === 'string'
     ? Number(valor_taxa.replace(',', '.'))
     : valor_taxa
@@ -595,6 +609,10 @@ const formataTaxa = (valor_total: number | string, valor_taxa: number | string, 
 
   const totalComTaxa = valor_total + valor
 
+  if (isTaxOnly){
+    return Number(valor)
+  } 
+  
   return formataValor(isTotal ? totalComTaxa : valor)
 }
 
@@ -606,10 +624,27 @@ const consultaCaixa = async (caixa_id: number) => {
 
   try{
     const response = await helper.getIdMovimentoCaixa(caixa_id)
-    const id = response.map( item => ({
+    const data: Caixa[] = response
+    const id = data.map (item  => ({
       caixa_id: item.caixamovid
     }))
-    console.log('consultaCaixa:', response)
+
+
+  } catch(e){
+    console.log(e)
+  }
+}
+
+const efetuarVenda = async (nova_venda: Venda) => {
+
+  try{
+    const response = await helper.postVenda({
+      data_venda: nova_venda.data_venda,
+      valor_total: nova_venda.valor_total,
+      funcionario_id: nova_venda.funcionario_id,
+      taxa_servico: nova_venda.taxa_servico})
+
+    const data: Venda[] = response
 
   } catch(e){
     console.log(e)
@@ -644,6 +679,7 @@ useEffect(() => {
         setPorta(settings.porta || '')
         setHost(settings.host || '')
         setDatabase(settings.database || '')
+        setCaixaId(settings.caixa_id || '')
       }
     } catch (e) {
       console.error('Erro ao carregar configurações:', e);
@@ -663,12 +699,13 @@ useEffect(() => {
       ip,
       porta,
       host,
-      database
+      database,
+      caixa_id
     }
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(config))
   }
   saveConfig()
-}, [selectedOption, taxValue, taxState, tipoTaxa, ip, porta, host, database])
+}, [selectedOption, taxValue, taxState, tipoTaxa, ip, porta, host, database, caixa_id])
 
 
   // aqui precisamos passar as funções que queremos usar em outros documentos
@@ -737,7 +774,9 @@ useEffect(() => {
         setTipoOrdem,
         setInputProcurar,
         recarregaComanda,
-        setCaixaId
+        setCaixaId,
+        consultaCaixa,
+        efetuarVenda
       }}
     >
       {children}

@@ -208,8 +208,8 @@ export default function Ajustes() {
               Keyboard.dismiss();
               Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             }}
-            value={caixa_id}
-            onChangeText={setCaixaId}
+            value={String(caixa_id)}
+            onChangeText={(text) => setCaixaId(Number(text))}
             maxLength={4}
             placeholder={'id do caixa'}
             placeholderTextColor="#808080"

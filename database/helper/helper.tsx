@@ -23,12 +23,18 @@ interface ItemComanda {
   item_nome: string;
 }
 
+interface Venda {
+  data_venda:string
+  valor_total: number
+  funcionario_id:number
+  taxa_servico:number
+}
+
 export default class Helper {
   BASE_URL: string;
 
   constructor() {
     this.BASE_URL = `http://${globalThis.appConfig?.ip|| ""}`;
-    console.log("globalThis:", globalThis.appConfig)
   }
   currentDate(seconds = 0): Date {
     let currentDate = new Date();
@@ -239,11 +245,13 @@ export default class Helper {
     }
   }
 
-  async postVenda(data_venda:string, valor_total: number, funcionario_id:number, taxa_servico:number){
+  async postVenda(nova_venda: Venda){
 
-    const data = { data_venda, valor_total, funcionario_id, taxa_servico};
     try{
-      return (await axios.put(`${this.BASE_URL}/vendas`, { data })).data;
+      const response =  (await axios.post(`${this.BASE_URL}/vendas`, nova_venda, {
+        headers: { 'Content-Type': 'application/json' }
+      }));
+      return response.data
     } catch(e) {
       console.error(e)
     }

@@ -23,13 +23,17 @@ export default function Pagamento() {
     taxValue,
     taxState,
     tipoTaxa,
+    caixa_id,
     carregaFormaPagamento,
     removerItens,
     carregaItens,
+    gerarData,
     finalizaComanda,
     setComandaFinalizada,
     formataValor,
-    formataTaxa
+    formataTaxa,
+    consultaCaixa,
+    efetuarVenda
   } = useComanda();
 
   const [dialogActionVisible, setDialogPagamentoVisible] = useState(false);
@@ -43,6 +47,7 @@ export default function Pagamento() {
 
   useEffect(() => {
     carregaFormaPagamento();
+    consultaCaixa(caixa_id)
   }, []);
 
   useEffect(() => {
@@ -67,6 +72,15 @@ export default function Pagamento() {
   const handleFinalizaComanda = () => {
     setDialogPagamentoVisible(false);
     setIsLoading(true);
+
+    efetuarVenda({
+      data_venda: gerarData('completo'),
+      valor_total: comandaSelecionada?.valor_total||0,
+      funcionario_id: comandaSelecionada?.usuario_responsavel_id||0,
+      taxa_servico: Number(Number(formataTaxa(comandaSelecionada?.valor_total || 0, taxValue, tipoTaxa, false, true)).toFixed(2))
+      
+    })
+
     finalizaComanda(comandaSelecionada?.comanda_uuid ?? '');
 
     timeoutRef.current = setTimeout(() => {
@@ -137,13 +151,13 @@ export default function Pagamento() {
 
           <Text style={styles.viewValorComanda}>Consumo: {formataValor(comandaSelecionada?.valor_total||0)}</Text>
           <Text style={styles.viewValorTaxa}>Taxa de serviço: { taxState?
-          formataTaxa(comandaSelecionada?.valor_total||0, taxValue, tipoTaxa, false)
+          formataTaxa(comandaSelecionada?.valor_total||0, taxValue, tipoTaxa, false, false)
           :
           "0"
           }</Text>
           <Text style={styles.viewTotalAPagar}>Total a Pagar</Text>
           <Text style={styles.viewValorTotal}>{ taxState ? 
-          formataTaxa(comandaSelecionada?.valor_total||0, taxValue, tipoTaxa, true)
+          formataTaxa(comandaSelecionada?.valor_total||0, taxValue, tipoTaxa, true, false)
           :
           formataValor(comandaSelecionada?.valor_total||0)
           }</Text>

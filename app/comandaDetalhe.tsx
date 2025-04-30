@@ -127,7 +127,7 @@ export default function ComandaDetalhe () {
           <Text style={styles.textValorTotal}>Valor Total:</Text>
           <Text style={styles.textValorTotalNumero}>{
             comandaSelecionada?.status_comanda === '4' && taxState ?
-            formataTaxa(comandaSelecionada?.valor_total||0, taxValue, tipoTaxa, true)
+            formataTaxa(comandaSelecionada?.valor_total||0, taxValue, tipoTaxa, true, false)
             :
             formataValor(comandaSelecionada?.valor_total||0)
           }</Text>
@@ -144,7 +144,7 @@ export default function ComandaDetalhe () {
             <Text style={{ color: '#fff' }}>
               {tipoTaxa === false 
               ?
-             `Taxa de serviço (${taxValue}%) - ${formataTaxa(comandaSelecionada?.valor_total||0, taxValue, tipoTaxa, false)} ` 
+             `Taxa de serviço (${taxValue}%) - ${formataTaxa(comandaSelecionada?.valor_total||0, taxValue, tipoTaxa, false, false)} ` 
              :
               `Taxa de serviço - R$ ${taxValue}`}</Text>
           </Pressable>
