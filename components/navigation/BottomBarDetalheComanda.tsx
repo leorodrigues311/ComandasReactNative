@@ -113,7 +113,9 @@ export function BottomBarDetalheComanda({ selectedItemsLength, limparSelecao }: 
         <View style={styles.viewPrincipal}>
 
         {/*Este é o dialogo dos botões, o conteudo muda de acordo com cada botão*/}
-          <Dialog.Container visible={dialogActionVisible}>
+          <Dialog.Container 
+          visible={dialogActionVisible}
+          contentStyle={{ backgroundColor: '#1e1e1e' }}>
             <Dialog.Title>{tituloModal}</Dialog.Title>
             <Dialog.Description>
               {conteudoModal}

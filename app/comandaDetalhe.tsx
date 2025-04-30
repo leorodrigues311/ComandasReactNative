@@ -265,7 +265,8 @@ const styles = StyleSheet.create({
   },
   viewBtnPagar: {
     marginHorizontal:0,
-    marginBottom:30
+    marginBottom:'10%',
+    position:'fixed'
   },
   btnPagar: {
     backgroundColor: '#04c78a',
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
   viewValorTotal:{
     backgroundColor:'#363636',
     width:'100%',
-    height:60,
+    height:'8%',
     bottom:0,
     borderRadius:5,
     flexDirection:'row',

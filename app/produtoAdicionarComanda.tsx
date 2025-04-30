@@ -105,11 +105,15 @@ export default function produtoAdicionarComanda() {
     <SafeAreaView style={{ flex: 1 }}>
       <TopBarAdicionarProduto />
 
-      <Dialog.Container visible={dialogQuantidadeProduto}>
+      <Dialog.Container
+        visible={dialogQuantidadeProduto}
+        contentStyle={{ backgroundColor: '#1e1e1e' }}>
+          
         <Dialog.Title>Adicionar "{tituloItem}"</Dialog.Title>
         <TextInput
           style={styles.textInput}
           placeholder="Quantidade:"
+          placeholderTextColor="#888"
           value={itemQtd}
           onChangeText={setItemQtd}
           keyboardType="numeric"

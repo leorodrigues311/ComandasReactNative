@@ -111,7 +111,9 @@ export function BottomBarConferirItens() {
         <Ionicons name="checkmark-circle-outline" size={38} color="white"/>
       </Pressable>
 
-      <Dialog.Container visible={dialogActionVisible}>
+      <Dialog.Container 
+        visible={dialogActionVisible}
+        contentStyle={{ backgroundColor: '#1e1e1e' }}>
         <Dialog.Title>Adicionar Itens</Dialog.Title>
         <Dialog.Description>Deseja Realmente Adicionar os itens à Comanda?</Dialog.Description>
         <Dialog.Button onPress={handleCancel} label="Não" />
@@ -126,7 +128,7 @@ export function BottomBarConferirItens() {
 
 const styles = StyleSheet.create({
   viewPrincipal: {
-    bottom: 15,
+    bottom: 0,
     width: '100%',
     backgroundColor: '#151718',
     borderTopColor: '#363636',

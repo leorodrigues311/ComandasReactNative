@@ -38,7 +38,7 @@ export function ItemProduto({ nomeItem, estoque, valorTotal, imagem, style }: it
 
 const styles = StyleSheet.create({
   viewPrincipal: {
-    height:70,
+    height:80,
     borderWidth: 0.5,
     borderRadius:5,
     borderColor: '#4F4F4F',
@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
   },
 
   viewNumero: {
-    height:70,
-    width:70,
+    height:80,
+    width:80,
     alignItems: 'center',
     backgroundColor:'#696969',
     borderRadius:5,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   quantidadeItem: {
     fontSize: 13,
     color: '#C0C0C0',
-    left: 180,
+    left: '60%',
     margin: 0,
     marginTop: 14,
     fontWeight: '300',
