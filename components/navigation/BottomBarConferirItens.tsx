@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Pressable, Animated, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Animated, Dimensions, ScrollView } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import Dialog from "react-native-dialog";
@@ -92,18 +92,20 @@ export function BottomBarConferirItens() {
       </Pressable>
 
       {isExpanded && (
+        <ScrollView>
         <View style={styles.viewExtra}>
           {itensCarrinho.map(item => (
             <ItemConferenciaAdd
-             key={item.item_uuid}
-             id={item.item_uuid || ''}
-             item_nome={item.item_nome}
-             quantidade={item.quantidade} 
-             onRemove={removerItemCarrinho}
-             onIncrement={mudaQuantidade}
-             onDecrement={mudaQuantidade} />
+            key={item.item_uuid}
+            id={item.item_uuid || ''}
+            item_nome={item.item_nome}
+            quantidade={item.quantidade} 
+            onRemove={removerItemCarrinho}
+            onIncrement={mudaQuantidade}
+            onDecrement={mudaQuantidade} />
           ))}
         </View>
+        </ScrollView>
       )}
 
       <Pressable onPressIn={handleFeedbackButton} onPressOut={handleConfirmaInclusao} style={styles.btnIncluir}>

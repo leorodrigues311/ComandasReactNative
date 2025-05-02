@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   viewPrincipal: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginVertical: 0,
+    marginVertical: 4,
     justifyContent: 'space-between',
     maxHeight:50,
     flex: 1,
