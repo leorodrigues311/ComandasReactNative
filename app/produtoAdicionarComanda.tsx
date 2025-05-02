@@ -118,6 +118,7 @@ export default function produtoAdicionarComanda() {
           placeholder="Quantidade:"
           placeholderTextColor="#888"
           value={itemQtd}
+          maxLength={4}
           onChangeText={setItemQtd}
           keyboardType="numeric"
         />

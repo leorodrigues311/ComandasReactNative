@@ -3,14 +3,18 @@ export default function (api) {
   return {
     presets: ['babel-preset-expo'],
     plugins: [
-      ["module:react-native-dotenv", {
-        "envName": "APP_NAME",
-        "moduleName": "@env",
-        "path": ".env",
-        "safe": false,
-        "allowUndefined": true,
-        "verbose": false
-      }]
+      [
+        "module:react-native-dotenv",
+        {
+          envName: "APP_NAME",
+          moduleName: "@env",
+          path: ".env",
+          safe: false,
+          allowUndefined: true,
+          verbose: false,
+        }
+      ],
+      'react-native-reanimated/plugin',
     ]
   };
 };

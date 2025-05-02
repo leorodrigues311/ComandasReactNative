@@ -30,7 +30,10 @@ export default function RootLayout() {
   return (
     <ComandaProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DarkTheme}>
-          <Stack>
+          <Stack 
+      screenOptions={{
+        gestureEnabled: false, // desabilita o swipe para voltar em todas as telas
+      }}>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen name="+not-found" />
             <Stack.Screen name="comandaDetalhe" options={{ headerShown: false }}/>
