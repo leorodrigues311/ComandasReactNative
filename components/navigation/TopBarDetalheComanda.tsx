@@ -154,8 +154,8 @@ export function TopBarDetalheComanda({ style, hideIcons  }: EstiloMutavel) {
           <Ionicons style={styles.btnFinalizarComanda} name={iconeComanda} size={32} color={isDisabled ? "#454444" : "#e11d48"}  />
         </Pressable>
 
-        <Pressable disabled={isDisabled} onPressIn={() => handleFeedbackPrint()} onPressOut={() => handleImprimir()}>
-          <Ionicons style={styles.btnImprimir} name={iconeImpressora} size={32}color={isDisabled ? "#454444" : "white"}  />
+        <Pressable disabled={true} onPressIn={() => handleFeedbackPrint()} onPressOut={() => handleImprimir()}>
+          <Ionicons style={styles.btnImprimir} name={iconeImpressora} size={32}color={"#454444"}  />
         </Pressable>
 
         <Pressable disabled={isDisabled} onPressIn={() => handleFeedbackAdd()} onPressOut={() => handleAddProduto()}>

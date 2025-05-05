@@ -132,8 +132,8 @@ export function BottomBarDetalheComanda({ selectedItemsLength, limparSelecao }: 
               <Ionicons style={styles.btnExcluirProduto} name={iconeLixo} size={32} color="red" ></Ionicons>
             </Pressable>
 
-            <Pressable onPressIn={() => handleFeedbackPrint()} onPressOut={() => handleImprimir()}>
-              <Ionicons style={styles.btnImprimir} name={iconeImpressora} size={32} color="white" />
+            <Pressable disabled={true} onPressIn={() => handleFeedbackPrint()} onPressOut={() => handleImprimir()}>
+              <Ionicons style={styles.btnImprimir} name={iconeImpressora} size={32} color="#454444" />
             </Pressable>
 
             <Pressable onPressIn={() => handleFeedbackFecharBottomBar()} onPressOut={() => handleFecharBottomBar()}>

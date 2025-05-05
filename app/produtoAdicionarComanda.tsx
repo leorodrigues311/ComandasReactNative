@@ -32,6 +32,7 @@ export default function produtoAdicionarComanda() {
 
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [btnAdicionar, setBtnAdicionar] = useState(true)
 
   useEffect(() => {
     const carregar = async () => {
@@ -88,8 +89,10 @@ export default function produtoAdicionarComanda() {
 
   const renderItem = ({ item }: any) => (
     <Pressable
-      onPress={() =>
+      onPress={() =>{
+        setBtnAdicionar(true)
         handleItemSelect(item.codigo_produto, item.nome_produto, item.valor_venda, 'selecionarQuantidade')
+        }
       }
     >
       <ItemProduto
@@ -115,14 +118,19 @@ export default function produtoAdicionarComanda() {
           placeholder="Quantidade:"
           placeholderTextColor="#888"
           value={itemQtd}
+          maxLength={4}
           onChangeText={setItemQtd}
           keyboardType="numeric"
         />
         <Dialog.Button onPress={handleCancel} label="Cancelar" />
         <Dialog.Button
-          onPress={() => handleItemSelect(codItem, tituloItem, valorItem, 'AdicionarAoCarrinho')}
-          label="Adicionar"
-        />
+        disabled={!btnAdicionar}
+        onPress={() => {
+          setBtnAdicionar(false)
+          handleItemSelect(codItem, tituloItem, valorItem, 'AdicionarAoCarrinho');
+        }}
+        label="Adicionar"
+      />
       </Dialog.Container>
 
       {loading ? (
