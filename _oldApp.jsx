@@ -4,7 +4,7 @@ import { loadConfig } from './src/utils/AppConfig';
 import React, { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import { ExpoRoot } from 'expo-router';
-import { AppContext } from './app/context/appContext'
+
 
 export function App() {
   const [loaded, setLoaded] = useState(false);

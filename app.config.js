@@ -3,6 +3,7 @@ export default {
     name: "inova_comandas",
     slug: "inova_comandas",
     version: "1.0.0",
+    jsEngine: "jsc",
     orientation: "portrait",
     icon: "./assets/images/icon.png",
     scheme: "myapp",
@@ -16,6 +17,7 @@ export default {
       supportsTablet: true
     },
     android: {
+      package: "com.inovacomandas.inovasistemas",
       adaptiveIcon: {
         foregroundImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#ffffff"
@@ -33,13 +35,10 @@ export default {
     experiments: {
       typedRoutes: true
     },
-    extra:{
+    extra: {
       eas: {
-        "projectId": "a89c32d4-5ad5-4ee9-83a1-df0b9d152d52"
+        projectId: "a89c32d4-5ad5-4ee9-83a1-df0b9d152d52"
       }
-    },
-    android: {
-      "package": "com.inovacomandas.inovasistemas"
     }
   }
 }
