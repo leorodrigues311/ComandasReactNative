@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import 'expo-router/entry';
 import { Pressable, StyleSheet, Text, SafeAreaView, FlatList, View, RefreshControl, ActivityIndicator } from 'react-native';
 import { Comanda } from '@/components/Comanda';
 import { TopBar } from '@/components/navigation/TopBar';
